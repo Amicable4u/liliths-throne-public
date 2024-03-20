@@ -36,7 +36,7 @@ public enum SVGImages {
 			menuIcon,
 			inventoryIcon, inventoryIconDisabled,
 			questInventoryIcon, questInventoryIconDisabled,
-			journalIcon, peopleIcon, zoomInIcon, zoomOutIcon, copyIcon, exportIcon, calendarIcon, informationIcon, addIcon,
+			journalIcon, peopleIcon, zoomInIcon, zoomOutIcon, copyIcon, cheatIcon, exportIcon, calendarIcon, informationIcon, addIcon,
 
 			diskSave, diskSaveDisabled, diskSaveConfirm, diskOverwrite,
 			diskLoad, diskLoadConfirm, diskLoadDisabled, diskLoadQuick,
@@ -259,6 +259,9 @@ public enum SVGImages {
 			is = this.getClass().getResourceAsStream("/com/lilithsthrone/res/UIElements/copy.svg");
 			copyIcon = Util.inputStreamToString(is);
 			copyIcon = setColour(copyIcon, PresetColour.BASE_BLACK);
+			is = this.getClass().getResourceAsStream("/com/lilithsthrone/res/UIElements/cheat.svg");
+			cheatIcon = Util.inputStreamToString(is);
+			// cheatIcon = setColour(cheatIcon, PresetColour.BASE_BLACK);
 
 			is = this.getClass().getResourceAsStream("/com/lilithsthrone/res/UIElements/export.svg");
 			exportIcon = Util.inputStreamToString(is);
@@ -955,6 +958,10 @@ public enum SVGImages {
 
 	public String getCopyIcon() {
 		return copyIcon;
+	}
+
+	public String getCheatIcon() {
+		return cheatIcon;
 	}
 	
 	public String getExportIcon() {

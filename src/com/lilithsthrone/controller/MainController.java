@@ -21,6 +21,7 @@ import com.lilithsthrone.controller.eventListeners.InventorySelectedItemEventLis
 import com.lilithsthrone.controller.eventListeners.SetContentEventListener;
 import com.lilithsthrone.controller.eventListeners.buttons.ButtonCharactersEventListener;
 import com.lilithsthrone.controller.eventListeners.buttons.ButtonCopyDialogueEventListener;
+import com.lilithsthrone.controller.eventListeners.buttons.ButtonCheatMenuEventListener;
 import com.lilithsthrone.controller.eventListeners.buttons.ButtonInventoryEventHandler;
 import com.lilithsthrone.controller.eventListeners.buttons.ButtonJournalEventListener;
 import com.lilithsthrone.controller.eventListeners.buttons.ButtonMainMenuEventListener;
@@ -83,6 +84,7 @@ import com.lilithsthrone.game.dialogue.story.CharacterCreation;
 import com.lilithsthrone.game.dialogue.utils.BodyChanging;
 import com.lilithsthrone.game.dialogue.utils.CharacterModificationUtils;
 import com.lilithsthrone.game.dialogue.utils.CharactersPresentDialogue;
+import com.lilithsthrone.game.dialogue.utils.CheatDialogue;
 import com.lilithsthrone.game.dialogue.utils.CombatMovesSetup;
 import com.lilithsthrone.game.dialogue.utils.CosmeticsDialogue;
 import com.lilithsthrone.game.dialogue.utils.DebugDialogue;
@@ -265,6 +267,33 @@ public class MainController implements Initializable {
 			}
 			
 			Main.game.setContent(new Response("", "", OptionsDialogue.MENU));
+		}
+	}
+
+	public void openCheatMenu() {
+		// TODO: Cheat code
+
+		DialogueNode toDialogue = CheatDialogue.MENU;
+
+		if(isPhoneDisabled() && toDialogue!=PositioningMenu.POSITIONING_MENU && Main.game.getCurrentDialogueNode()!=PositioningMenu.POSITIONING_MENU) {
+			return;
+		}
+		
+		if (Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.PHONE) {
+			Main.game.restoreSavedContent(false);
+			
+		} else {
+			if (Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.NORMAL
+//					|| Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.OCCUPANT_MANAGEMENT
+					) {
+				Main.game.saveDialogueNode();
+			}
+			
+			Pathing.initPathingVariables();
+			if(toDialogue.equals(PhoneDialogue.MAP)) {
+				PhoneDialogue.worldTypeMap = Main.game.getPlayer().getWorldLocation();
+			}
+			Main.game.setContent(new Response("", "", toDialogue));
 		}
 	}
 
@@ -1115,6 +1144,7 @@ public class MainController implements Initializable {
 	
 	// Buttons:
 	static ButtonCopyDialogueEventListener copyDialogueButtonListener = new ButtonCopyDialogueEventListener();
+	static ButtonCheatMenuEventListener cheatMenuButtonListener = new ButtonCheatMenuEventListener();
 	static ButtonCharactersEventListener charactersPresentButtonListener = new ButtonCharactersEventListener();
 	static ButtonInventoryEventHandler inventoryButtonListener = new ButtonInventoryEventHandler();
 	static ButtonJournalEventListener journalButtonListener = new ButtonJournalEventListener();
@@ -1938,6 +1968,18 @@ public class MainController implements Initializable {
 					+ "This scene was written by: <b>"+Main.game.getCurrentDialogueNode().getAuthor()+"</b>",
 					80), false);
 			
+		}
+
+		id = "cheatMenuButton";
+		if(((EventTarget) documentButtonsRight.getElementById(id))!=null) {
+			MainController.addEventListener(documentButtonsRight, id, "click", cheatMenuButtonListener, false);
+			MainController.addEventListener(documentButtonsRight, id, "mousemove", moveTooltipListener, false);
+			MainController.addEventListener(documentButtonsRight, id, "mouseleave", hideTooltipListener, false);
+			
+
+			MainController.addEventListener(documentButtonsRight, id, "mouseenter", new TooltipInformationEventListener().setInformation("Cheat menu",
+					"Use cheats to modify your character or their surroundings.<br/>",
+					48), false);
 		}
 		
 		id = "exportCharacter";

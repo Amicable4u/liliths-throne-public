@@ -2460,36 +2460,42 @@ public enum RenderingEngine {
 										|| Main.game.getCurrentDialogueNode().equals(PhoneDialogue.CONTACTS_CHARACTER));
 		
 		Main.mainController.setButtonsRightContent(
-				 "<div class='quarterContainer' style='width:25%; float:right;'>"
-					+ "<div class='button" + (Main.isLoadGameAvailable(Main.getQuickSaveName())?"":" disabled")+ "' id='quickLoad'>"
-						+ (Main.isLoadGameAvailable(Main.getQuickSaveName())
-								?SVGImages.SVG_IMAGE_PROVIDER.getDiskLoadQuick()
-								:SVGImages.SVG_IMAGE_PROVIDER.getDiskLoadDisabled())
-						+ (!Main.isLoadGameAvailable(Main.getQuickSaveName()) ? "<div class='disabledLayer'></div>" : "")
-					+ "</div>"
+			"<div class='quarterContainer'>"
+				+ "<div class='button" + (Main.isQuickSaveAvailable()?"":" disabled")+ "' id='quickSave'>"
+					+ (Main.isQuickSaveAvailable()
+							?SVGImages.SVG_IMAGE_PROVIDER.getDiskSave()
+							:SVGImages.SVG_IMAGE_PROVIDER.getDiskSaveDisabled())
+					+ (!Main.isQuickSaveAvailable() ? "<div class='disabledLayer'></div>" : "")
 				+ "</div>"
+			+ "</div>"
+
+			+ "<div class='quarterContainer'>"
+				+ "<div class='button" + (Main.isLoadGameAvailable(Main.getQuickSaveName())?"":" disabled")+ "' id='quickLoad'>"
+					+ (Main.isLoadGameAvailable(Main.getQuickSaveName())
+							?SVGImages.SVG_IMAGE_PROVIDER.getDiskLoadQuick()
+							:SVGImages.SVG_IMAGE_PROVIDER.getDiskLoadDisabled())
+					+ (!Main.isLoadGameAvailable(Main.getQuickSaveName()) ? "<div class='disabledLayer'></div>" : "")
+				+ "</div>"
+			+ "</div>"
 					
-				+ "<div class='quarterContainer' style='width:25%; float:right;'>"
-					+ "<div class='button" + (Main.isQuickSaveAvailable()?"":" disabled")+ "' id='quickSave'>"
-						+ (Main.isQuickSaveAvailable()
-								?SVGImages.SVG_IMAGE_PROVIDER.getDiskSave()
-								:SVGImages.SVG_IMAGE_PROVIDER.getDiskSaveDisabled())
-						+ (!Main.isQuickSaveAvailable() ? "<div class='disabledLayer'></div>" : "")
-					+ "</div>"
+			+ "<div class='quarterContainer'>"
+				+ "<div class='button"+(exportAvailable?"":" disabled")+"' id='exportCharacter'>"
+					+ SVGImages.SVG_IMAGE_PROVIDER.getExportIcon()
+					+ (!exportAvailable ? "<div class='disabledLayer'></div>" : "")
 				+ "</div>"
-					
-				+ "<div class='quarterContainer' style='width:25%; float:left;'>"
-					+ "<div class='button"+(exportAvailable?"":" disabled")+"' id='exportCharacter'>"
-						+ SVGImages.SVG_IMAGE_PROVIDER.getExportIcon()
-						+ (!exportAvailable ? "<div class='disabledLayer'></div>" : "")
-					+ "</div>"
+			+ "</div>"
+				
+			+ "<div class='quarterContainer'>"
+				+ "<div class='button' id='copyContent'>"
+					+ SVGImages.SVG_IMAGE_PROVIDER.getCopyIcon()
 				+ "</div>"
-					
-				+ "<div class='quarterContainer' style='width:25%; float:left;'>"
-					+ "<div class='button' id='copyContent'>"
-						+ SVGImages.SVG_IMAGE_PROVIDER.getCopyIcon()
-					+ "</div>"
+			+ "</div>"
+
+			+ "<div class='quarterContainer'>"
+				+ "<div class='button' id='cheatMenuButton'>"
+					+ SVGImages.SVG_IMAGE_PROVIDER.getCheatIcon()
 				+ "</div>"
+			+ "</div>"
 					
 //				+ "<div class='quarterContainer' style='text-align:center; width:60%; font-size:0.8em; float:right; color:"+PresetColour.TEXT_GREY.toWebHexString()+";'>"
 //					+ "Difficulty: <span style='color:"+Main.getProperties().difficultyLevel.getColour().getShades()[1]+";'>"+Main.getProperties().difficultyLevel.getName()+"</span>"

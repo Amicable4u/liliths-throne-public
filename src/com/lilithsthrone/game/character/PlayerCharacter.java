@@ -86,7 +86,6 @@ import com.lilithsthrone.utils.SizedStack;
 import com.lilithsthrone.utils.TreeNode;
 import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.utils.Vector2i;
-import com.lilithsthrone.utils.XMLSaving;
 import com.lilithsthrone.utils.colours.PresetColour;
 import com.lilithsthrone.world.AbstractWorldType;
 import com.lilithsthrone.world.WorldType;
@@ -98,7 +97,7 @@ import com.lilithsthrone.world.places.PlaceType;
  * @version 0.3.7.7
  * @author Innoxia
  */
-public class PlayerCharacter extends GameCharacter implements XMLSaving {
+public class PlayerCharacter extends GameCharacter {
 	
 	private String title;
 	
