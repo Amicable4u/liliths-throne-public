@@ -271,29 +271,20 @@ public class MainController implements Initializable {
 	}
 
 	public void openCheatMenu() {
-		// TODO: Cheat code
-
-		DialogueNode toDialogue = CheatDialogue.MENU;
-
-		if(isPhoneDisabled() && toDialogue!=PositioningMenu.POSITIONING_MENU && Main.game.getCurrentDialogueNode()!=PositioningMenu.POSITIONING_MENU) {
+		if(isPhoneDisabled()) {
 			return;
 		}
 		
 		if (Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.PHONE) {
 			Main.game.restoreSavedContent(false);
-			
 		} else {
 			if (Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.NORMAL
 //					|| Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.OCCUPANT_MANAGEMENT
 					) {
 				Main.game.saveDialogueNode();
 			}
-			
-			Pathing.initPathingVariables();
-			if(toDialogue.equals(PhoneDialogue.MAP)) {
-				PhoneDialogue.worldTypeMap = Main.game.getPlayer().getWorldLocation();
-			}
-			Main.game.setContent(new Response("", "", toDialogue));
+
+			CheatDialogue.open();
 		}
 	}
 
