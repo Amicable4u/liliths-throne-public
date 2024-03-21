@@ -476,7 +476,7 @@ public class PlayerTalk {
 							UtilText.returnStringAtRandom(
 								"[npc.speech(Please tell me what you want me to do!)]",
 								"[npc.speech(I'll do anything you want, just tell me how you want to use me!)]"
-							)
+							) +"<br/><br/>"
 						);
 						break;
 					case SUB_NORMAL:
@@ -553,51 +553,52 @@ public class PlayerTalk {
 		// Main.sex.isConsensual();
 		// Main.sex.get
 
-
 		if (desired.isPenetrating()) {
-			// penetrative sex (tentacle, tail, penis, finger, tongue)
+			// penetrative sex (tentacle, tail, penis, finger, tongue, thighs)
 			// any orifice and non-orifice
-			String actionDescription = "my " + pname + " in your" + tname;
+
+			// TODO (mark): thighs
+			String actionDescription = "my " + pname + " in your " + tname;
 
 			switch (sexPace) {
 				case DOM_GENTLE:
 				case DOM_NORMAL:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(Hmm, how about I put " + actionDescription + ")]",
-							"[npc.speech(I think we'd both enjoy it if I shoved " + actionDescription + ")]"
+							"[npc2.speech(Hmm, how about I put " + actionDescription + ")]",
+							"[npc2.speech(I think we'd both enjoy it if I shoved " + actionDescription + ")]"
 						) +"<br/><br/>"
 					);
 					break;
 				case DOM_ROUGH:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(Shut up! Maybe you'll be lucky enough to take " + actionDescription +  ".)]",
-							"[npc.speech(Aren't you an eager little whore? Want to take " + actionDescription + "?)]"
+							"[npc2.speech(Shut up! Maybe you'll be lucky enough to take " + actionDescription +  ".)]",
+							"[npc2.speech(Aren't you an eager little whore? Want to take " + actionDescription + "?)]"
 						)
 					);
 					break;
 				case SUB_NORMAL:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(Please, I wanna put " + actionDescription + "!)]",
-							"[npc.speech(Can I put " + actionDescription + "?)]"
+							"[npc2.speech(Please, I wanna put " + actionDescription + "!)]",
+							"[npc2.speech(Can I put " + actionDescription + "?)]"
 						) +"<br/><br/>"
 					);
 					break;
 				case SUB_EAGER:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(Can this worthless slut put [npc2].her " + pname + " in your" + tname + "?)]",
-							"[npc.speech(Please let me put " + actionDescription + ", I promise I'll make you feel [style.italicsMinorGood(really)] good!)]"
+							"[npc2.speech(Can this worthless slut put [npc2].her " + pname + " in your " + tname + "?)]",
+							"[npc2.speech(Please let me put " + actionDescription + ", I promise I'll make you feel [style.italicsMinorGood(really)] good!)]"
 						) +"<br/><br/>"
 					);
 					break;
 				case SUB_RESISTING:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(Get off me, or I'll put " + actionDescription + "!)]",
-							"[npc.speech(Please, don't make me keep going! But if you're going to keep raping me, at least let me put " + actionDescription + ".)]"
+							"[npc2.speech(Get off me, or I'll put " + actionDescription + "!)]",
+							"[npc2.speech(Please, don't make me keep going! But if you're going to keep raping me, at least let me put " + actionDescription + ".)]"
 						) +"<br/><br/>"
 					);
 					break;
@@ -606,49 +607,49 @@ public class PlayerTalk {
 					break;
 			}
 		} else if (desired.isBeingPenetrated()) {
-			// penetrative sex (tentacle, tail, penis, finger, tongue)
+			// penetrative sex (tentacle, tail, penis, finger, tongue, thighs)
 			// any orifice and non-orifice
-			String actionDescription = "your " + tname + " in my" + pname;
-			UtilText.nodeContentSB.append(actionDescription);
+			String actionDescription = "your " + tname + " in my " + pname;
 
 			switch (sexPace) {
 				case DOM_GENTLE:
 				case DOM_NORMAL:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(You've been a good [npc.girl], how about I let you fuck my " + pname + " with your " + tname + "?)]",
-							"[npc.speech(I want to feel " + actionDescription + ".)]"
+							"[npc2.speech(You've been a good [npc2.girl], how about I let you fuck my " + pname + " with your " + tname + "?)]",
+							"[npc2.speech(I want to feel " + actionDescription + ".)]"
 						) +"<br/><br/>"
 					);
 					break;
 				case DOM_ROUGH:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(You want to please me that badly, you whore? Fine, I'll let you put " + actionDescription + ", but you'd better do your best to please me.)]",
-							"[npc.speech(I'll give you the honour of putting " + actionDescription + ", you worthless slut.)]"
+							"[npc2.speech(You want to please me that badly, you whore? Fine, I'll let you put " + actionDescription + ", but you'd better do your best to please me.)]",
+							"[npc2.speech(I'll give you the honour of putting " + actionDescription + ", you worthless slut.)]"
 						)
 					);
 					break;
 				case SUB_NORMAL:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(Please put" + actionDescription + "! It would be so hot...)]",
-							"[npc.speech(It would [style.italicsMinorGood(really)] turn me on if you fucked my " + pname + " with your " + tname + ".)]"
+							"[npc2.speech(Please put" + actionDescription + "! It would be so hot...)]",
+							"[npc2.speech(It would [style.italicsMinorGood(really)] turn me on if you fucked my " + pname + " with your " + tname + ".)]"
 						) +"<br/><br/>"
 					);
+					break;
 				case SUB_EAGER:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(Fuck yeah! Shove " + actionDescription + ", make me your slut!)]",
-							"[npc.speech(What do I want? I want " + actionDescription + "! I want " + (targetArea.isPlural() ? "them" : "it") +  " so bad!)]"
+							"[npc2.speech(Fuck yeah! Shove " + actionDescription + ", make me your slut!)]",
+							"[npc2.speech(What do I want? I want " + actionDescription + "! I want " + (targetArea.isPlural() ? "them" : "it") +  " so bad!)]"
 						) +"<br/><br/>"
 					);
 					break;
 				case SUB_RESISTING:
 					UtilText.nodeContentSB.append(
 						UtilText.returnStringAtRandom(
-							"[npc.speech(Fuck off! At least put " + actionDescription + " if you're going to rape me like this!)]",
-							"[npc.speech(Fine! You can put your ugly " + tname + " in my" + pname + " if it will get this over with faster.)]"
+							"[npc2.speech(Fuck off! At least put " + actionDescription + " if you're going to rape me like this!)]",
+							"[npc2.speech(Fine! You can put your ugly " + tname + " in my" + pname + " if it will get this over with faster.)]"
 						) +"<br/><br/>"
 					);
 					break;
