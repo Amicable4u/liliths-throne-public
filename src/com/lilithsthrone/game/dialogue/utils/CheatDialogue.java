@@ -1,6 +1,7 @@
 package com.lilithsthrone.game.dialogue.utils;
 
 import com.lilithsthrone.game.character.PlayerCharacter;
+import com.lilithsthrone.game.character.attributes.Attribute;
 import com.lilithsthrone.game.combat.spells.SpellSchool;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.DialogueNodeType;
@@ -102,20 +103,48 @@ public class CheatDialogue {
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
+			PlayerCharacter player = Main.game.getPlayer();
 			if(responseTab==0) {
 				if (index == 1) {
 					return new Response(
-							"<span style='color:" + PresetColour.BASE_GOLD.toWebHexString() + ";'>Give 1k</span>",
-							"Give the player 1000 money.", CheatDialogue.MENU){
-						@Override
-						public void effects() {
-							Main.game.getPlayer().incrementMoney(1000);
-						}
-					};
+						"<span style='color:" + PresetColour.BASE_GOLD.toWebHexString() + ";'>Give 1k</span>",
+						"Give the player 1000 money.", CheatDialogue.MENU) {
+							@Override
+							public void effects() {
+								player.incrementMoney(1000);
+							}
+						};
 				} else if (index == 2) {
 					return new Response(
-							"Get spell",
-							"Gain a spell upgrade point.", CheatDialogue.SPELL);
+						"<span style='color:" + PresetColour.BASE_GOLD.toWebHexString() + ";'>Give 10k</span>",
+						"Increase player's money by 10000.", CheatDialogue.MENU) {
+							@Override
+							public void effects() {
+								player.incrementMoney(10000);
+							}
+						};
+				} else if (index == 3) {
+					return new Response(
+						"Get spell",
+						"Gain a spell upgrade point.", CheatDialogue.SPELL);
+				} else if (index == 4) {
+					return new Response(
+						"Regain aura",
+						"Completely refill your aura.", CheatDialogue.MENU) {
+							@Override
+							public void effects() {
+								player.setMana(player.getAttributeValue(Attribute.MANA_MAXIMUM));
+							}
+					};
+				} else if (index == 5) {
+					return new Response(
+						"Get essence",
+						"Give the player 10 arcane essence.", CheatDialogue.MENU) {
+							@Override
+							public void effects() {
+								player.incrementEssenceCount(10, false);
+							}
+					};
 				}
 			} else if(responseTab==1) {
 				// TODO
