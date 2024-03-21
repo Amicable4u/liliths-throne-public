@@ -19,4 +19,14 @@ java -jar target/Lilith\'s\ Throne\ \(linux\)/Lilith\'s\ Throne-0.4.9.jar
 
 ## Changelog (this fork)
 
-Add a cheat menu (#cheatMenuButton)
+* Add a cheat menu (#cheatMenuButton)
+private static SexType getMainSexPreference(GameCharacter dom, GameCharacter sub) {
+
+## TODO (this fork)
+
+* More cheat menu options (unlock spell, add exp, change fetishes, modify present characters)
+* Allow NPCs to use "Ask" SexAction
+* Abstraction for referring to the other partner (pet names, dominant, submissive, gentle or rough terms)
+* Pet play
+* Violence (impact, electro, sharps)
+* extended cum play (display in mouth, cum sharing)
