@@ -557,8 +557,7 @@ public class PlayerTalk {
 			// penetrative sex (tentacle, tail, penis, finger, tongue, thighs)
 			// any orifice and non-orifice
 
-			// TODO (mark): thighs
-			String actionDescription = "my " + pname + " in your " + tname;
+			String actionDescription = "my " + pname + " in" + (targetArea == SexAreaOrifice.THIGHS ? "-between" : "") + " your " + tname;
 
 			switch (sexPace) {
 				case DOM_GENTLE:
@@ -609,7 +608,7 @@ public class PlayerTalk {
 		} else if (desired.isBeingPenetrated()) {
 			// penetrative sex (tentacle, tail, penis, finger, tongue, thighs)
 			// any orifice and non-orifice
-			String actionDescription = "your " + tname + " in my " + pname;
+			String actionDescription = "your " + tname + " in" + (performingArea == SexAreaOrifice.THIGHS ? "-between" : "") + " my " + pname;
 
 			switch (sexPace) {
 				case DOM_GENTLE:

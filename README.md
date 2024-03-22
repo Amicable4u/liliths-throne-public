@@ -30,3 +30,5 @@ private static SexType getMainSexPreference(GameCharacter dom, GameCharacter sub
 * Pet play
 * Violence (impact, electro, sharps)
 * extended cum play (display in mouth, cum sharing)
+* Allow dom giving directions during scene (eat her pussy etc.)
+* Allow sub to "role play as dom" (can perform any action, but must always answer yes to requests, and must ask before performing non self-penetrative actions)
