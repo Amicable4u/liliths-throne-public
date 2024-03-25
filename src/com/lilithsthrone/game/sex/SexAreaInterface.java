@@ -38,6 +38,10 @@ public interface SexAreaInterface {
 	public default boolean isPlural() {
 		return false;
 	}
+
+	public default String getDemonstrativePronoun() {
+		return this.isPlural() ? "those" : "that";
+	}
 	
 	public String getSexDescription(boolean pastTense, GameCharacter performer, SexPace performerPace, GameCharacter target, SexPace targetPace, SexAreaInterface targetArea);
 	

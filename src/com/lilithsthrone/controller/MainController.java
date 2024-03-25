@@ -116,6 +116,7 @@ import com.lilithsthrone.game.sex.managers.SexManagerDefault;
 import com.lilithsthrone.game.sex.positions.SexPosition;
 import com.lilithsthrone.game.sex.positions.slots.SexSlotLyingDown;
 import com.lilithsthrone.game.sex.sexActions.baseActions.PenisVagina;
+import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.AskAction;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.PositioningMenu;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.rendering.ImageCache;
@@ -297,13 +298,12 @@ public class MainController implements Initializable {
 	}
 	
 	public void openPhone(DialogueNode toDialogue) {
-		if(isPhoneDisabled() && toDialogue!=PositioningMenu.POSITIONING_MENU && Main.game.getCurrentDialogueNode()!=PositioningMenu.POSITIONING_MENU) {
+		if(isPhoneDisabled() && toDialogue != PositioningMenu.POSITIONING_MENU && Main.game.getCurrentDialogueNode() != PositioningMenu.POSITIONING_MENU && toDialogue != AskAction.ASK_MENU) {
 			return;
 		}
 		
 		if (Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.PHONE) {
 			Main.game.restoreSavedContent(false);
-			
 		} else {
 			if (Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.NORMAL
 //					|| Main.game.getCurrentDialogueNode().getDialogueNodeType() == DialogueNodeType.OCCUPANT_MANAGEMENT
@@ -312,7 +312,7 @@ public class MainController implements Initializable {
 			}
 			
 			Pathing.initPathingVariables();
-			if(toDialogue.equals(PhoneDialogue.MAP)) {
+			if (toDialogue.equals(PhoneDialogue.MAP)) {
 				PhoneDialogue.worldTypeMap = Main.game.getPlayer().getWorldLocation();
 			}
 			Main.game.setContent(new Response("", "", toDialogue));
