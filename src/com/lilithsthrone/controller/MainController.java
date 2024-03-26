@@ -298,7 +298,7 @@ public class MainController implements Initializable {
 	}
 
 	public void openPhone(DialogueNode toDialogue) {
-		openPhone(PhoneDialogue.MENU, false);
+		openPhone(toDialogue, false);
 	}
 	
 	public void openPhone(DialogueNode toDialogue, boolean ignoreRestrictions) {

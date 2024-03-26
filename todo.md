@@ -2,9 +2,12 @@
 
 * More cheat menu options (add exp, change fetishes, modify present characters, transform, rest)
 * Pet play (allow to ride slaves with saddles, bit gags)
-* Dialogue for playing with toys / bondage items (Buttplug lick clean, hit with crop)
-* * Buttplug unequip:
-* * InventoryDialogue.java: new Response("Unequip", "Unequip the "
+* Dialogue for playing with toys / bondage items
+  * Buttplug lick clean on unequip:
+
+    InventoryDialogue.java: new Response("Unequip", "Unequip the "
+  * hit with crop
+  * Tease chastity during sex
 * "Get Bathed" option (if slave is in party)
 * Pain play (impact, electro, sharps, slave job punching-bag)
 * extended cum play (display in mouth, cum sharing)
