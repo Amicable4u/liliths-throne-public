@@ -11,8 +11,8 @@ import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.colours.PresetColour;
 
 /**
- * @since 0.1.0
- * @version 0.3.9
+ * @since 0.4.9
+ * @version 0.4.9
  * @author Mark
  */
 public class CheatDialogue {
@@ -29,7 +29,22 @@ public class CheatDialogue {
 		public String getContent() {
 			UtilText.nodeContentSB.setLength(0);
 
-			UtilText.nodeContentSB.append("<p>Click the spell school to gain a spell upgrade point.</p>");
+			UtilText.nodeContentSB.append("<p>Click the spell school to gain a spell upgrade point.</p>")
+				.append("<p>Earth: ")
+				.append(Main.game.getPlayer().getSpellUpgradePoints(SpellSchool.EARTH))
+				.append("</p>")
+				.append("<p>Water: ")
+				.append(Main.game.getPlayer().getSpellUpgradePoints(SpellSchool.WATER))
+				.append("</p>")
+				.append("<p>Fire: ")
+				.append(Main.game.getPlayer().getSpellUpgradePoints(SpellSchool.FIRE))
+				.append("</p>")
+				.append("<p>Air: ")
+				.append(Main.game.getPlayer().getSpellUpgradePoints(SpellSchool.AIR))
+				.append("</p>")
+				.append("<p>Arcane: ")
+				.append(Main.game.getPlayer().getSpellUpgradePoints(SpellSchool.ARCANE))
+				.append("</p>");
 			
 			return UtilText.nodeContentSB.toString();
 		}

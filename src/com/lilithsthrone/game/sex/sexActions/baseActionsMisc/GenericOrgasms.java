@@ -1375,16 +1375,16 @@ public class GenericOrgasms {
 								"[npc.moansVerb], [npc.speechNoEffects(Get pregnant, you [npc2.bitch+]!)]",
 								"[npc.verb(tease)], [npc.speechNoEffects(You're going to get pregnant from this, [npc2.bitch]...)]",
 								"[npc.verb(tease)], [npc.speechNoEffects(You'll be carrying my kids soon enough, [npc2.bitch]...)]",
-								"[npc.verb(tease)], [npc.speechNoEffects(I'll have knocked you up from this, [npc2.bitch]...)]",
-								"[npc.verb(tease)], [npc.speechNoEffects(I'll have got you pregnant from this, [npc2.bitch]...)]"));
+								"[npc.verb(tease)], [npc.speechNoEffects(I bet I just knocked you up, [npc2.bitch]...)]",
+								"[npc.verb(tease)], [npc.speechNoEffects(Hope you're ready to be pregnant, [npc2.bitch]...)]"));
 						
 					} else {
 						genericOrgasmSB.append(UtilText.returnStringAtRandom(
 								"[npc.moansVerb], [npc.speechNoEffects(Get pregnant!)]",
 								"[npc.verb(tease)], [npc.speechNoEffects(You're going to get pregnant from this...)]",
 								"[npc.verb(tease)], [npc.speechNoEffects(You'll be carrying my kids soon enough...)]",
-								"[npc.verb(tease)], [npc.speechNoEffects(I'll have knocked you up from this...)]",
-								"[npc.verb(tease)], [npc.speechNoEffects(I'll have got you pregnant from this...)]"));
+								"[npc.verb(tease)], [npc.speechNoEffects(I bet I just knocked you up...)]",
+								"[npc.verb(tease)], [npc.speechNoEffects(Hope you're ready to be pregnant...)]"));
 					}
 				} else {
 					genericOrgasmSB.append(".");

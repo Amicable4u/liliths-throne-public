@@ -14,6 +14,7 @@ import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.DialogueNodeType;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.responses.ResponseEffectsOnly;
+import com.lilithsthrone.game.dialogue.utils.ParserTarget;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.game.sex.ArousalIncrease;
 import com.lilithsthrone.game.sex.SexAreaInterface;
@@ -35,96 +36,135 @@ import com.lilithsthrone.utils.Util;
  */
 public class AskAction {
 
-	private static GameCharacter asker;
-	private static GameCharacter responder;
-	private static SexType desiredSexType;
-	
-	public static final DialogueNode ASK_MENU = new DialogueNode("Request", "", true) {
-		@Override
-		public String getLabel() {
-			// TODO (mark): add the name of the requested action?
-			return "Request";
-		}
+	private static DialogueNode getReturnDialogue(String content, DialogueNode currentDialogue) {
+		return new DialogueNode(currentDialogue.getLabel(), content, true, true) {
+			@Override
+			public String getContent() {
+				return content;
+			}
 
-		@Override
-		public String getContent() {
-			StringBuilder sb = UtilText.nodeContentSB;
-			sb.setLength(0);
-
-			sb.append("<div class='container-full-width'>");
-				sb.append("<p style='text-align:center;'>How will you respond to ");
-					sb.append(UtilText.parse(responder,
-					"<span style=\"color:"+responder.getFemininity().getColour().toWebHexString()+";\">[npc.Name]"));
-					sb.append("'s</span> request?");
-				sb.append("</p>");
-			sb.append("</div>");
-		
-			return sb.toString();
-		}
-
-		@Override
-		public Response getResponse(int responseTab, int index) {
-			if (index == 1) {
-				boolean isPossible = true; // TODO (mark)
-				boolean isPositionChangeRequired = false;
-				return new ResponseEffectsOnly("Accept", isPositionChangeRequired ? "Move into position (may disrupt ongoing actions)." : "") {
-					@Override
-					public boolean isSexPositioningHighlight() {
-						return isPositionChangeRequired;
-					}
-
-					@Override
-					public void effects() {
-						Main.mainController.openPhone();
-						UtilText.nodeContentSB.setLength(0);
-
-						if (isPositionChangeRequired) {
-							if (Main.sex.isDom(asker)) {
-								UtilText.nodeContentSB.append("You manoeuvre [npc.name] into [npc.her] new place, ready to satisfy [npc.her] wishes.");
-							} else {
-								UtilText.nodeContentSB.append("You manoeuvre yourself into your new place, ready to fulfil [npc.namePos] wishes.");
-							}
-							// TODO (mark): actually change the position and start the new action
-	
-							// SexActionUtility.POSITION_SELECTION.applyEffects();
-							// Main.sex.endSexTurn(SexActionUtility.POSITION_SELECTION);
-							// Main.game.setContent(new Response("", "", Main.sex.SEX_DIALOGUE));
-						} else {
-							if (Main.sex.isDom(asker)) {
-								SexAreaInterface performingArea = desiredSexType.getPerformingSexArea();
-								SexAreaInterface targetArea = desiredSexType.getTargetedSexArea();
-								Main.sex.applyOngoingAction(responder, performingArea, asker, targetArea, true);
-							} else {
-								// Give the dom impetus to do it
-								responder.generateSexChoices(true, Main.game.getPlayer(), Util.newArrayListOfValues(desiredSexType));
-							}
-						}
-
-						UtilText.nodeContentSB.setLength(0);
-						UtilText.nodeContentSB.append(
-							Main.sex.isDom(asker)
-								? "[npc.speech(Sounds like fun.)]"
-								: "[npc2.speech(Mmm, I can't wait.)]"
-						);
-					}
-				};
-				
-			} else if(index==2) {
-				// TODO (mark): give dom a chance to override this preference, after the sub already asked
-				return new ResponseEffectsOnly("Decline", "");
+			@Override
+			public String getResponseTabTitle(int index) {
+				return currentDialogue.getResponseTabTitle(index);
 			}
 			
-			return null;
-		}
+			@Override
+			public Response getResponse(int responseTab, int index) {
+				return currentDialogue.getResponse(responseTab, index);
+			}
+		};
+	}
 
-		@Override
-		public DialogueNodeType getDialogueNodeType() {
-			return DialogueNodeType.PHONE;
-		}
-	};
+	private static DialogueNode getAskMenu(GameCharacter asker, GameCharacter responder, SexType desiredSexType, String askContent, String respondContent) {
+		DialogueNode currentDialogue = Main.game.getCurrentDialogueNode();
+		
+		return new DialogueNode("Request", "", true, true) {
+			@Override
+			public String getLabel() {
+				// TODO (mark): add the name of the requested action?
+				return "Request";
+			}
+		
+			@Override
+			public String getContent() {
+				StringBuilder sb = UtilText.nodeContentSB;
+				sb.setLength(0);
+				sb.append(askContent)
+				.append("<br /><br/>")
+				.append(respondContent)
+				.append(" [responder.She] replies.<br /><br/>")
+				.append("<div class='container-full-width'>")
+					.append("<p style='text-align:center;'>How will you respond to ")
+						.append(UtilText.parse(responder, "[responder.NameFem]'s request?"))
+					.append("</p>")
+				.append("</div>");
+			
+				return sb.toString();
+			}
+		
+			@Override
+			public Response getResponse(int responseTab, int index) {
+				boolean isPossible = true; // TODO (mark)
+				boolean isPositionChangeRequired = false;
+				UtilText.nodeContentSB.setLength(0);
+
+				if (index == 1) {
+					if (isPositionChangeRequired) {
+						if (Main.sex.isDom(asker)) {
+							UtilText.nodeContentSB.append("You manoeuvre [responder.name] into [responder.her] new place, ready to satisfy [responder.her] wishes.");
+						} else {
+							UtilText.nodeContentSB.append("You manoeuvre yourself around [responder.name], and get ready to fulfil [responder.her] wishes.");
+						}
+					}
+
+					UtilText.nodeContentSB.append(
+						Main.sex.isDom(asker)
+							? " [asker.speech(Sounds like fun.)]"
+							: " [asker.speech(Mmm, I can't wait.)]"
+					);
+
+					DialogueNode returnDialogue = getReturnDialogue(UtilText.nodeContentSB.toString(), currentDialogue);
+
+					return new Response("Accept", isPositionChangeRequired ? "Move into position (may disrupt ongoing actions)." : "", returnDialogue) {
+						@Override
+						public boolean isSexPositioningHighlight() {
+							return isPositionChangeRequired;
+						}
+		
+						@Override
+						public void effects() {
+							// Main.mainController.openPhone();
+							if (isPositionChangeRequired) {
+								// TODO (mark): actually change the position and start the new action
+
+								// SexActionUtility.POSITION_SELECTION.applyEffects();
+								// Main.sex.endSexTurn(SexActionUtility.POSITION_SELECTION);
+								// Main.game.setContent(new Response("", "", Main.sex.SEX_DIALOGUE));
+							} else {
+								if (Main.sex.isDom(asker)) {
+									SexAreaInterface performingArea = desiredSexType.getPerformingSexArea();
+									SexAreaInterface targetArea = desiredSexType.getTargetedSexArea();
+									Main.sex.applyOngoingAction(responder, performingArea, asker, targetArea, true);
+								} else {
+									// Give the dom impetus to do it
+									responder.generateSexChoices(true, Main.game.getPlayer(), Util.newArrayListOfValues(desiredSexType));
+								}
+							}
+						}
+					};
+				} else if (index == 2) {
+					// TODO (mark): give dom a chance to override this preference, after the sub already asked
+
+					UtilText.nodeContentSB.append(
+						Main.sex.isDom(asker)
+							? " [asker.speech(Not right now.)]"
+							: " [asker.speech(Maybe we could do something else?)]"
+					);
+
+					DialogueNode returnDialogue = getReturnDialogue(UtilText.nodeContentSB.toString(), currentDialogue);
+
+					return new Response("Decline", "", returnDialogue) {
+						@Override
+						public void effects() {
+							// TODO (mark): Work out what this does exactly, and if it is needed
+							// Main.game.restoreSavedContent(false);
+						}
+					};
+				}
+				
+				return null;
+			}
+		
+			@Override
+			public DialogueNodeType getDialogueNodeType() {
+				return DialogueNodeType.PHONE;
+			}
+		};
+	}
+		
 
 	public static final SexAction PLAYER_ASK = new SexAction(
-			SexActionType.SPEECH_WITH_ALTERNATIVE,
+			SexActionType.MISC_NO_TURN_END,
 			ArousalIncrease.ONE_MINIMUM,
 			ArousalIncrease.ONE_MINIMUM,
 			CorruptionLevel.ONE_VANILLA,
@@ -139,9 +179,9 @@ public class AskAction {
 		@Override
 		public String getActionDescription() {
 			if(Main.sex.getCharacterPerformingAction().isSpeechMuffled()) {
-				return "Give [npc2.name] a questioning look, to ask what [npc2.he] wants you to do.";
+				return "Give [npc.name] a questioning look, to ask what [npc.she] wants you to do.";
 			}
-			return "Ask [npc2.name] what [npc2.he] wants you to do.";
+			return "Ask [npc.name] what [npc.she] wants you to do.";
 		}
 
 		@Override
@@ -153,16 +193,14 @@ public class AskAction {
 		@Override
 		public String getDescription() {
 			UtilText.nodeContentSB.setLength(0);
-			asker = Main.sex.getCharacterPerformingAction();
-			responder = Main.sex.getCharacterTargetedForSexAction(this);
-			SexPace pace = Main.sex.getSexPace(responder);
+			SexPace pace = Main.sex.getSexPace(Main.sex.getCharacterTargetedForSexAction(this));
 
 			if(Main.sex.getCharacterPerformingAction().isSpeechMuffled()) {
 				// TODO (mark): improve dialogue to account for blindfolds
 				UtilText.nodeContentSB.append(
 					UtilText.returnStringAtRandom(
-						"As [npc.namePos] mouth is blocked, [npc.she] [npc.verb(look)] at [npc2.name] inquisitively, in an attempt to find out what [npc2.she] wants from [npc.herHim].",
-						"With [npc.her] mouth being blocked, [npc.name] [npc.verb(fall)] back on giving [npc2.name] a suggestive look with [npc.her] [npc.eyes] in order to find out what [npc2.name] might want next."
+						"As [pc.namePos] mouth is blocked, [pc.she] [pc.verb(look)] at [npc.name] inquisitively, in an attempt to find out what [npc.she] wants from [pc.herHim].",
+						"With [pc.her] mouth being blocked, [pc.name] [pc.verb(fall)] back on giving [npc.name] a suggestive look with [pc.her] [pc.eyes] in order to find out what [npc.name] might want next."
 					) +"<br/><br/>"
 				);
 			} else {
@@ -171,16 +209,16 @@ public class AskAction {
 					case DOM_NORMAL:
 						UtilText.nodeContentSB.append(
 							UtilText.returnStringAtRandom(
-								"[npc.speech(What do you want me to do next?)]",
-								"[npc.speech(Is there something I can do to make you feel good?)]"
+								"[pc.speech(What do you want me to do next?)]",
+								"[pc.speech(Is there something I can do to make you feel good?)]"
 							) +"<br/><br/>"
 						);
 						break;
 					case DOM_ROUGH:
 						UtilText.nodeContentSB.append(
 							UtilText.returnStringAtRandom(
-								"[npc.speech(Please tell me what you want me to do!)]",
-								"[npc.speech(I'll do anything you want, just tell me how you want to use me!)]"
+								"[pc.speech(Please tell me what you want me to do!)]",
+								"[pc.speech(I'll do anything you want, just tell me how you want to use me!)]"
 							) +"<br/><br/>"
 						);
 						break;
@@ -188,24 +226,24 @@ public class AskAction {
 						UtilText.nodeContentSB.append(
 							"You lean closer to [npc2.name] and "
 							+ UtilText.returnStringAtRandom(
-								"[npc.verb(ask)], [npc.speech(What do you want me to do, [npc2.name]?)]",
-								"[npc.verb(say)], [npc.speech(Tell me what you want next.)]"
+								"[pc.verb(ask)], [pc.speech(What do you want me to do, [npc.name]?)]",
+								"[pc.verb(say)], [pc.speech(Tell me what you want next.)]"
 							) +"<br/><br/>"
 						);
 						break;
 					case SUB_EAGER:
 						UtilText.nodeContentSB.append(
 							UtilText.returnStringAtRandom(
-								"[npc.speech(Speak up, you filthy whore! Beg for how you want to be used!)]",
-								"[npc.speech(Tell me what you want, you fucking slut! And don't make me ask again!)]"
+								"[pc.speech(Speak up, you filthy whore! Beg for how you want to be used!)]",
+								"[pc.speech(Tell me what you want, you fucking slut! And don't make me ask again!)]"
 							) +"<br/><br/>"
 						);
 						break;
 					case SUB_RESISTING:
 						UtilText.nodeContentSB.append(
 							UtilText.returnStringAtRandom(
-								"[npc.speech(What turns you on? Tell me or you're going to find out what turns me on instead!)]",
-								"[npc.speech(Tell me what you want, and don't make me ask again!)]"
+								"[pc.speech(What turns you on? If you don't tell me I'll see if you enjoy a little pain instead!)]",
+								"[pc.speech(Tell me what you want, and don't make me ask again!)]"
 							) +"<br/><br/>"
 						);
 						break;
@@ -215,25 +253,32 @@ public class AskAction {
 				}
 			}
 			
-			getAskResponse(pace);
-			
 			return UtilText.nodeContentSB.toString();
 		}
 
 		@Override
 		public void applyEffects() {
-			Main.mainController.openPhone(ASK_MENU);
+			GameCharacter asker = Main.sex.getCharacterPerformingAction();
+			GameCharacter responder = Main.sex.getCharacterTargetedForSexAction(this);
+			ParserTarget.addAdditionalParserTarget("asker", asker);
+			ParserTarget.addAdditionalParserTarget("responder", responder);
+			SexPace pace = Main.sex.getSexPace(responder);
+			SexType desired = getAskResponse(asker, responder, pace);
+			String askResponse = UtilText.nodeContentSB.toString();
+
+			DialogueNode askMenu = getAskMenu(asker, responder, desired, PLAYER_ASK.getDescription(), askResponse);
+			Main.mainController.openPhone(askMenu, true);
 		}
 	};
 
 	/**
-	 * Appends the response to Ask action to UtilText.nodeContentSB
+	 * Appends the response to AskAction to UtilText.nodeContentSB
 	 * @param asker character who asked what responder wanted
 	 * @param responder character who asked what responder wanted
 	 * @param sexPace sex pace (from responder's point of view)
-	 * @return the responder's response as an enriched string
+	 * @return the responder's desired SexType
 	 */
-	private static void getAskResponse(SexPace sexPace) {
+	private static SexType getAskResponse(GameCharacter asker, GameCharacter responder, SexPace sexPace) {
 		// TODO (mark): separate rape play and SUB_RESISTING cases
 
 		Map<SexType, Integer> preferences;
@@ -243,11 +288,11 @@ public class AskAction {
 			preferences = responder.getMainSexPreferences(false, asker, null);
 		}
 
-		// TODO (mark): just use desiredSexType instead of having a local as well
 		SexType desired = Util.getRandomObjectFromWeightedMap(preferences);
-		desiredSexType = desired;
 		String pname = desired.getPerformingSexArea().getName(responder);
 		String tname = desired.getTargetedSexArea().getName(asker);
+
+		UtilText.nodeContentSB.setLength(0);
 
 		// Main.sex.isConsensual();
 		// Main.sex.get
@@ -260,7 +305,7 @@ public class AskAction {
 
 			String penetrationPreposition = switch (targetArea) {
 				case ARMPITS -> "in";
-				default -> targetArea.isPlural() ? "in" : "in-between";
+				default -> targetArea.isPlural() ? "in-between" : "in";
 			};
 
 			// responder lick asker (armpits, ass-cheeks, thighs, breasts)
@@ -268,39 +313,29 @@ public class AskAction {
 
 				String orifice = targetArea == SexAreaOrifice.ASS ? "ass" : targetArea.getName(asker, false);
 
-				switch (sexPace) {
-					case DOM_GENTLE, DOM_NORMAL -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
+				UtilText.nodeContentSB.append(switch (sexPace) {
+					case DOM_GENTLE, DOM_NORMAL -> UtilText.returnStringAtRandom(
 								"[npc2.speech(Hmm, how about I lick your " + orifice + " up and down?)]",
 								"[npc2.speech(Let me bury my tongue " + penetrationPreposition + " " + targetArea.getDemonstrativePronoun() + " " + tname + ".)]"
-							) +"<br/><br/>"
-						);
-					case DOM_ROUGH -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
+							);
+					case DOM_ROUGH -> UtilText.returnStringAtRandom(
 								"[npc2.speech(Be a good bitch and give me your " + orifice +  " so I can get a good taste.)]",
 								"[npc2.speech(I hope you're not ticklish, slut. I want to lick your " + orifice + " nice and slow.)]"
-							)
-						);
-					case SUB_NORMAL -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
+							);
+					case SUB_NORMAL -> UtilText.returnStringAtRandom(
 								"[npc2.speech(Please, I wanna lick your " + orifice + "!)]",
 								"[npc2.speech(Can I use my tongue to make your " + orifice + " feel good?)]"
-							) +"<br/><br/>"
-						);
-						case SUB_EAGER -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
+							);
+						case SUB_EAGER -> UtilText.returnStringAtRandom(
 								"[npc2.speech(Will you let me shove my tongue " + penetrationPreposition + " your " + orifice + "?)]",
 								"[npc2.speech(Please use my worthless tongue to clean your " + orifice + ", I promise I'll make you feel [style.italicsMinorGood(really)] good!)]"
-							) +"<br/><br/>"
-						);
-					case SUB_RESISTING -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
+							);
+					case SUB_RESISTING -> UtilText.returnStringAtRandom(
 								"[npc2.name] cries out as [npc2.she] tries to throw you off. [npc2.speech(Fine! But I'll only use my tongue. Will that satisfy you?)]",
 								"[npc2.speech(Please, stop! If you're going to keep raping me, just let me lick your " + orifice + " and finish quickly!.)]"
-							) +"<br/><br/>"
-						);
-					default -> UtilText.nodeContentSB.append("Unknown respond tongue penetrating pace.<br/><br/>");
-				}
+							);
+					default -> "Unknown respond tongue penetrating pace.";
+				});
 			} else {
 				// responder penetrate asker
 				String actionDescription = "my " + pname + " " + penetrationPreposition + " your " + tname;
@@ -310,39 +345,29 @@ public class AskAction {
 
 				// }
 	
-				switch (sexPace) {
-					case DOM_GENTLE, DOM_NORMAL -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
-								"[npc2.speech(Hmm, how about I put " + actionDescription + ")]",
-								"[npc2.speech(I think we'd both enjoy it if I shoved " + actionDescription + ")]"
-							) +"<br/><br/>"
+				UtilText.nodeContentSB.append(switch (sexPace) {
+					case DOM_GENTLE, DOM_NORMAL -> UtilText.returnStringAtRandom(
+							"[npc2.speech(Hmm, how about I put " + actionDescription + ")]",
+							"[npc2.speech(I think we'd both enjoy it if I shoved " + actionDescription + ")]"
 						);
-					case DOM_ROUGH -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
-								"[npc2.speech(Shut up! Maybe you'll be lucky enough to take " + actionDescription +  ".)]",
-								"[npc2.speech(Aren't you an eager little whore? Want to take " + actionDescription + "?)]"
-							)
+					case DOM_ROUGH -> UtilText.returnStringAtRandom(
+							"[npc2.speech(Shut up! Maybe you'll be lucky enough to take " + actionDescription +  ".)]",
+							"[npc2.speech(Aren't you an eager little whore? Want to take " + actionDescription + "?)]"
 						);
-					case SUB_NORMAL -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
-								"[npc2.speech(Please, I wanna put " + actionDescription + "!)]",
-								"[npc2.speech(Can I put " + actionDescription + "?)]"
-							) +"<br/><br/>"
+					case SUB_NORMAL -> UtilText.returnStringAtRandom(
+							"[npc2.speech(Please, I wanna put " + actionDescription + "!)]",
+							"[npc2.speech(Can I put " + actionDescription + "?)]"
 						);
-					case SUB_EAGER -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
-								"[npc2.speech(Can this worthless slut put [npc2].her " + pname + " " + penetrationPreposition + " your " + tname + "?)]",
-								"[npc2.speech(Please let me put " + actionDescription + ", I promise I'll make you feel [style.italicsMinorGood(really)] good!)]"
-							) +"<br/><br/>"
+					case SUB_EAGER -> UtilText.returnStringAtRandom(
+							"[npc2.speech(Can this worthless slut put [npc2].her " + pname + " " + penetrationPreposition + " your " + tname + "?)]",
+							"[npc2.speech(Please let me put " + actionDescription + ", I promise I'll make you feel [style.italicsMinorGood(really)] good!)]"
 						);
-					case SUB_RESISTING -> UtilText.nodeContentSB.append(
-							UtilText.returnStringAtRandom(
-								"[npc2.speech(Get off me, or I'll put " + actionDescription + "!)]",
-								"[npc2.speech(Please, don't make me keep going! But if you're going to keep raping me, at least let me put " + actionDescription + ".)]"
-							) +"<br/><br/>"
+					case SUB_RESISTING -> UtilText.returnStringAtRandom(
+							"[npc2.speech(Get off me, or I'll put " + actionDescription + "!)]",
+							"[npc2.speech(Please, don't make me keep going! But if you're going to keep raping me, at least let me put " + actionDescription + ".)]"
 						);
-					default -> UtilText.nodeContentSB.append("Unknown respond penetrating pace.<br/><br/>");
-				}
+					default -> "Unknown respond penetrating pace.";
+				});
 			}
 		} else if (desired.isBeingPenetrated()) {
 			// penetrative sex (tentacle, tail, penis, finger, tongue, thighs)
@@ -351,56 +376,33 @@ public class AskAction {
 			SexAreaPenetration targetArea = (SexAreaPenetration)desired.getTargetedSexArea();
 			String penetrationPreposition = switch (performingArea) {
 				case ARMPITS -> "in";
-				default -> targetArea.isPlural() ? "in" : "in-between";
+				default -> targetArea.isPlural() ? "in-between" : "in";
 			};
 			String actionDescription = "your " + tname + " " + penetrationPreposition + " my " + pname;
 
-			switch (sexPace) {
-				case DOM_GENTLE:
-				case DOM_NORMAL:
-					UtilText.nodeContentSB.append(
-						UtilText.returnStringAtRandom(
-							"[npc2.speech(You've been a good [npc2.girl], how about I let you fuck my " + pname + " with your " + tname + "?)]",
-							"[npc2.speech(I want to feel " + actionDescription + ".)]"
-						) +"<br/><br/>"
+			UtilText.nodeContentSB.append(switch (sexPace) {
+				case DOM_GENTLE, DOM_NORMAL -> UtilText.returnStringAtRandom(
+						"[npc2.speech(You've been a good [npc2.girl], how about I let you fuck my " + pname + " with your " + tname + "?)]",
+						"[npc2.speech(I want to feel " + actionDescription + ".)]"
 					);
-					break;
-				case DOM_ROUGH:
-					UtilText.nodeContentSB.append(
-						UtilText.returnStringAtRandom(
-							"[npc2.speech(You want to please me that badly, you whore? Fine, I'll let you put " + actionDescription + ", but you'd better do your best to please me.)]",
-							"[npc2.speech(I'll give you the honour of putting " + actionDescription + ", you worthless slut.)]"
-						)
+				case DOM_ROUGH -> UtilText.returnStringAtRandom(
+						"[npc2.speech(You want to please me that badly, you whore? Fine, I'll let you put " + actionDescription + ", but you'd better do your best to please me.)]",
+						"[npc2.speech(I'll give you the honour of putting " + actionDescription + ", you worthless slut.)]"
 					);
-					break;
-				case SUB_NORMAL:
-					UtilText.nodeContentSB.append(
-						UtilText.returnStringAtRandom(
-							"[npc2.speech(Please put " + actionDescription + "! It would be so hot...)]",
-							"[npc2.speech(It would [style.italicsMinorGood(really)] turn me on if you fucked my " + pname + " with your " + tname + ".)]"
-						) +"<br/><br/>"
+				case SUB_NORMAL -> UtilText.returnStringAtRandom(
+						"[npc2.speech(Please put " + actionDescription + "! It would be so hot...)]",
+						"[npc2.speech(It would [style.italicsMinorGood(really)] turn me on if you fucked my " + pname + " with your " + tname + ".)]"
 					);
-					break;
-				case SUB_EAGER:
-					UtilText.nodeContentSB.append(
-						UtilText.returnStringAtRandom(
-							"[npc2.speech(Fuck yeah! Shove " + actionDescription + ", make me your slut!)]",
-							"[npc2.speech(What do I want? I want " + actionDescription + "! I want " + (targetArea.isPlural() ? "them" : "it") +  " so bad!)]"
-						) +"<br/><br/>"
+				case SUB_EAGER -> UtilText.returnStringAtRandom(
+						"[npc2.speech(Fuck yeah! Shove " + actionDescription + ", make me your slut!)]",
+						"[npc2.speech(What do I want? I want " + actionDescription + "! I want " + (targetArea.isPlural() ? "them" : "it") +  " so bad!)]"
 					);
-					break;
-				case SUB_RESISTING:
-					UtilText.nodeContentSB.append(
-						UtilText.returnStringAtRandom(
-							"[npc2.speech(Fuck off! At least put " + actionDescription + " if you're going to rape me like this!)]",
-							"[npc2.speech(Fine! You can put your ugly " + tname + " " + penetrationPreposition + " my" + pname + " if it will get this over with faster.)]"
-						) +"<br/><br/>"
+				case SUB_RESISTING -> UtilText.returnStringAtRandom(
+						"[npc2.speech(Fuck off! At least put " + actionDescription + " if you're going to rape me like this!)]",
+						"[npc2.speech(Fine! You can put your ugly " + tname + " " + penetrationPreposition + " my" + pname + " if it will get this over with faster.)]"
 					);
-					break;
-			
-				default:
-					break;
-			}
+				default -> "Unknown respond penetrated pace.";
+			});
 
 		} else {
 			// groping
@@ -497,5 +499,6 @@ public class AskAction {
 			// 		break;
 			// }
 		}
-	}	
+		return desired;
+	}
 }

@@ -296,9 +296,13 @@ public class MainController implements Initializable {
 	public void openPhone() {
 		openPhone(PhoneDialogue.MENU);
 	}
-	
+
 	public void openPhone(DialogueNode toDialogue) {
-		if(isPhoneDisabled() && toDialogue != PositioningMenu.POSITIONING_MENU && Main.game.getCurrentDialogueNode() != PositioningMenu.POSITIONING_MENU && toDialogue != AskAction.ASK_MENU) {
+		openPhone(PhoneDialogue.MENU, false);
+	}
+	
+	public void openPhone(DialogueNode toDialogue, boolean ignoreRestrictions) {
+		if(!ignoreRestrictions && isPhoneDisabled() && toDialogue != PositioningMenu.POSITIONING_MENU && Main.game.getCurrentDialogueNode() != PositioningMenu.POSITIONING_MENU) {
 			return;
 		}
 		

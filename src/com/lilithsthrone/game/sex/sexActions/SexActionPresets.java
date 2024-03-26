@@ -65,6 +65,7 @@ import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.GenericTalk;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.LovingActions;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.PartnerTalk;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.PlayerTalk;
+import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.AskAction;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.PositioningMenu;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.SadisticActions;
 import com.lilithsthrone.game.sex.sexActions.baseActionsSelf.SelfFingerAnus;
@@ -424,6 +425,7 @@ public class SexActionPresets {
 		miscActions.add(PlayerTalk.class);
 		miscActions.add(PartnerTalk.class);
 		miscActions.add(GenericTalk.class);
+		miscActions.add(AskAction.class);
 
 		// Sadistic actions:
 		sexActions.add(SadisticActions.class);

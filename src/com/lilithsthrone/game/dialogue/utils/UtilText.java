@@ -1801,6 +1801,49 @@ public class UtilText {
 		});
 
 		commandsList.add(new ParserCommand(
+				Util.newArrayListOfValues("nameFem"),
+				true,
+				false,
+				"(prefix/real name)",
+				"Returns the name of the target, colouring the name based on their femininity and <b>automatically appending</b> 'the' to names that don't start with a capital letter."
+						+ " If a prefix is provided, the prefix will be appended (with an automatic addition of a space) to non-capitalised names."
+						+ " If a blank space or 'true' is set as the argument, the character's true name will be returned, ignoring whether or not the player knows it.") {
+			@Override
+			public String parse(List<GameCharacter> specialNPCs, String command, String arguments, String target,
+					GameCharacter character) {
+						
+				String prefix = "<span style=\"color:"+character.getFemininity().getColour().toWebHexString()+";\">";
+				String suffix = "</span>";
+				if (arguments != null) {
+					if (arguments.equals(" ") || arguments.equalsIgnoreCase("true")) {
+						return prefix + character.getNameIgnoresPlayerKnowledge() + suffix;
+					}
+					if (!character.isPlayer()) {
+						return prefix + character.getName(arguments) + suffix;
+					}
+				}
+
+				if (!speechTarget.isEmpty()) {
+					return prefix + parseSyntaxNew(specialNPCs, speechTarget, parseCapitalise ? "PetName" : "petName", target,
+							ParseMode.REGULAR) + suffix;
+
+				} else {
+					if (isPlayer(target, character)) {
+						if (command.startsWith("N")) {
+							return prefix + "You" + suffix;
+						} else {
+							return prefix + "you" + suffix;
+						}
+					}
+					if (character.isPlayerKnowsName() || character.isPlayer()) {
+						return prefix + character.getName(true) + suffix;
+					}
+					return prefix + character.getName("the") + suffix;
+				}
+			}
+		});
+
+		commandsList.add(new ParserCommand(
 				Util.newArrayListOfValues(
 						"verb",
 						"verbPerson"),

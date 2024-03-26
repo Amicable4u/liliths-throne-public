@@ -62,6 +62,7 @@ import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.GenericTalk;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.LovingActions;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.PartnerTalk;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.PlayerTalk;
+import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.AskAction;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.PositioningMenu;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.SadisticActions;
 import com.lilithsthrone.game.sex.sexActions.baseActionsSelf.SelfFingerAnus;
@@ -173,6 +174,7 @@ public class SexActionManager {
 				new Value<>("PlayerTalk", PlayerTalk.class.getFields()),
 				new Value<>("PartnerTalk", PartnerTalk.class.getFields()),
 				new Value<>("GenericTalk", GenericTalk.class.getFields()),
+				new Value<>("AskAction", AskAction.class.getFields()),
 
 				// Sadistic actions:
 				new Value<>("SadisticActions", SadisticActions.class.getFields()),

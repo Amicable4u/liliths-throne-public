@@ -1584,7 +1584,7 @@ public class ParserTarget {
 	/**
 	 * Adds an associated between the tag and the target for parsing.
 	 */
-	public static void addAdditionalParserTarget(String tag, NPC target) {
+	public static void addAdditionalParserTarget(String tag, GameCharacter target) {
 		AbstractParserTarget newParserTarget = new AbstractParserTarget(Util.newArrayListOfValues(tag), "") {
 			public String getDescription() {
 				return target.getDescription();
@@ -1596,7 +1596,7 @@ public class ParserTarget {
 		};
 		if(idToParserTargetMap.containsKey(tag)) {
 //			System.err.println("Warning: Parser target of '"+tag+"' has been replaced!");
-			removeAdditionalParserTarget((NPC) idToParserTargetMap.get(tag).getCharacter(null, null));
+			removeAdditionalParserTarget(idToParserTargetMap.get(tag).getCharacter(null, null));
 		}
 		
 		parserTargetToIdMap.put(newParserTarget, tag);
@@ -1611,7 +1611,7 @@ public class ParserTarget {
 	/**
 	 * Removes map references to the specified NPC.
 	 */
-	public static void removeAdditionalParserTarget(NPC target) {
+	public static void removeAdditionalParserTarget(GameCharacter target) {
 		AbstractParserTarget targetToRemove = null;
 		
 		for(AbstractParserTarget parserTarget : allParserTargets) {
