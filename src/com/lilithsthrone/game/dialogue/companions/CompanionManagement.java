@@ -366,7 +366,7 @@ public class CompanionManagement {
 								}
 								Main.game.getPlayer().removeCompanion(characterSelected());
 								characterSelected().returnToHome();
-//								Main.mainController.openCharactersPresent();
+								// Main.mainController.openCharactersPresent();
 								Main.game.restoreSavedContent(false);
 							}
 						};

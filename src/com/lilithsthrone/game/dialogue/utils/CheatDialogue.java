@@ -131,7 +131,7 @@ public class CheatDialogue {
 				if (index == 1) {
 					return new ResponseEffectsOnly(
 						"<span style='color:" + PresetColour.BASE_GOLD.toWebHexString() + ";'>Give 1k</span>",
-						"Give the player 1000 money.") {
+						"Give the player 1,000 flames.") {
 							@Override
 							public void effects() {
 								player.incrementMoney(1000);
@@ -140,7 +140,7 @@ public class CheatDialogue {
 				} else if (index == 2) {
 					return new ResponseEffectsOnly(
 						"<span style='color:" + PresetColour.BASE_GOLD.toWebHexString() + ";'>Give 10k</span>",
-						"Increase player's money by 10000.") {
+						"Give the player 10,000 flames.") {
 							@Override
 							public void effects() {
 								player.incrementMoney(10000);

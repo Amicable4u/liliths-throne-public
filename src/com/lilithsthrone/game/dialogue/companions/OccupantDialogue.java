@@ -18,6 +18,7 @@ import com.lilithsthrone.game.character.fetishes.Fetish;
 import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.character.npc.NPCFlagValue;
 import com.lilithsthrone.game.character.persona.Occupation;
+import com.lilithsthrone.game.dialogue.companions.SlaveInteract;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.DialogueNodeType;
 import com.lilithsthrone.game.dialogue.places.dominion.lilayashome.LilayaSpa;
@@ -53,6 +54,7 @@ public class OccupantDialogue {
 	private static GameCharacter characterForSex;
 	private static NPC characterForSexSecondary;
 	private static List<NPC> charactersPresent;
+	private static SlaveInteract slaveInteract;
 	private static boolean isApartment;
 	private static boolean confirmKickOut;
 	private static boolean initFromCharactersPresent;
@@ -69,6 +71,7 @@ public class OccupantDialogue {
 		} else if(targetedOccupant.isAtWork() || targetedOccupant.isAtHome()) {
 			CompanionManagement.initManagement(OCCUPANT_START, 2, targetedOccupant);
 		}
+		slaveInteract = SlaveInteract.fromCharacter(targetedOccupant);
 		
 		occupant = targetedOccupant;
 		characterForSex = targetedOccupant;
@@ -240,6 +243,8 @@ public class OccupantDialogue {
 				return UtilText.parse("[style.colourSex(Sex)]");
 			} else if(index == 2) {
 				return UtilText.parse("[style.colourCompanion(Manage)]");
+			} else if(index == 3 && slaveInteract != null) {
+				return SlaveInteract.responseTabTitle;
 			}
 			
 			return null;
@@ -1041,6 +1046,13 @@ public class OccupantDialogue {
 					return CompanionManagement.getManagementResponses(index);
 					
 				}
+				
+			} else if(responseTab == 2) {
+				return CompanionManagement.getManagementResponses(index);
+			} else if (responseTab == 3 && slaveInteract != null) {
+				return slaveInteract.getInteractResponses(index, OCCUPANT_START);
+			} else {
+				return null;
 			}
 			
 			return null;
@@ -1618,6 +1630,8 @@ public class OccupantDialogue {
 					return UtilText.parse("[style.colourSex(Sex)]");
 				} else if(index == 2) {
 					return UtilText.parse("[style.colourCompanion(Manage)]");
+				} else if(index == 3 && slaveInteract != null) {
+					return SlaveInteract.responseTabTitle;
 				}
 			}
 			
@@ -1875,7 +1889,8 @@ public class OccupantDialogue {
 				
 			} else if(responseTab == 2) {
 				return CompanionManagement.getManagementResponses(index);
-				
+			} else if (responseTab == 3 && slaveInteract != null) {
+				return slaveInteract.getInteractResponses(index, OCCUPANT_APARTMENT);
 			} else {
 				return null;
 			}

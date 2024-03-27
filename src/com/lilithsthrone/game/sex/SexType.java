@@ -12,6 +12,8 @@ import com.lilithsthrone.game.character.GameCharacter;
 import com.lilithsthrone.game.character.fetishes.AbstractFetish;
 import com.lilithsthrone.game.character.fetishes.Fetish;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
+import com.lilithsthrone.game.sex.sexActions.SexAction;
+import com.lilithsthrone.game.sex.sexActions.SexActionManager;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.XMLSaving;
 
@@ -395,5 +397,9 @@ public class SexType implements XMLSaving {
 			}
 		}
 		return oppositeFetishes;
+	}
+
+	public SexAction getSexAction() {
+		return SexActionManager.getSexActionFromAreas(this.performingSexArea, this.targetedSexArea);
 	}
 }

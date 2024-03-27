@@ -23,6 +23,7 @@ import com.lilithsthrone.game.character.npc.misc.NPCOffspring;
 import com.lilithsthrone.game.character.quests.Quest;
 import com.lilithsthrone.game.character.quests.QuestLine;
 import com.lilithsthrone.game.character.race.Subspecies;
+import com.lilithsthrone.game.dialogue.companions.SlaveInteract;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.DialogueNodeType;
 import com.lilithsthrone.game.dialogue.places.dominion.slaverAlley.ScarlettsShop;
@@ -64,7 +65,7 @@ public class SlaveDialogue {
 	private static NPC slave;
 	private static NPC characterForSex;
 	private static NPC characterForSexSecondary;
-	
+	private static SlaveInteract slaveInteract;
 	private static List<NPC> charactersPresent;
 	
 	private static boolean initFromCharactersPresent;
@@ -74,6 +75,7 @@ public class SlaveDialogue {
 		CompanionManagement.initManagement(SLAVE_START, 2, targetedSlave);
 		slave = targetedSlave;
 		characterForSex = targetedSlave;
+		slaveInteract = SlaveInteract.fromCharacter(targetedSlave);
 
 		characterForSexSecondary = null;
 		charactersPresent = new ArrayList<>(Main.game.getCharactersPresent());
@@ -845,6 +847,8 @@ public class SlaveDialogue {
 				return UtilText.parse("[style.colourSex(Sex)]");
 			} else if(index == 2) {
 				return UtilText.parse("[style.colourCompanion(Manage)]");
+			} else if(index == 3) {
+				return SlaveInteract.responseTabTitle;
 			}
 			return null;
 		}
@@ -1896,7 +1900,7 @@ public class SlaveDialogue {
 							};
 						}
 					
-					}else if(index==10) {
+					} else if(index==10) {
 						if(charactersPresent.size()<3) {
 							return new Response("Gangbang (as sub)",
 									"There need to be at least three characters present in order to start a gangbang.",
@@ -2061,7 +2065,10 @@ public class SlaveDialogue {
 				} else {
 					return CompanionManagement.getManagementResponses(index);
 				}
-			
+			} else if(responseTab == 2) {
+				return CompanionManagement.getManagementResponses(index);
+			} else if (responseTab == 3) {
+				return slaveInteract.getInteractResponses(index, SLAVE_START);
 			} else {
 				return null;
 			}

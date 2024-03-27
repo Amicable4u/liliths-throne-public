@@ -1,8 +1,11 @@
 # FAQ
 
+__Q: How do I open the debug menu?__
+A: Run the game and type the cheat code "buggy" (while anywhere in the game world, must be after the prologue)
+
 __Q: How do I add character specific Dialogue?__
 
-A: See [UtilText.java](src/com/lilithsthrone/game/dialogue/utils/UtilText.java) and [ParserTarget.java](src/com/lilithsthrone/game/dialogue/utils/ParserTarget.java) for a list of commands that will be substituted with appropriate character-specific terms. 
+A: On the debug menu, navigate to Test Parser > Help. Also see [UtilText.java](src/com/lilithsthrone/game/dialogue/utils/UtilText.java) and [ParserTarget.java](src/com/lilithsthrone/game/dialogue/utils/ParserTarget.java) for a list of commands that will be substituted with appropriate character-specific terms. 
 
 __Q: How do I make dialogues with multiple steps where actions can be chosen?__
 

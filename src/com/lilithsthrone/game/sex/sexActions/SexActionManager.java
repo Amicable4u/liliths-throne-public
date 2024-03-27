@@ -85,6 +85,7 @@ import com.lilithsthrone.game.sex.sexActions.baseActionsSelf.SelfTongueAnus;
 import com.lilithsthrone.game.sex.sexActions.baseActionsSelf.SelfTongueMouth;
 import com.lilithsthrone.game.sex.sexActions.baseActionsSelf.SelfTongueNipple;
 import com.lilithsthrone.game.sex.sexActions.baseActionsSelf.SelfTongueVagina;
+import com.lilithsthrone.game.sex.SexAreaInterface;
 import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.utils.Util.Value;
 
@@ -288,4 +289,14 @@ public class SexActionManager {
 		}
 	}
 	
+	public static SexAction getSexActionFromAreas(SexAreaInterface performingArea, SexAreaInterface targetArea) {
+		// TODO (mark): define a map once instead of looping over all actions every time
+		for (SexAction a : allSexActions) {
+			if (a.getSexAreaInteractions().get(performingArea) == targetArea) {
+				return a;
+			}
+		}
+		System.err.format("Could not determine SexAction for areas %s and %s%n", performingArea.getClass().getName(), targetArea.getClass().getName());
+		return null;
+	}
 }

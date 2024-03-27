@@ -479,6 +479,7 @@ public abstract class NPC extends GameCharacter implements XMLSaving {
 			return new Value<>(false, "As [npc.name] is a unique character, who is not your slave, you cannot force [npc.herHim] to equip the "+clothing.getName()+"!");
 		}
 		if(Main.game.isInSex() && (Main.sex.isDom(this) || Main.sex.isSubHasEqualControl())) {
+			// TODO (mark): doms may want to wear strapons
 			return new Value<>(false, "[npc.Name] is not interested in equipping the "+clothing.getName()+"!");
 		}
 		return new Value<>(true, "");

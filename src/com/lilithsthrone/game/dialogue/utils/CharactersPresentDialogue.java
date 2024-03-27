@@ -13,6 +13,7 @@ import com.lilithsthrone.game.dialogue.DialogueNodeType;
 import com.lilithsthrone.game.dialogue.companions.CompanionManagement;
 import com.lilithsthrone.game.dialogue.companions.OccupantDialogue;
 import com.lilithsthrone.game.dialogue.companions.SlaveDialogue;
+import com.lilithsthrone.game.dialogue.companions.SlaveInteract;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.responses.ResponseEffectsOnly;
 import com.lilithsthrone.main.Main;
@@ -28,6 +29,7 @@ public class CharactersPresentDialogue {
 	public static String menuContent;
 	public static String menuTitle;
 	public static NPC characterViewed = null;
+	private static SlaveInteract slaveInteract;
 	
 	private static NPC targetedCharacterForSex;
 	private static NPC companionCharacter;
@@ -49,9 +51,11 @@ public class CharactersPresentDialogue {
 			}
 			CompanionManagement.initManagement(MENU, 2, CharactersPresentDialogue.characterViewed);
 		}
+
 		
 //		Main.game.setActiveNPC(characterViewed);
 		targetedCharacterForSex = (NPC) CharactersPresentDialogue.characterViewed;
+		slaveInteract = SlaveInteract.fromCharacter((NPC) CharactersPresentDialogue.characterViewed);
 
 		if(Main.game.getPlayer().getCompanions().size()>1) {
 			companionCharacter = (NPC) Main.game.getPlayer().getMainCompanion();
@@ -136,6 +140,8 @@ public class CharactersPresentDialogue {
 					return "Sex";
 				} else if(index == 2) {
 					return "Manage";
+				} else if(index == 3 && slaveInteract != null) {
+					return SlaveInteract.responseTabTitle;
 				}
 			}
 			return null;
@@ -222,6 +228,8 @@ public class CharactersPresentDialogue {
 				
 			} else if(responseTab==2 && Main.game.getPlayer().hasCompanion(characterViewed)) {
 				return CompanionManagement.getManagementResponses(index);
+			} else if (responseTab == 3 && slaveInteract != null) {
+				return slaveInteract.getInteractResponses(index, MENU);
 			}
 			
 			return null;

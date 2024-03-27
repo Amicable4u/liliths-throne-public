@@ -1,13 +1,22 @@
 ## TODO (this fork)
 
-* More cheat menu options (add exp, change fetishes, modify present characters, transform, rest)
+* More cheat menu options:
+  * add exp
+  * apply cheats to other present characters
+  * transform
+  * change fetishes
+  * change time
+  * get item (spawn in inventory with ItemType.getAllItems())
 * Pet play (allow to ride slaves with saddles, bit gags)
 * Dialogue for playing with toys / bondage items
+  * Buttplug tease (slightly pull out, prod)
   * Buttplug lick clean on unequip:
 
-    InventoryDialogue.java: new Response("Unequip", "Unequip the "
+    applyUnequipClothingEffects()
   * hit with crop
   * Tease chastity during sex
+* Add slave jobs for enslavable named characters
+  * Hyorlyss, Fyrsia, Jhortrax
 * "Get Bathed" option (if slave is in party)
 * Pain play (impact, electro, sharps, slave job punching-bag)
 * extended cum play (display in mouth, cum sharing)
@@ -28,3 +37,8 @@
 * Abstraction for referring to the other partner (pet names, dominant, submissive, gentle or rough terms)
 * different copy when doms use "Offer" SexActions
 * work out how to add references to the play / other named NPCs in NPC descriptions
+* SlaveForSale NPCs sometimes end up wearing two collars at once (the player has two keys) due to equipClothing override
+
+## TODO (main)
+
+See [todo_list.txt](src/com/lilithsthrone/res/doc/todo_list.txt)

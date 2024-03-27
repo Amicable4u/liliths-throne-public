@@ -20,5 +20,7 @@ java -jar target/Lilith\'s\ Throne\ \(linux\)/Lilith\'s\ Throne-0.4.9.jar
 ## Changelog (this fork)
 
 * Add a cheat menu (#cheatMenuButton). Can refill health & mana, gain money, gain spell upgrade points
+* Add the "Ask" action during sex, allowing the player to ask their partners what they would like.
+* Add the "Deny cock" action during sex, allowing characters to tease their partner's cocks if they are currently in chastity.
 
 See [todo.md](todo.md) for more planned features

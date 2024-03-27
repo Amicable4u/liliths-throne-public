@@ -30232,19 +30232,28 @@ public abstract class GameCharacter implements XMLSaving {
 	 */
 	public boolean hasErection() {
 		if(Main.game.isInSex()) {
-			for(AbstractClothing c : this.getClothingCurrentlyEquipped()) {
-				if(c.getItemTags().contains(ItemTag.PREVENTS_ERECTION_OTHER)
-						|| c.getItemTags().contains(ItemTag.PREVENTS_ERECTION_PHYSICAL)) {
-					return false;
-				}
+			return !isErectionPrevented();
+		}
+		return false;
+	}
+
+	public boolean isErectionPrevented() {
+		return isErectionPreventedNonphysically() || isErectionPreventedPhysically();
+	}
+
+	/**
+	 * @return True if this character's erection is, or would, be prevented by means other than an item of restrictive clothing.
+	 */
+	public boolean isErectionPreventedNonphysically() {
+		for(AbstractClothing c : this.getClothingCurrentlyEquipped()) {
+			if(c.getItemTags().contains(ItemTag.PREVENTS_ERECTION_OTHER)) {
+				return true;
 			}
-			for(AbstractStatusEffect se : this.getStatusEffects()) {
-				if(se.getTags().contains(ItemTag.PREVENTS_ERECTION_OTHER)
-						|| se.getTags().contains(ItemTag.PREVENTS_ERECTION_PHYSICAL)) {
-					return false;
-				}
+		}
+		for(AbstractStatusEffect se : this.getStatusEffects()) {
+			if(se.getTags().contains(ItemTag.PREVENTS_ERECTION_OTHER)) {
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}

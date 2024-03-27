@@ -25,6 +25,7 @@ import com.lilithsthrone.game.sex.SexParticipantType;
 import com.lilithsthrone.game.sex.SexType;
 import com.lilithsthrone.game.sex.positions.slots.SexSlotTag;
 import com.lilithsthrone.game.sex.sexActions.SexAction;
+import com.lilithsthrone.game.sex.sexActions.SexActionManager;
 import com.lilithsthrone.game.sex.sexActions.SexActionType;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
@@ -72,7 +73,7 @@ public class AskAction {
 				sb.append(askContent)
 				.append("<br /><br/>")
 				.append(respondContent)
-				.append(" [responder.She] replies.<br /><br/>")
+				.append(" [responder.She] asks.<br /><br/>")
 				.append("<div class='container-full-width'>")
 					.append("<p style='text-align:center;'>How will you respond to ")
 						.append(UtilText.parse(responder, "[responder.NameFem]'s request?"))
@@ -84,8 +85,9 @@ public class AskAction {
 		
 			@Override
 			public Response getResponse(int responseTab, int index) {
-				boolean isPossible = true; // TODO (mark)
-				boolean isPositionChangeRequired = false;
+				boolean isPossible = true; // TODO (mark): it should always be possible, just make sure
+				boolean isPositionChangeRequired = false; // TODO (mark)
+				boolean isStoppingOngoing = false; // TODO (mark)
 				UtilText.nodeContentSB.setLength(0);
 
 				if (index == 1) {
@@ -104,11 +106,20 @@ public class AskAction {
 					);
 
 					DialogueNode returnDialogue = getReturnDialogue(UtilText.nodeContentSB.toString(), currentDialogue);
+					SexAreaInterface performingArea = desiredSexType.getPerformingSexArea();
+					SexAreaInterface targetArea = desiredSexType.getTargetedSexArea();
+					// swap areas to make player the first one
+					SexAction action = SexActionManager.getSexActionFromAreas(targetArea, performingArea);
 
 					return new Response("Accept", isPositionChangeRequired ? "Move into position (may disrupt ongoing actions)." : "", returnDialogue) {
 						@Override
 						public boolean isSexPositioningHighlight() {
 							return isPositionChangeRequired;
+						}
+
+						@Override
+						public boolean isSexActionSwitch() {
+							return action.isSexActionSwitch();
 						}
 		
 						@Override
@@ -120,15 +131,21 @@ public class AskAction {
 								// SexActionUtility.POSITION_SELECTION.applyEffects();
 								// Main.sex.endSexTurn(SexActionUtility.POSITION_SELECTION);
 								// Main.game.setContent(new Response("", "", Main.sex.SEX_DIALOGUE));
+							} 
+							if (Main.sex.isDom(asker)) {
+								// Main.sex.getSexManager().performSexAction(action); // no this isn't it
+								
+								Main.sex.applyOngoingAction(responder, performingArea, asker, targetArea, true);
+								action.baseEffects();
+								Main.game.updateResponses();
+								// TODO (mark): do i need to call "applyPenetrationEffects?"
+								// SexAreaInterface ongoing = Main.sex.getOngoingActionsMap(responder).get(performingArea).get(asker).get(targetArea);
+								// return Main.sex.applyPenetrationEffects(PenisAnus.PENIS_FUCKING_START, Main.sex.getCharacterPerformingAction(), SexAreaPenetration.PENIS, secondaryTarget, SexAreaOrifice.ANUS);
+								// TODO (mark): regenerate sex choices for asker?
+								// asker.generateSexChoices(false, responder);
 							} else {
-								if (Main.sex.isDom(asker)) {
-									SexAreaInterface performingArea = desiredSexType.getPerformingSexArea();
-									SexAreaInterface targetArea = desiredSexType.getTargetedSexArea();
-									Main.sex.applyOngoingAction(responder, performingArea, asker, targetArea, true);
-								} else {
-									// Give the dom impetus to do it
-									responder.generateSexChoices(true, Main.game.getPlayer(), Util.newArrayListOfValues(desiredSexType));
-								}
+								// Give the dom impetus to do it
+								responder.generateSexChoices(true, Main.game.getPlayer(), Util.newArrayListOfValues(desiredSexType));
 							}
 						}
 					};
