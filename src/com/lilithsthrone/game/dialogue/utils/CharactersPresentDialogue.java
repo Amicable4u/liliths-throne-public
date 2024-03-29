@@ -131,6 +131,8 @@ public class CharactersPresentDialogue {
 					return UtilText.parse("[style.colourSex(Sex)]");
 				} else if(index == 2) {
 					return UtilText.parse("[style.colourCompanion(Manage)]");
+				} else if(index == 3 && SlaveInteract.isAvailable(characterViewed)) {
+					return SlaveInteract.responseTabTitle;
 				}
 				
 			} else {
