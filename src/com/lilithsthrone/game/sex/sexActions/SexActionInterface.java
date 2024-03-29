@@ -1435,7 +1435,7 @@ public interface SexActionInterface {
 				}
 				@Override
 				public boolean isSexActionSwitch() {
-					return isSexActionSwitch();
+					return SexActionInterface.this.isSexActionSwitch();
 				}
 				@Override
 				public Map<String, Boolean> getAdditionalOngoingAvailableMap() {
@@ -1486,7 +1486,7 @@ public interface SexActionInterface {
 				}
 				@Override
 				public boolean isSexActionSwitch() {
-					return isSexActionSwitch();
+					return SexActionInterface.this.isSexActionSwitch();
 				}
 				@Override
 				public Map<String, Boolean> getAdditionalOngoingAvailableMap() {

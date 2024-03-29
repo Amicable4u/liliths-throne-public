@@ -14,8 +14,10 @@ import com.lilithsthrone.game.character.effects.Perk;
 import com.lilithsthrone.game.character.effects.StatusEffect;
 import com.lilithsthrone.game.character.fetishes.Fetish;
 import com.lilithsthrone.game.character.npc.NPC;
+import com.lilithsthrone.game.character.npc.submission.FortressAlphaLeader;
 import com.lilithsthrone.game.dialogue.DialogueFlagValue;
 import com.lilithsthrone.game.dialogue.eventLog.EventLogEntry;
+import com.lilithsthrone.game.dialogue.places.submission.impFortress.ImpFortressDialogue;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.game.inventory.InventorySlot;
 import com.lilithsthrone.game.inventory.clothing.AbstractClothing;
@@ -1120,7 +1122,95 @@ public enum SlaveJob {
 			}
 			return super.getAvailabilityText(hour, character);
 		}
+	},
+
+	FORTRESS_ALPHA_WARDEN(PresetColour.BASE_FREEDOM,
+		0.05f,
+		1,
+		2f,
+		"warden",
+		"warden",
+		"Return a true alpha to her fortress.",
+		0, 0,
+		100,
+		0.1f, -0.1f,
+		null,
+		null,
+		null,
+		null,
+		Util.newArrayListOfValues(
+			SlaveJobFlag.EXPERIENCE_GAINS,
+			SlaveJobFlag.INTERACTION_SEX,
+			SlaveJobFlag.FORTRESS_ALPHA
+		),
+		WorldType.IMP_FORTRESS_ALPHA,
+		PlaceType.FORTRESS_ALPHA_KEEP
+	) {
+		private Cell getFortressCell() {
+			List<Cell> cells = Main.game.getWorlds().get(WorldType.IMP_FORTRESS_ALPHA).getCells(PlaceType.FORTRESS_ALPHA_KEEP);
+			if(!cells.isEmpty()) {
+				return cells.get(0);
+			}
+			return null;
+		}
+		@Override
+		public AbstractWorldType getWorldLocation(GameCharacter character) {
+			Cell c = getFortressCell();
+			if(c==null) {
+				return null;
+			}
+			return c.getType();
+		}
+		@Override
+		public AbstractPlaceType getPlaceLocation(GameCharacter character) {
+			Cell c = getFortressCell();
+			if(c==null) {
+				return null;
+			}
+			return c.getPlace().getPlaceType();
+		}
+		@Override
+		public Cell getWorkDestinationCell(GameCharacter slave) {
+			return getFortressCell();
+		}
+		@Override
+		public void sendToWorkLocation(GameCharacter slave) {
+			Cell c = getFortressCell();
+			if(c!=null) {
+				if(c.getType()!=slave.getWorldLocation() || c.getLocation()!=slave.getLocation()) {
+					slave.setLocation(c.getType(), c.getLocation(), false);
+				}
+				
+			} else {
+				slave.returnToHome();
+			}
+		}
+		@Override
+		public boolean isAvailable(int hour, GameCharacter character) {
+			return ImpFortressDialogue.isDarkSirenDefeated()
+				&& character.getClass() == FortressAlphaLeader.class
+				&& super.isAvailable(hour, character);
+			// Main.game.getDialogueFlags().hasFlag(DialogueFlagValue.impFortressAlphaDefeated)
+		}
+		@Override
+		public String getAvailabilityText(int hour, GameCharacter character) {
+			if (!Main.game.getPlayer().getWorldsVisited().contains(WorldType.IMP_FORTRESS_ALPHA)) {
+				return "You haven't discovered a suitable place for an alpha warden";
+			}
+			if (!Main.game.getDialogueFlags().hasFlag(DialogueFlagValue.impFortressAlphaBossEncountered)) {
+				return UtilText.parse(Main.game.getNpc(FortressAlphaLeader.class), "You haven't fully scouted the fortress yet.");
+			}
+			if (!Main.game.getDialogueFlags().hasFlag(DialogueFlagValue.impFortressAlphaDefeated)) {
+				return UtilText.parse(Main.game.getNpc(FortressAlphaLeader.class), "The fortress is currently occupied by the [npc.raceFeral] [npc.name].");
+			}
+			if (!ImpFortressDialogue.isDarkSirenDefeated()) {
+				return UtilText.parse(Main.game.getNpc(FortressAlphaLeader.class), "Although you defeated the [npc.raceFeral] [npc.name], the fortress will not be yours until [npc.her] master is defeated.");
+			}
+			return super.getAvailabilityText(hour, character);
+		}
 	};
+	
+	public static final float BASE_STAMINA = 24f;
 	
 	private Colour colour;
 	private float hourlyEventChance;

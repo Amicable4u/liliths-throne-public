@@ -4973,6 +4973,84 @@ public class UtilText {
 
 		commandsList.add(new ParserCommand(
 				Util.newArrayListOfValues(
+						"sheYou",
+						"youShe",
+						"heYou",
+						"youHe",
+						"secondThird"),
+				true,
+				true,
+				"",
+				"Returns the second person pronoun for the player (you) or for npcs (he, she).") {
+			@Override
+			public String parse(List<GameCharacter> specialNPCs, String command, String arguments, String target,
+					GameCharacter character) {
+				if (isPlayer(target, character) || target.equals("pc")) {
+					return "you";
+				} else {
+					if (character.isFeminine()) {
+						return Gender.F_V_B_FEMALE.getSecondPerson();
+					} else {
+						return Gender.M_P_MALE.getSecondPerson();
+					}
+				}
+			}
+		});
+
+		commandsList.add(new ParserCommand(
+				Util.newArrayListOfValues(
+						"youHer",
+						"herYou",
+						"himYou",
+						"youHim",
+						"secondThirdPos"),
+				true,
+				true,
+				"",
+				"Returns the second person pronoun for the player (you) or the third person pronoun for npcs (her, him).") {
+			@Override
+			public String parse(List<GameCharacter> specialNPCs, String command, String arguments, String target,
+					GameCharacter character) {
+				if (isPlayer(target, character) || target.equals("pc")) {
+					return "you";
+				} else {
+					if (character.isFeminine()) {
+						return Gender.F_V_B_FEMALE.getThirdPerson();
+					} else {
+						return Gender.M_P_MALE.getThirdPerson();
+					}
+				}
+			}
+		});
+
+		commandsList.add(new ParserCommand(
+				Util.newArrayListOfValues(
+						"herYour",
+						"yourHer",
+						"hisYour",
+						"yourHis",
+						"secondThirdPos"),
+				true,
+				true,
+				"",
+				"Returns the second person possessive pronoun for the player (your) or the third person possessive pronoun for npcs (her, his).") {
+			@Override
+			public String parse(List<GameCharacter> specialNPCs, String command, String arguments, String target,
+					GameCharacter character) {
+				if (isPlayer(target, character) || target.equals("pc")) {
+					return "your";
+				} else {
+					if (character.isFeminine()) {
+						return Gender.F_V_B_FEMALE.getPossessiveBeforeNoun();
+					} else {
+						return Gender.M_P_MALE.getPossessiveBeforeNoun();
+					}
+				}
+			}
+		});
+
+		commandsList.add(new ParserCommand(
+				Util.newArrayListOfValues(
 						"she",
 						"sheHe",
 						"he",
@@ -5301,6 +5379,28 @@ public class UtilText {
 
 				} else {
 					return "<i style='color:" + PresetColour.GENERIC_BAD.toWebHexString() + ";'>Clothing_area_not_found</i>";
+				}
+			}
+
+			@Override
+			public String getArgumentExample() {
+				return "VAGINA";
+			}
+		});
+
+		commandsList.add(new ParserCommand(
+				Util.newArrayListOfValues("wrist"),
+				true,
+				false,
+				"",
+				"Returns the name of the target's wrist.") {
+			@Override
+			public String parse(List<GameCharacter> specialNPCs, String command, String arguments, String target,
+					GameCharacter character) {
+				if (character.getBody().getArm().getType().getTags().contains(BodyPartTag.ARM_WINGS)) {
+					return "wingtip";
+				} else {
+					return "wrist";
 				}
 			}
 

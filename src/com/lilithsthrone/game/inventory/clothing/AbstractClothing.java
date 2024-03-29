@@ -2710,6 +2710,15 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 		}
 		return clothingType.blockedPartsMap.get(slotEquippedTo);
 	}
+
+	public boolean doesBlockSlot(GameCharacter character, InventorySlot slotEquippedTo, InventorySlot slotToCheck) {
+		for (BlockedParts blockedPart : this.getBlockedPartsMap(character, slotEquippedTo)) {
+			if (blockedPart.concealedSlots.contains(slotToCheck)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public boolean isConcealsSlot(GameCharacter character, InventorySlot slotEquippedTo, InventorySlot slotToCheck) {
 		for(BlockedParts blockedPart : this.getBlockedPartsMap(character, slotEquippedTo)) {

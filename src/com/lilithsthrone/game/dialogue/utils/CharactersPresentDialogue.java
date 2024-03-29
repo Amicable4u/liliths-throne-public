@@ -140,7 +140,7 @@ public class CharactersPresentDialogue {
 					return "Sex";
 				} else if(index == 2) {
 					return "Manage";
-				} else if(index == 3 && slaveInteract != null) {
+				} else if(index == 3 && SlaveInteract.isAvailable(characterViewed)) {
 					return SlaveInteract.responseTabTitle;
 				}
 			}

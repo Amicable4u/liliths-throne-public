@@ -155,6 +155,7 @@ import com.lilithsthrone.game.character.effects.AbstractPerk;
 import com.lilithsthrone.game.character.effects.AbstractStatusEffect;
 import com.lilithsthrone.game.character.effects.Addiction;
 import com.lilithsthrone.game.character.effects.AppliedStatusEffect;
+import com.lilithsthrone.game.character.effects.ChasteReason;
 import com.lilithsthrone.game.character.effects.Perk;
 import com.lilithsthrone.game.character.effects.PerkCategory;
 import com.lilithsthrone.game.character.effects.PerkManager;
@@ -25144,6 +25145,7 @@ public abstract class GameCharacter implements XMLSaving {
 		return false;
 	}
 
+	// TODO (mark): this doesn't actually mean "plugged", it means "plugged or sealed"
 	public boolean isOrificePlugged(SexAreaOrifice ot) {
 		HashMap<SexAreaOrifice, List<ItemTag>> plugMap = new HashMap<>();
 		
@@ -30226,7 +30228,21 @@ public abstract class GameCharacter implements XMLSaving {
 		
 		return body.getPenis();
 	}
-	
+
+	public boolean hasItemTag(ItemTag tag) {
+		for(AbstractClothing c : this.getClothingCurrentlyEquipped()) {
+			if(c.getItemTags().contains(tag)) {
+				return true;
+			}
+		}
+		for(AbstractStatusEffect se : this.getStatusEffects()) {
+			if(se.getTags().contains(tag)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * @return True if this character has an erection. Erections can currently only occur during sex, and are prevented by certain items of clothing.
 	 */
@@ -30245,34 +30261,14 @@ public abstract class GameCharacter implements XMLSaving {
 	 * @return True if this character's erection is, or would, be prevented by means other than an item of restrictive clothing.
 	 */
 	public boolean isErectionPreventedNonphysically() {
-		for(AbstractClothing c : this.getClothingCurrentlyEquipped()) {
-			if(c.getItemTags().contains(ItemTag.PREVENTS_ERECTION_OTHER)) {
-				return true;
-			}
-		}
-		for(AbstractStatusEffect se : this.getStatusEffects()) {
-			if(se.getTags().contains(ItemTag.PREVENTS_ERECTION_OTHER)) {
-				return true;
-			}
-		}
-		return false;
+		return hasItemTag(ItemTag.PREVENTS_ERECTION_OTHER);
 	}
 	
 	/**
 	 * @return True if this character's erection is, or would, be prevented by an item of restrictive clothing.
 	 */
 	public boolean isErectionPreventedPhysically() {
-		for(AbstractClothing c : this.getClothingCurrentlyEquipped()) {
-			if(c.getItemTags().contains(ItemTag.PREVENTS_ERECTION_PHYSICAL)) {
-				return true;
-			}
-		}
-		for(AbstractStatusEffect se : this.getStatusEffects()) {
-			if(se.getTags().contains(ItemTag.PREVENTS_ERECTION_PHYSICAL)) {
-				return true;
-			}
-		}
-		return false;
+		return hasItemTag(ItemTag.PREVENTS_ERECTION_PHYSICAL);
 	}
 	
 	// Type:

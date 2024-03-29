@@ -34,6 +34,19 @@ public enum SlavePermission {
 					SlavePermissionSetting.GENERAL_OUTSIDE_FREEDOM),
 			false),
 	
+	// TODO (mark): add a new set of permissions for slaves to manage clothing
+	// APPEARANCE(PresetColour.BASE_FREEDOM,
+	// 		"Appearance",
+	// 		Util.newArrayListOfValues(
+	// 			SlavePermissionSetting.APPEARANCE_CLOTHES_SELF,
+	// 			SlavePermissionSetting.APPEARANCE_CLOTHES_OTHERS,
+	// 			SlavePermissionSetting.APPEARANCE_SEAL_OTHERS,
+	// 			SlavePermissionSetting.APPEARANCE_MASCULINE,
+	// 			SlavePermissionSetting.APPEARANCE_FEMININE,
+	// 		),
+	// 		true
+	// ),
+	
 	SEX(PresetColour.GENERIC_SEX,
 			"Sex",
 			Util.newArrayListOfValues(

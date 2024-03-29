@@ -1,15 +1,23 @@
 package com.lilithsthrone.game.dialogue.companions;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.lilithsthrone.game.character.GameCharacter;
+import com.lilithsthrone.game.character.attributes.AffectionLevelBasic;
+import com.lilithsthrone.game.character.attributes.ObedienceLevelBasic;
+import com.lilithsthrone.game.character.body.types.BodyPartType;
+import com.lilithsthrone.game.character.effects.ChasteReason;
+import com.lilithsthrone.game.character.fetishes.Fetish;
 import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.DialogueNodeType;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
+import com.lilithsthrone.game.inventory.InventorySlot;
 import com.lilithsthrone.game.sex.sexActions.baseActionsMisc.DenyCock;
+import com.lilithsthrone.main.Main;
 
 public class SlaveInteract {
 
@@ -20,6 +28,45 @@ public class SlaveInteract {
 
   public SlaveInteract(NPC slave) {
     this.slave = slave;
+  }
+
+  private boolean enjoysSpanking() {
+    return slave.getFetishDesire(Fetish.FETISH_MASOCHIST).isPositive()
+      || slave.getFetishDesire(Fetish.FETISH_SADOMASOCHIST).isPositive();
+  }
+
+  // private boolean enjoysReverseSpanking() {
+  //   return slave.getFetishDesire(Fetish.FETISH_SADIST).isPositive()
+  //     || slave.getFetishDesire(Fetish.FETISH_SADOMASOCHIST).isPositive();
+  // }
+
+  private boolean hatesSpanking() {
+    return slave.getFetishDesire(Fetish.FETISH_MASOCHIST).isNegative();
+  }
+
+  private String getMasturbationDescription() {
+    ChasteReason chasteReason = ChasteReason.get(slave);
+    final String reach = slave.hasLegs() ? "down between [npc.her] [npc.legs]" : ("towards [npc.her] " + slave.getBodyMaterial().getSkinAdj() + " nethers");
+    final String unableShort = "as [npc.she] pictures being spanked some more.";
+    final String unable = ", so [npc.she] just groans " + unableShort;
+    return switch(ChasteReason.getPossibleMasturbation(slave)) {
+      case VAGINA -> "[npc.name] slowly [npc.verb(reach)] " + reach + " and [npc.verb(start)] touching [npc.her] hungry, [npc.pussyRace] [npc.pussy].";
+      case PENIS -> "[npc.name] slowly [npc.verb(reach)] " + reach + " and [npc.verb(start)] touching [npc.her] slightly aroused, [npc.pussyRace] [npc.cock].";
+      case ANUS -> "[npc.name] slowly [npc.verb(reach)] around behind [npc.her] back and [npc.verb(slip)] one finger discreetly between [npc.her] cheeks, moaning softly as [npc.she] traces [npc.her] [npc.finger] around the rim of [npc.her] [npc.anus+] before slipping it inside.";
+      case ASS -> "[npc.name] desperately searches for a way to get [npc.herself] off, but being a taur, [npc.she] can't reach back there [npc.herself]. Instead, [npc.she] frantically starts rubbing [npc.her] rear-end up against a nearby piece of furniture in a desperate attempt to masturbate and finish what you started.";
+      case null, default -> "[npc.name] desperately searches for a way to get [npc.herself] off, " + switch (chasteReason) {
+        case ARMS_HINDERED -> "but [npc.her] [npc.arms] are so tightly bound that [npc.she] couldn't possibly reach " + reach + unable;
+        case PENILE_CHASTITY, VAGINAL_CHASTITY, ANAL_CHASTITY -> "but the chastity device [npc.she] has been locked in prevents [npc.her] from feeling any pleasure" + unable;
+        case PENIS_SEALED, VAGINA_SEALED, ANAL_SEALED -> "but being unable to remove the arcane seal on the items obstructing the way, [npc.she] can only clench [npc.her] fists in frustration " + unableShort;
+        case VAGINA_PLUGGED -> "[npc.name] slowly [npc.verb(reach)] " + reach + " and [npc.verb(take)] hold of the toy inserted in [npc.her] hungry, [npc.pussyRace] [npc.pussy], moaning in pleasure as [npc.she] [npc.verb(work)] the " + slave.getClothingInSlot(InventorySlot.VAGINA).getName() + " around inside [npc.her].";
+        case ANUS_PLUGGED -> "[npc.name] slowly [npc.verb(reach)] " + reach + " and [npc.verb(take)] hold of the toy inserted in [npc.her] [npc.anus+], moaning in pleasure as [npc.she] works the " + slave.getClothingInSlot(InventorySlot.ANUS).getName() + " around inside [npc.her].";
+        case SLAVE_FORBIDDEN -> "but as a slave [npc.she] has been forbidden from masturbation, and no matter how turned on [npc.she] might be, [npc.she] cannot risk the ire of [npc.her] owner by touching [npc.herself] without permission" + unable;
+        case DISLIKES_ANAL -> "but the only area [npc.she] can reach is right between [npc.her] sore cheeks, and [npc.name] doesn't like using [npc.her] butt to get off, so [npc.she] can only clench [npc.her] fists in frustration" + unableShort;
+        case DISLIKES_MASTURBATION -> "but what [npc.she] really wants is for you to finish what you started. Unwilling to masturbate to achieve release, [npc.name] can only clench [npc.her] fists in frustration" + unableShort;
+        case MISSING_BODY_PART -> "but without any sex organs at all, [npc.name] is powerless to achieve any kind of release. As usual, [npc.she] touches [npc.her] barren bump, aching to feel something, but it only makes the problem worse, and [npc.she] is forced to give up, even hornier than before.";
+        default -> "but there is simply no way for [npc.her] to satisfy [npc.herself]" + unable;
+      };
+    };
   }
 
   private DialogueNode SPANK = new DialogueNode("", ".", true) {
@@ -35,30 +82,145 @@ public class SlaveInteract {
 
     @Override
     public String getContent() {
-      String tailSpecial1 = "", tailSpecial2 = "";
-      if(!slave.hasTail()) {
-        tailSpecial1 = "Letting out [pc.a_moan+], [pc.name] [pc.verb(reach)] down and [pc.verb(grab)] [npc.namePos] waist, using one [pc.hand(true)] to hold [npc.herHim] still,"
-                  + " while using [pc.her] other to deliver a series of firm spanks to [npc.her] [npc.ass+].";
-      } else {
-        tailSpecial1 = "Letting out [pc.a_moan+], [pc.name] playfully [pc.verb(grab)] the base of [npc.her] [npc.tail+] and [pc.verb(pull)] upwards,"
-              + " raising [npc.her] [npc.ass+] up high in the air before starting to deliver a series of firm spanks to [npc.her] exposed cheeks.";
+
+      AffectionLevelBasic affection = AffectionLevelBasic.getAffectionLevelFromValue(slave.getAffection(Main.game.getPlayer()));
+      ObedienceLevelBasic obedience = ObedienceLevelBasic.getObedienceLevelFromValue(slave.getObedienceValue());
+      // Pair<AffectionLevel, ObedienceLevel> disposition = new Pair<>();
+
+      UtilText.nodeContentSB.setLength(0);
+      UtilText.nodeContentSB.append("<p>").append( // approach
+        (slave.hasTail() && Math.random() > 0.5)
+          ? UtilText.returnStringAtRandom( // approach tail
+            "[pc.name] [pc.verb(catch)] a movement in the corner of [pc.her] eye, and notice [npc.namePos] [npc.tail] lifting itself out of the way to reveal [npc.her] beautiful butt, and [pc.sheYou] can't help moving closer.",
+            "[npc.namePos] [npc.tail] swishes enticingly as [npc.she] turns around, flicking over [npc.her] butt and making [pc.name] move closer."
+          ) : UtilText.returnStringAtRandom( // approach
+            "When [npc.name] has [npc.her] back turned, [pc.name] [pc.verb(sneak)] up behind [npc.herHim], eyeing [npc.her] cute [npc.ass].",
+            "[pc.name] [pc.verb(wait)] until [npc.name] [npc.verb(turn)] around, and then takes a moment to admire the perfect curves of [npc.herHis] [npc.ass+].",
+            "[pc.name] [pc.verb(find)] [pc.himself] distracted as [npc.name] [npc.verb(bend)] over for a moment, giving [pc.name] a perfect view of [npc.her] [npc.ass+], and [pc.sheYou] [pc.verb(start)] to saunter over.",
+            switch (obedience) {
+              case DISOBEDIENT -> "[pc.You] command [npc.name] to bend [npc.herself] over and present [npc.her] [npc.butt] for [pc.yourHer] enjoyment - an order which [npc.she] again carries out as slowly as [npc.she] possibly can.";
+              case NEUTRAL -> "[npc.Name] [npc.verb(let)] out a flustered gasp as [pc.youShe] [pc.verb(order)] [npc.herHim] to bend over, but [npc.she] reluctantly moves to obey, slowly leaning down and sighing, [npc.speech(Let's get this over quickly then, <i>[npc.pcName]</i>.)]";
+              case OBEDIENT -> UtilText.returnStringAtRandom(
+                "As [npc.name] [npc.verb(catch)] [pc.yourHer] gaze travelling down [npc.her back], [npc.she] slowly begins to stick out her [npc.ass]. [npc.speech(Is this what you wanted, [npc.pcName]?)] [npc.She] asks.",
+                "[npc.name] [npc.verb(see)] you staring at [npc.her] [npc.ass+], and immediately starts [npc.walking] closer. Without having to be told, [npc.she] [npc.verb(lie)] down in [pc.yourHer] lap, presenting [npc.her] [npc.butt] for [pc.youHer]. [npc.speech(Is this to your pleasure, [npc.pcName]?)] [npc.She] asks."
+              );
+              default -> Arrays.toString(new Throwable().getStackTrace());
+            }
+          )
+      )
+      .append(" ")
+      .append(
+        (slave.hasTail() && Math.random() > 0.5)
+          ? UtilText.returnStringAtRandom( // spank tail
+            "[pc.name] playfully [pc.verb(grab)] the base of [npc.namePos] [npc.tail+] and [pc.verb(lift)] it up to expose [npc.her] pert rear. It lashes side to side, but it is held tight as [pc.name] raises [npc.her] [npc.ass+] up to a comfortable height before delivering a series of firm spanks to [npc.her] exposed cheeks.",
+            "The first sign that tells [npc.name] something is happening is when [npc.she] feels [npc.her] [npc.tail] brush against something behind [npc.herHim]. [npc.She] [npc.verb(let)] out a surprised yelp as [pc.name] playfully pulls [npc.her] back into [pc.herHim], forcing [npc.herHim] to push [npc.her] [npc.ass+] up against [pc.herHis] body as [pc.name] firmly spanks [npc.her] exposed cheeks."
+          ) : UtilText.returnStringAtRandom( // spank
+            "[pc.name] [pc.verb(reach)] down and [pc.verb(grab)] [npc.namePos] waist, using one [pc.hand(true)] to hold [npc.herHim] still, while using [pc.her] other to deliver a series of firm spanks to [npc.her] [npc.ass+]."
+          )
+      )
+      .append("</p><p>");
+
+      String dislikePunishment = UtilText.returnStringAtRandom(
+        " A squeal accompanies the sound of her [npc.assSkin+] being whacked as [pc.youShe] [pc.verb(reach)] around and [pc.verb(smack)] [npc.her] again for " + switch (obedience) {
+          case DISOBEDIENT -> "being so defiant";
+          case NEUTRAL -> "being so reluctant";
+          case OBEDIENT -> "looking at [pc.youHer] with such venom.";
+          default -> Arrays.toString(new Throwable().getStackTrace());
+        },
+        " Unhappy with [npc.her] " + switch (obedience) {
+          case DISOBEDIENT -> "defiant remarks";
+          case NEUTRAL -> "slightly rebellious remarks";
+          case OBEDIENT -> "look of considerable loathing";
+          default -> Arrays.toString(new Throwable().getStackTrace());
+        } + ", [pc.youShe] [pc.verb(grab)] [npc.her] by  [npc.her] [npc.wrist], your slave squirming and squealing as you punish the [npc.racePos] vulnerable backside a few more blows."
+      );
+
+      UtilText.nodeContentSB.append( // reaction
+        // new Pair<AffectionLevel, ObedienceLevel>(AffectionLevel.DISLIKE, ObedienceLevel.DISOBEDIENT)
+        switch (affection) {
+          case DISLIKE -> switch (obedience) {
+            case DISOBEDIENT -> UtilText.returnStringAtRandom(
+              "An angry growl escapes from [npc.namePos] [npc.mouth] as [npc.she] recoils from [pc.herYour] touch. [npc.speech(Get your hands off me you fucking [pc.bitch]!)] [npc.She] [npc.verb(snap)], twirling around to move [npc.her] freshly spanked [npc.butt] out of [pc.yourHer] reach.",
+
+              "[npc.speech(I'll break your fucking fingers next time you try that!)] [npc.name] shouts as [npc.she] stumbles away from [pc.youHer] and covers [npc.her] sore cheeks with [npc.her] [npc.hands]."
+            ) + dislikePunishment;
+            case NEUTRAL -> UtilText.returnStringAtRandom(
+              "[npc.name] almost protests, but [npc.she] manages not to fight back as [pc.youShe] [pc.verb(have)] [pc.yourHer] way with [npc.her]. [pc.youShe] [pc.verb(hears)] [npc.her] mumble something under [npc.her] breath as [pc.youShe] [pc.verb(let)] [npc.her] go, although the sight of the [npc.racePos] freshly spanked [npc.butt] is almost too much to give up.",
+              "[npc.speech(I hope you know I hate you.)] [npc.name] [npc.verb(snarl)] as [pc.youShe] [pc.verb(spank)] [npc.her], although [npc.she] manages not to move as [pc.yourHer] [pc.hand] slams down on [npc.her] exposed [npc.ass], waiting until [pc.youShe] [pc.are] done before backing away."
+            ) + dislikePunishment;
+            case OBEDIENT -> UtilText.returnStringAtRandom(
+              "Despite dutifully getting ready to be spanked, [pc.name] can [pc.verb(see)] the distinct look of hatred in [npc.namePos] [npc.eyes] as [npc.she] obediently [npc.verb(receive)] [npc.her] punishment. Even as [npc.sheYou] [npc.verb(nurse)] [npc.her] sore [npc.ass], [pc.youShe] can sense [npc.herYour] rage at being humiliated like this.",
+              "Even as [npc.namePos] [npc.verb(raise)] [npc.her] [npc.hips] to let [pc.youHer] spank [npc.her] harder, [npc.she] [npc.verb(give)] [pc.youHer] a look dripping with loathing."
+            ) + dislikePunishment;
+            default -> Arrays.toString(new Throwable().getStackTrace());
+          };
+          case NEUTRAL -> switch (obedience) {
+            case DISOBEDIENT -> UtilText.returnStringAtRandom(
+              "A meek noise escapes from [npc.namePos] [npc.mouth] as [npc.she] realises [pc.youShe] [pc.is]n't going to let [npc.her] escape before [pc.youShe] [pc.is] satisfied, and [pc.youShe] [pc.have] to [pc.verb(give)] [npc.her] [npc.butt] a thorough tenderising before [npc.she] begrudgingly [npc.verb(accept)] [npc.her] punishment. [npc.speech(This is no way to treat a slave!)] [npc.She] [npc.verb(grumbles)] as [pc.youShe] finally [pc.verb(let)] [npc.her] go.",
+              "[npc.speech(Let me go, you're hurting me!)] [npc.name] groans as [pc.youShe] [pc.verb(hold)] [npc.her] firmly in place, making sure to properly discipline the defiant [npc.race]. When you deem [npc.her] sufficiently chastened, [pc.youShe] [pc.verb(let)] [npc.her] stumbles away to massage [npc.her] sore cheeks with [npc.her] [npc.hands]."
+            );
+            case NEUTRAL -> UtilText.returnStringAtRandom(
+              "[npc.name] almost protests, but [npc.she] manages not to fight back as [pc.youShe] [pc.verb(have)] [pc.yourHer] way with [npc.her]. [pc.youShe] [pc.verb(hears)] [npc.her] mumble something under [npc.her] breath as [pc.youShe] [pc.verb(let)] [npc.her] go, although the sight of the [npc.racePos] freshly spanked [npc.butt] is almost too much to give up.",
+              "[npc.speech(I hope you know I hate you.)] [npc.name] [npc.verb(snarl)] as [pc.youShe] [pc.verb(spank)] [npc.her], although [npc.she] manages not to move as [pc.yourHer] [pc.hand] slams down on [npc.her] exposed [npc.ass], waiting until [pc.youShe] [pc.are] done before backing away."
+            );
+            case OBEDIENT -> UtilText.returnStringAtRandom(
+              "As [npc.name] dutifully [npc.verb(get)] ready to be spanked, [pc.name] can see that [npc.name] [npc.verb(feel)] that her punishment is uncalled for. [npc.SheYou] [npc.verb(ask)] [pc.youHer] if [pc.youShe] would like to keep going, but [pc.youShe] [pc.verb(tell)] [npc.her] that [npc.youShe] [npc.is] free to go, and [npc.sheYou] [npc.verb(nurse)] [npc.her] sore [npc.ass] as [npc.she] stalks away, chastened.",
+              "Even as [npc.namePos] [npc.verb(raise)] [npc.her] [npc.hips] to let [pc.youHer] spank [npc.her] harder, [npc.she] [npc.verb(give)] [pc.youHer] a confused look, as if [npc.she] [npc.verb(think)] [npc.she] doesn't deserve [npc.her] punishment. [npc.thought(I should be careful not to let [npc.pcName] sneak up behind me again...)] [npc.she] thinks to [npc.herself], as [npc.herYour] ass twinges in pain."
+            );
+            default -> Arrays.toString(new Throwable().getStackTrace());
+          };
+          case LIKE -> switch (obedience) {
+            // TODO (mark): finish LIKE (currently same as NEUTRAL)
+            case DISOBEDIENT -> UtilText.returnStringAtRandom(
+              "A meek noise escapes from [npc.namePos] [npc.mouth] as [npc.she] realises [pc.youShe] [pc.is]n't going to let [npc.her] escape before [pc.youShe] [pc.is] satisfied, and [pc.youShe] [pc.have] to [pc.verb(give)] [npc.her] [npc.butt] a thorough tenderising before [npc.she] begrudgingly [npc.verb(accept)] [npc.her] punishment. [npc.speech(This is no way to treat a slave!)] [npc.She] [npc.verb(grumbles)] as [pc.youShe] finally [pc.verb(let)] [npc.her] go.",
+              "[npc.speech(Let me go, you're hurting me!)] [npc.name] groans as [pc.youShe] [pc.verb(hold)] [npc.her] firmly in place, making sure to properly discipline the defiant [npc.race]. When you deem [npc.her] sufficiently chastened, [pc.youShe] [pc.verb(let)] [npc.her] stumbles away to massage [npc.her] sore cheeks with [npc.her] [npc.hands]."
+            );
+            case NEUTRAL -> UtilText.returnStringAtRandom(
+              "[npc.name] almost protests, but [npc.she] manages not to fight back as [pc.youShe] [pc.verb(have)] [pc.yourHer] way with [npc.her]. [pc.youShe] [pc.verb(hears)] [npc.her] mumble something under [npc.her] breath as [pc.youShe] [pc.verb(let)] [npc.her] go, although the sight of the [npc.racePos] freshly spanked [npc.butt] is almost too much to give up.",
+              "[npc.speech(I hope you know I hate you.)] [npc.name] [npc.verb(snarl)] as [pc.youShe] [pc.verb(spank)] [npc.her], although [npc.she] manages not to move as [pc.yourHer] [pc.hand] slams down on [npc.her] exposed [npc.ass], waiting until [pc.youShe] [pc.are] done before backing away."
+            );
+            case OBEDIENT -> UtilText.returnStringAtRandom(
+              "As [npc.name] dutifully [npc.verb(get)] ready to be spanked, [pc.name] can see that [npc.name] [npc.verb(feel)] that her punishment is uncalled for. [npc.SheYou] [npc.verb(ask)] [pc.youHer] if [pc.youShe] would like to keep going, but [pc.youShe] [pc.verb(tell)] [npc.her] that [npc.youShe] [npc.is] free to go, and [npc.sheYou] [npc.verb(nurse)] [npc.her] sore [npc.ass] as [npc.she] stalks away, chastened.",
+              "Even as [npc.namePos] [npc.verb(raise)] [npc.her] [npc.hips] to let [pc.youHer] spank [npc.her] harder, [npc.she] [npc.verb(give)] [pc.youHer] a confused look, as if [npc.she] [npc.verb(think)] [npc.she] doesn't deserve [npc.her] punishment. [npc.thought(I should be careful not to let [npc.pcName] sneak up behind me again...)] [npc.she] thinks to [npc.herself], with a twinge of pain."
+            );
+            default -> Arrays.toString(new Throwable().getStackTrace());
+          };
+        }
+      ).append("</p>");
+
+      // TODO (mark): account for submissive / dominant reaction to being spanked
+
+      if (enjoysSpanking()) {
+        UtilText.nodeContentSB.append("<p>").append(
+          switch (affection) {
+            case DISLIKE -> UtilText.returnStringAtRandom(
+              "You notice that despite how much [npc.she] hates you, [npc.name] couldn't help lingering for a moment, as if [npc.she] were hoping for more.",
+              "Despite all of [npc.namePos] vitriol, you can see [npc.her] panting, and grinding [npc.her] legs together from having [npc.her] sensitive behind so thoroughly punished."
+            );
+            case NEUTRAL -> UtilText.returnStringAtRandom(
+              "Although [npc.she] may not have thought [npc.her] punishment was justified, you notice [npc.name] biting [npc.her] lip and letting out a quiet moan as [npc.she] [npc.verb(feels)] the fresh marks on [npc.her] [npc.hipSize] ass.",
+              "When [npc.she] thinks you aren't looking any more, " + getMasturbationDescription()
+            );
+            case LIKE -> UtilText.returnStringAtRandom(
+              "Giving in to [npc.her] masochistic streak, [npc.name] gasps, [npc.speech(Can we do that again sometime?)] [npc.She] makes a point of showing off the state of [npc.her] thoroughly punished rear by bending over slightly and wiggling [npc.her] butt in [pc.yourHer] direction.",
+              "Although most people would be embarrassed to enjoy being spanked, your slave found it too arousing to keep control of [npc.herself]. " + getMasturbationDescription()
+            );
+            default -> Arrays.toString(new Throwable().getStackTrace());
+          }
+        )
+        .append("</p>");
+      } else if (hatesSpanking()) {
+        UtilText.nodeContentSB.append("<p>").append(
+          switch (affection) {
+            case DISLIKE -> "";
+            case NEUTRAL -> "";
+            case LIKE -> "";
+            default -> Arrays.toString(new Throwable().getStackTrace());
+          }
+        ).append("</p>");
       }
-      if(!slave.hasTail()) {
-        tailSpecial2 = "[pc.Name] [pc.verb(reach)] down and [pc.verb(grab)] [npc.namePos] waist with one hand,"
-            + " holding [npc.herHim] firmly in [pc.her] grip as [pc.she] [pc.verb(start)] to playfully slap [npc.her] exposed cheeks.";
-      } else {
-        tailSpecial2 = "[pc.Name] [pc.verb(reach)] down and [pc.verb(grab)] the base of [npc.namePos] [npc.tail+], causing [npc.herHim] to let out a surprised yelp as [pc.she] playfully [pc.verb(pull)] upwards,"
-                  + " forcing [npc.herHim] to push [npc.her] [npc.ass+] up high in the air as [pc.name] [pc.verb(start)] to firmly spank [npc.her] exposed cheeks.";
-      }
-    
-      return UtilText.returnStringAtRandom(
-            tailSpecial1,
-            tailSpecial2,
-            "[npc.Name] [npc.verb(let)] out [npc.a_moan+] as [pc.name] [pc.verb(start)] playfully spanking [npc.her] [npc.ass+].",
-            
-            "[pc.Name] [pc.verb(use)] one [pc.hand] to hold [npc.name] still, while using [pc.her] other to deliver a series of firm spanks to [npc.her] exposed ass cheeks.",
-            
-            "[pc.Name] [pc.verb(reach)] down and [pc.verb(start)] to playfully spank [npc.her] [npc.ass+], which causes [npc.herHim] to [npc.verb(squirm)] and [npc.verb(squeal)] in response.");
+
+      return UtilText.nodeContentSB.toString();
     }
 
     @Override
@@ -77,7 +239,20 @@ public class SlaveInteract {
       // TODO (mark): It would be cool to unlock these after completing a little miniquest for the slave
       //              E.g. fulfilling one of their "love" fetishes
       // add(new Response("Spank", UtilText.parse(slave, "[npc.name] has not permitted you to spank [npc.herHim]."), null));
-      add(new Response("Spank", UtilText.parse(slave, "Give [npc.name] a good slap on [npc.her] [npc.ass+]."), SPANK));
+      add(new Response("Spank", UtilText.parse(slave, "Give [npc.name] a good slap on [npc.her] [npc.ass+]."), SPANK) {
+        @Override
+        public void effects() {
+          if (enjoysSpanking()) {
+            Main.game.getTextEndStringBuilder().append(
+              slave.setLust(slave.getLust() + 10)
+            );
+          } else if (hatesSpanking()) {
+            Main.game.getTextEndStringBuilder().append(
+              slave.setLust(slave.getLust() - 10)
+            );
+          }
+        }
+      });
     }};
 
     if (DenyCock.isPhysicallyPossible(slave)) {
@@ -92,213 +267,6 @@ public class SlaveInteract {
       return actions.get(index - 1);
     }
     return null;
-
-    // TODO (mark): remove example responses
-		
-    // if (index == 1) {
-    //   if(Main.game.getCurrentDialogueNode()==SLAVE_MANAGEMENT_INSPECT) {
-    //     return new Response("Inspect", UtilText.parse(slave, "You are already taking a closer look at [npc.name]!"), null);
-    //   }
-    //   return new Response("Inspect", UtilText.parse(slave, "Take a closer look at [npc.name]!"), SLAVE_MANAGEMENT_INSPECT);
-      
-    // } else if (index == 2) {
-    //   if(Main.game.getCurrentDialogueNode()==SLAVE_MANAGEMENT_JOBS) {
-    //     return new Response("Job", UtilText.parse(slave, "You are already setting [npc.namePos] job and work hours!"), null);
-    //   }
-    //   if(!slave.getOwner().isPlayer()) {
-    //     return new Response("Job", "You cannot manage the job of a slave you do not own!", null);
-    //   }
-    //   return new Response("Job", "Set this slave's job and work hours.", SLAVE_MANAGEMENT_JOBS);
-      
-    // } else if (index == 3) {
-    //   if(Main.game.getCurrentDialogueNode()==SLAVE_MANAGEMENT_PERMISSIONS) {
-    //     return new Response("Permissions", UtilText.parse(slave, "You are already setting [npc.namePos] permissions!"), null);
-    //   }
-    //   if(!slave.getOwner().isPlayer()) {
-    //     return new Response("Permissions", "You cannot manage the permissions of a slave you do not own!", null);
-    //   }
-    //   return new Response("Permissions", "Set this slave's permissions.", SLAVE_MANAGEMENT_PERMISSIONS);
-      
-    // } else if (index == 4) {
-    //   if(!slave.getOwner().isPlayer()) {
-    //     return new Response("Inventory", "You cannot manage the inventory of a slave you do not own!", null);
-    //   }
-      
-    //   if(slave.getOwner().isPlayer()) {
-    //     return new ResponseEffectsOnly("Inventory", UtilText.parse(slave, "Manage [npc.namePos] inventory.")){
-    //       @Override
-    //       public void effects() {
-    //         Main.mainController.openInventory(slave, InventoryInteraction.FULL_MANAGEMENT);
-    //       }
-    //     };
-    //   } else {
-    //     return new Response("Inventory", UtilText.parse(slave, "You can't manage [npc.namePos] inventory, as you don't own [npc.herHim]!"), null);
-    //   }
-      
-    // } else if(index == 5) {
-    //   if(!slave.getOwner().isPlayer()) {
-    //     return new Response("Send to Kate", "You cannot send slaves which you do not own to Kate!", null);
-        
-    //   } else if(Main.game.getDialogueFlags().hasFlag(DialogueFlagValue.kateIntroduced)) {
-    //     return new Response("Send to Kate",
-    //         UtilText.parse(slave, "Send [npc.name] to Kate's beauty salon, 'Succubi's secrets', to get [npc.her] appearance changed."),
-    //         SLAVE_MANAGEMENT_COSMETICS_HAIR) {
-    //           @Override
-    //           public void effects() {
-    //             BodyChanging.setTarget(slave);
-    //           }
-    //         };
-    //   } else {
-    //     return new Response("Send to Kate", "You haven't met Kate yet!", null);
-    //   }
-      
-    // } else if (index == 6) {
-    //   if(!slave.getOwner().isPlayer()) {
-    //     return new Response("Perks", "You can't manage the perks of slaves that you do not own!", null);
-    //   }
-    //   if(Main.game.getCurrentDialogueNode()==SLAVE_MANAGEMENT_PERKS) {
-    //     return new Response("[style.colourMinorBad(Reset perks)]",
-    //         UtilText.parse(slave, "Reset all of [npc.namePos] perks and traits, refunding all points spent. (This is a temporary action while the perk tree is still under development.)"),
-    //         Main.game.getCurrentDialogueNode()) {
-    //       @Override
-    //       public void effects() {
-    //         slave.resetPerksMap(false, false);
-    //       }
-    //     };
-    //   }
-    //   return new Response("Perks", "Spend your slave's perk points.", SLAVE_MANAGEMENT_PERKS);
-      
-    // } else if(index==7) {
-    //   if(!slave.isAbleToSelfTransform()) {
-    //     return new Response("Transformations", slave.getUnableToTransformDescription(), null);
-        
-    //   } else {
-    //     return new Response("Transformations",
-    //         UtilText.parse(slave, "Take a very detailed look at what [npc.name] can transform [npc.herself] into..."),
-    //         BodyChanging.BODY_CHANGING_CORE){
-    //       @Override
-    //       public void effects() {
-    //         BodyChanging.setTarget(slave, coreNode, defaultResponseTab);
-    //       }
-    //     };
-    //   }
-      
-    // } else if(index==8) {
-    //   if(Main.game.getCurrentDialogueNode()==OCCUPANT_CHOOSE_NAME) {
-    //     return new Response("Set names", UtilText.parse(slave, "You are managing [npc.namePos] name!"), null);
-    //   }
-    //   if(slave == null) {
-    //     return new Response("Set names", "You haven't selected anyone...", null);
-    //   }
-    //   return new Response("Set names", UtilText.parse(slave, "Change [npc.namePos] name or tell [npc.herHim] to call you by a different name."), OCCUPANT_CHOOSE_NAME);
-      
-    // } else if(index==10 && Main.getProperties().hasValue(PropertyValue.companionContent)) {
-    //   return new Response("Send home", UtilText.parse(slave, "[npc.Name] isn't in your party, so you can't send [npc.herHim] home..."), null);
-      
-    // } else if(index==11) {
-    //   if(!slave.getOwner().isPlayer()) {
-    //     return new Response("Combat moves", "You can't manage the combat moves of slaves that you do not own!", null);
-    //   }
-    //   return new Response("Combat moves", UtilText.parse(slave, "Adjust the moves [npc.name] can perform in combat."), CombatMovesSetup.COMBAT_MOVES_CORE) {
-    //     @Override
-    //     public void effects() {
-    //       CombatMovesSetup.setTarget(slave, coreNode);
-    //     }
-    //   };
-      
-    // } else if(index==12) {
-    //   return new Response("Spells", UtilText.parse(slave, "Manage [npc.namePos] spells."), SpellManagement.CHARACTER_SPELLS_EARTH) {
-    //     @Override
-    //     public void effects() {
-    //       SpellManagement.setSpellOwner(slave, coreNode);
-    //     }
-    //   };
-      
-    // } else if(index==13) {
-    //   if(!slave.isElementalSummoned()) {
-    //     return new Response("Dispel elemental", UtilText.parse(slave, "[npc.Name] doesn't have an elemental summoned..."), null);
-        
-    //   } else {
-    //     return new Response("Dispel elemental", UtilText.parse(slave, "Tell [npc.name] to dispel [npc.her] elemental."), coreNode) {
-    //       @Override
-    //       public void effects() {
-    //         slave.removeCompanion(slave.getElemental());
-    //         slave.getElemental().returnToHome();
-    //       }
-    //     };
-    //   }
-      
-    // } else if(index==14) {
-    //   if(!Main.game.getPlayer().hasItemType("innoxia_slavery_freedom_certification")) {
-    //     return new Response("Set free",
-    //         UtilText.parse(slave,
-    //             "You do not have a Freedom Certification, so you cannot set [npc.name] free..."
-    //             + "<br/><i>Freedom Certifications can be purchased from Finch in Slaver Alley's Slaver Administration building.</i>"),
-    //         null);
-        
-    //   } else {
-    //     if(slave instanceof Scarlett) {
-    //       return new Response("Set free",
-    //           UtilText.parse(slave,
-    //               "Fill out a Freedom Certification and set [npc.name] free!"
-    //               + "<br/>If you do this, [npc.she] will undoubtedly immediately leave and return to Helena's nest..."),
-    //           SET_SLAVE_FREE_SCARLETT);
-    //     }
-    //     if(slave instanceof Brax) {
-    //       return new Response("Set free",
-    //           UtilText.parse(slave,
-    //               "You cannot set [npc.name] free...<br/><i>(This will be added later when I add more content for Brax!)</i>"),
-    //           null);
-    //     }
-        
-    //     String unavailableGuestDescription = "";
-    //     if(!Main.game.getPlayer().isQuestCompleted(QuestLine.SIDE_ACCOMMODATION)) {
-    //       unavailableGuestDescription = "[style.italicsMinorBad(As you do not have Lilaya's permission to house guests, you will be unable to invite [npc.name] to stay here in the mansion after freeing [npc.herHim]!)]";
-          
-    //     } else if(!slave.isAffectionHighEnoughToInviteHome()) {
-    //       unavailableGuestDescription = "[style.italicsBad([npc.Name] does not like you enough to consider staying with you after being set free!)]";
-          
-    //     } else if(!OccupancyUtil.isFreeRoomAvailableForOccupant()) {
-    //       unavailableGuestDescription = "[style.italicsMinorBad(As you do not have a free guest room for [npc.name] to move in to, you will be unable to invite [npc.herHim] to stay here in the mansion after freeing [npc.herHim]!)]";
-    //     }
-    //     String thanksjava = unavailableGuestDescription;
-        
-    //     return new Response("Set free",
-    //         UtilText.parse(slave,
-    //             "Fill out a Freedom Certification and set [npc.name] free!"
-    //             + "<br/>"
-    //             + (thanksjava.isEmpty()
-    //               ?"[style.italicsMinorGood([npc.Name] likes you enough to accept an offer of staying here to live with you, so after freeing [npc.herHim] you can offer to let [npc.herHim] stay in one of the free guest rooms!)]"
-    //               :thanksjava+"<br/>[style.italicsBad(This will permanently remove [npc.herHim] (and everything in [npc.her] inventory) from the game!)]")),
-    //         SET_SLAVE_FREE) {
-    //       @Override
-    //       public Colour getHighlightColour() {
-    //         if(thanksjava.isEmpty()) {
-    //           return PresetColour.GENERIC_MINOR_GOOD;
-    //         }
-    //         return PresetColour.GENERIC_NPC_REMOVAL;
-    //       }
-    //     };
-    //   }
-      
-    // } else if(index == 0) {
-    //   if(coreNode==OccupantManagementDialogue.SLAVE_LIST) {
-    //     return new Response("Back", "Return to the occupant list overview.", coreNode) {
-    //       @Override
-    //       public void effects() {
-    //         Main.game.getDialogueFlags().setManagementCompanion(null);
-    //         coreNode = null;
-    //       }
-    //     };
-    //   }
-    //   return new Response("Leave", "Exit the occupant management screen.", Main.game.getDefaultDialogue(false)) {
-    //     @Override
-    //     public void effects() {
-    //       Main.game.getDialogueFlags().setManagementCompanion(null);
-    //       coreNode = null;
-    //     }
-    //   };
-    // }
 	}
 
   public static boolean isAvailable(GameCharacter slave) {
