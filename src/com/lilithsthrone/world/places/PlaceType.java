@@ -53,6 +53,7 @@ import com.lilithsthrone.game.dialogue.places.dominion.lilayashome.LilayaSpa;
 import com.lilithsthrone.game.dialogue.places.dominion.lilayashome.LilayasRoom;
 import com.lilithsthrone.game.dialogue.places.dominion.lilayashome.RoomArthur;
 import com.lilithsthrone.game.dialogue.places.dominion.lilayashome.RoomPlayer;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.MountIsilDialogue;
 import com.lilithsthrone.game.dialogue.places.dominion.nightlife.NightlifeDistrict;
 import com.lilithsthrone.game.dialogue.places.dominion.nyansApartment.NyanApartment;
 import com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade.ArcaneArts;
@@ -5991,8 +5992,32 @@ public class PlaceType {
 				}
 	}.initDangerous();
 	
-	
-	
+	public static final AbstractPlaceType DOMINION_MOUNT_ISIL_ENTRANCE = new AbstractPlaceType(
+			WorldRegion.DOMINION,
+			"Mount Isil Steps",
+			"At the extremeties of the city a wide set of steps are set into the low hills, leading up into a gently swirling fog.",
+			"dominion/mountIsilExit",
+			PresetColour.BASE_TEAL,
+			MountIsilDialogue.EXTERIOR,
+			Darkness.ALWAYS_LIGHT,
+			null, "in the streets of Dominion") {
+		@Override
+		public List<Population> getPopulation() {
+			List<Population> pop = new ArrayList<>();
+			
+			// pop.add(new Population(true, PopulationType.CROWD, PopulationDensity.DENSE, Subspecies.getWorldSpecies(WorldType.DOMINION, this, true)));
+			// pop.add(new Population(false, PopulationType.ENFORCER, PopulationDensity.OCCASIONAL, Subspecies.getWorldSpecies(WorldType.DOMINION, this, true, Subspecies.HUMAN)));
+			// pop.add(new Population(true, PopulationType.CENTAUR_CARTS, PopulationDensity.NUMEROUS, Util.newHashMapOfValues(new Value<>(Subspecies.CENTAUR, SubspeciesSpawnRarity.TEN))));
+			
+			return pop;
+		}
+
+		@Override
+		public Bearing getBearing() {
+			return Bearing.RANDOM;
+		}
+	};
+
 	private static List<AbstractPlaceType> allPlaceTypes = new ArrayList<>();
 	private static Map<AbstractPlaceType, String> placeToIdMap = new HashMap<>();
 	private static Map<String, AbstractPlaceType> idToPlaceMap = new HashMap<>();

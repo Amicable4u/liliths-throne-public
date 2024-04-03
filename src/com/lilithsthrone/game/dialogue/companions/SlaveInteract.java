@@ -69,7 +69,7 @@ public class SlaveInteract {
     };
   }
 
-  private DialogueNode SPANK = new DialogueNode("", ".", true) {
+  private DialogueNode SPANK = new DialogueNode("", "", true) {
     @Override
     public DialogueNodeType getDialogueNodeType() {
       return DialogueNodeType.PHONE;
@@ -165,7 +165,7 @@ public class SlaveInteract {
             );
             case OBEDIENT -> UtilText.returnStringAtRandom(
               "As [npc.name] dutifully [npc.verb(get)] ready to be spanked, [pc.name] can see that [npc.name] [npc.verb(feel)] that her punishment is uncalled for. [npc.SheYou] [npc.verb(ask)] [pc.youHer] if [pc.youShe] would like to keep going, but [pc.youShe] [pc.verb(tell)] [npc.her] that [npc.youShe] [npc.is] free to go, and [npc.sheYou] [npc.verb(nurse)] [npc.her] sore [npc.ass] as [npc.she] stalks away, chastened.",
-              "Even as [npc.namePos] [npc.verb(raise)] [npc.her] [npc.hips] to let [pc.youHer] spank [npc.her] harder, [npc.she] [npc.verb(give)] [pc.youHer] a confused look, as if [npc.she] [npc.verb(think)] [npc.she] doesn't deserve [npc.her] punishment. [npc.thought(I should be careful not to let [npc.pcName] sneak up behind me again...)] [npc.she] thinks to [npc.herself], as [npc.herYour] ass twinges in pain."
+              "Even as [npc.namePos] [npc.verb(raise)] [npc.her] [npc.hips] to let [pc.youHer] spank [npc.her] harder, [npc.she] [npc.verb(give)] [pc.youHer] a confused look, as if [npc.she] [npc.verb(think)] [npc.she] doesn't deserve [npc.her] punishment. [npc.thought(I should be careful [pc.he] doesn't get too distracted again...)] [npc.she] thinks to [npc.herself], as [npc.herYour] ass twinges in pain."
             );
             default -> Arrays.toString(new Throwable().getStackTrace());
           };
@@ -181,7 +181,7 @@ public class SlaveInteract {
             );
             case OBEDIENT -> UtilText.returnStringAtRandom(
               "As [npc.name] dutifully [npc.verb(get)] ready to be spanked, [pc.name] can see that [npc.name] [npc.verb(feel)] that her punishment is uncalled for. [npc.SheYou] [npc.verb(ask)] [pc.youHer] if [pc.youShe] would like to keep going, but [pc.youShe] [pc.verb(tell)] [npc.her] that [npc.youShe] [npc.is] free to go, and [npc.sheYou] [npc.verb(nurse)] [npc.her] sore [npc.ass] as [npc.she] stalks away, chastened.",
-              "Even as [npc.namePos] [npc.verb(raise)] [npc.her] [npc.hips] to let [pc.youHer] spank [npc.her] harder, [npc.she] [npc.verb(give)] [pc.youHer] a confused look, as if [npc.she] [npc.verb(think)] [npc.she] doesn't deserve [npc.her] punishment. [npc.thought(I should be careful not to let [npc.pcName] sneak up behind me again...)] [npc.she] thinks to [npc.herself], with a twinge of pain."
+              "Even as [npc.namePos] [npc.verb(raise)] [npc.her] [npc.hips] to let [pc.youHer] spank [npc.her] harder, [npc.she] [npc.verb(give)] [pc.youHer] a confused look, as if [npc.she] [npc.verb(think)] [npc.she] doesn't deserve [npc.her] punishment. [npc.thought(I should be careful [pc.he] doesn't get too distracted again...)] [npc.she] thinks to [npc.herself], with a twinge of pain."
             );
             default -> Arrays.toString(new Throwable().getStackTrace());
           };

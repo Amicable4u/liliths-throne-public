@@ -1,0 +1,22 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+ <defs id="defs8">
+  <linearGradient id="innoGrad1">
+   <stop offset="0" stop-color="#f55" id="stop2"/>
+   <stop offset="1" stop-color="#ff8080" id="stop4"/>
+  </linearGradient>
+  <linearGradient id="linearGradient15" x1="0.44708" x2="0.75717" y1="0.6106" y2="0.14069" xlink:href="#innoGrad1"/>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <path fill="url(#linearGradient15)" opacity="undefined" d="m32.25,62.88698c-16.78619,0 -30.383,-13.59592 -30.383,-30.381c0,-16.78508 13.59681,-30.381 30.383,-30.381c16.78619,0 30.383,13.59592 30.383,30.381c0,16.78508 -13.59681,30.381 -30.383,30.381z" id="ellipse10"/>
+  <line fill="none" x1="-3.75019" y1="14.99968" x2="-3.68769" y2="14.99968" id="svg_10"/>
+  <line fill="none" x1="11.6247" y1="17.43716" x2="12.56219" y2="17.43716" id="svg_11"/>
+  <path id="svg_2" d="m21.6875,36.5l22.8125,0l6.1875,14.9375l-35.125,0.0625" opacity="NaN" fill="#ffffff"/>
+  <rect id="svg_7" height="17.3125" width="3.5625" y="18.125" x="21.9375" fill="#ffffff"/>
+  <rect id="svg_8" height="17.3125" width="3.4375" y="18.125" x="40.9375" fill="#ffffff"/>
+  <path id="svg_9" d="m33.875,17.0625l-12,0c1.02083,-7.1875 7.85417,-8.25 11.875,-8.25c3.75,0.02083 10,1.35417 10.625,8.3125" opacity="NaN" fill="#ffffff"/>
+  <path style="vector-effect: non-scaling-stroke;" id="svg_12" d="m27.125,30.25l12.125,0l-12.125,0z" opacity="NaN" fill="#ffffff"/>
+  <path style="vector-effect: non-scaling-stroke;" id="svg_13" d="m27.875,32.25l10.875,-0.0625l-10.875,0.0625z" opacity="NaN" fill="url(#linearGradient15)"/>
+  <path id="svg_14" d="m27.0625,32.125c4.22917,0.6875 8.27083,0.75 12.3125,0c-2,0.89583 -4,1.79167 -6,2.6875" opacity="NaN" fill="#ffffff"/>
+ </g>
+</svg>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <path style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 8px;" d="M 69.943 424.367 L 70.038 370.767 L 340.911 371.045 L 340.911 424.557"/>
+  <path style="stroke-width: 8px; stroke: rgb(0, 0, 0); fill: none;" d="M 340.491 370.314 L 395.196 313.589 L 143.512 313.807 C 143.512 313.807 70.032 369.995 70.032 369.822"/>
+  <path style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 8px;" d="M 400.898 373.603 L 401.223 260.951 L 146.31 260.244 L 146.199 314.358"/>
+  <path style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 8px;" d="M 146.275 259.084 L 213.821 209.992 L 452.089 210.161 C 452.089 210.161 398.888 260.214 398.691 260.214"/>
+  <path style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); stroke-width: 8px;" d="M 456.965 206.565 C 456.965 206.565 456.163 299.921 456.163 300.121"/>
+  <ellipse style="fill: rgb(202, 255, 247);" cx="340.091" cy="61.729" rx="103.817" ry="52.574"/>
+  <ellipse style="fill: rgb(202, 255, 247);" cx="280.853" cy="138.727" rx="103.817" ry="52.574"/>
+  <ellipse style="fill: rgb(202, 255, 247);" cx="450.767" cy="117.696" rx="103.817" ry="52.574"/>
+  <ellipse style="fill: rgb(202, 255, 247);" cx="178.091" cy="69.883" rx="103.817" ry="52.574"/>
+</svg>

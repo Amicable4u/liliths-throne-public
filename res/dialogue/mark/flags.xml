@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dialogueFlags>
+	<!-- Additional dialogue flags for use in the game.
+	The 'dailyReset' attribute determines whether or not the flag gets reset to false at midnight every day.
+	You can instead use the 'resetHour' attribute to define the hour at which the flag is reset to false every day.
+	If neither attribute is defined, the flag will never automatically reset to false.
+	Please note that the final id of the flags defined below will have the parent folder's name appended to the front of them.
+		i.e. 'elis_berries_found' will be identified as 'innoxia_elis_berries_found' during the game's runtime. -->
+	
+	<!-- Mount Isil -->
+	<flag dailyReset="false">silenis_encountered</flag>
+	<flag dailyReset="false">silenis_defeated</flag>
+	<flag dailyReset="false">silenis_dommed_player</flag>
+
+	<flag dailyReset="false">uros_encountered</flag>
+	<flag dailyReset="false">uros_defeated</flag>
+	<flag dailyReset="false">uros_dommed_player</flag>
+	
+</dialogueFlags>

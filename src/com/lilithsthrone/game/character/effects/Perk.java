@@ -81,6 +81,23 @@ public class Perk {
 		}
 	};
 
+	public static AbstractPerk JOB_NPC_MOUNT_ISIL_GUARDIAN = new AbstractPerk(20,
+			true,
+			"Mount Isil guardian",
+			PerkCategory.JOB,
+			"perks/jobs/npc_mount_isil_guardian",
+			PresetColour.BASE_GREEN_DARK, // TODO (mark) make or find a reference to RACE_SNAKE
+			Util.newHashMapOfValues(
+					new Value<>(Attribute.DAMAGE_LUST, 10),
+					new Value<>(Attribute.MAJOR_CORRUPTION, 20),
+					new Value<>(Attribute.MAJOR_PHYSIQUE, 1)),
+			null) {
+		@Override
+		public String getDescription(GameCharacter owner) {
+			return UtilText.parse(owner, "[npc.NameIsFull] a guardian of the monastery on Mount Isil, granting [npc.her] a keen sense of observation and an understanding of how to care for others.");
+		}
+	};
+
 	
 	// Enforcers:
 	

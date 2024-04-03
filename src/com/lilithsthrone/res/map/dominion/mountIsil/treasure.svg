@@ -1,0 +1,19 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" xmlns:undefined="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:undefined="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+ <metadata id="metadata28">image/svg+xml</metadata>
+ <defs id="defs8">
+  <linearGradient id="innoGrad1">
+   <stop id="stop2" stop-color="#f55" offset="0"/>
+   <stop id="stop4" stop-color="#ff8080" offset="1"/>
+  </linearGradient>
+  <linearGradient xlink:href="#innoGrad1" y2="0.14069" y1="0.6106" x2="0.75717" x1="0.44708" id="linearGradient15"/>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <path id="ellipse10" d="m32,62.38698c-16.78619,0 -30.383,-13.59592 -30.383,-30.381c0,-16.78508 13.59681,-30.381 30.383,-30.381c16.78619,0 30.383,13.59592 30.383,30.381c0,16.78508 -13.59681,30.381 -30.383,30.381z" opacity="undefined" fill="url(#linearGradient15)"/>
+  <line id="svg_10" y2="14.49968" x2="-3.87519" y1="14.49968" x1="-3.93769" fill="none"/>
+  <line id="svg_11" y2="16.93716" x2="12.37469" y1="16.93716" x1="11.4372" fill="none"/>
+  <path id="svg_18" d="m15.74967,29.93707l-0.06228,15.93761l34.06204,-0.00022l-0.12478,-16.06217l-13.18741,0l0,3.24998l-6.43746,0.0625l0.0625,-3.24998" opacity="NaN" fill="#ffffff"/>
+  <path id="svg_20" d="m33.74955,17.93715c8.49998,-0.06246 16.12496,0.56257 15.875,11.18753l-13.2498,-0.06239l-0.0625,-2.06249l-6.31246,0l-0.0625,2.12499l-14.3124,0c-0.125,-11.35409 8.74994,-11.20826 17.12488,-11.18742" opacity="NaN" fill="#ffffff"/>
+  <path id="svg_24" d="m30.74957,27.62459l4.99996,0l0,4.87497l-4.99996,0l0,-4.87497z" opacity="undefined" fill="#ffffff"/>
+ </g>
+</svg>

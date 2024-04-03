@@ -5,16 +5,19 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.lilithsthrone.game.character.GameCharacter;
 import com.lilithsthrone.game.character.npc.misc.NPCOffspring;
+import com.lilithsthrone.game.dialogue.places.mountIsil.MountIsilPlaces;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.utils.Util.Value;
 import com.lilithsthrone.utils.colours.PresetColour;
+import com.lilithsthrone.world.places.AbstractPlaceType;
 import com.lilithsthrone.world.places.PlaceType;
 
 /**
@@ -103,7 +106,9 @@ public class WorldType {
 			true,
 			true,
 			TeleportPermissions.BOTH,
-			"/com/lilithsthrone/res/map/dominion/dominion.png", PlaceType.WORLD_MAP_DOMINION, PlaceType.DOMINION_PLAZA, Util.newHashMapOfValues(
+			"/com/lilithsthrone/res/map/dominion/dominion.png",
+			PlaceType.WORLD_MAP_DOMINION,
+			PlaceType.DOMINION_PLAZA, Util.newHashMapOfValues(
 					new Value<>(new Color(0xFFFFFF), PlaceType.GENERIC_IMPASSABLE),
 					
 					new Value<>(new Color(0x808080), PlaceType.DOMINION_STREET),
@@ -135,6 +140,8 @@ public class WorldType {
 					
 					new Value<>(new Color(0x008080), PlaceType.DOMINION_STREET_HARPY_NESTS),
 					new Value<>(new Color(0x00ff80), PlaceType.DOMINION_HARPY_NESTS_ENTRANCE),
+
+					new Value<>(new Color(0xbc00bf), PlaceType.DOMINION_MOUNT_ISIL_ENTRANCE),
 					
 					new Value<>(new Color(0x004000), PlaceType.DOMINION_PLAZA),
 					new Value<>(new Color(0x00ffff), PlaceType.DOMINION_AUNTS_HOME),
@@ -1127,23 +1134,25 @@ public class WorldType {
 		}
 	};
 	
-    public static AbstractWorldType REBEL_BASE = new AbstractWorldType(WorldRegion.SUBMISSION,
-    		"Mysterious Cave",
-			PresetColour.BASE_GREY,
-			false,
-			false,
-			TeleportPermissions.NONE,
-			"/com/lilithsthrone/res/map/submission/rebelBase/rebelBase.png",
-			PlaceType.WORLD_MAP_DOMINION,
-			PlaceType.REBEL_BASE_ENTRANCE,
-			Util.newHashMapOfValues(
-					new Value<>(new Color(0xFFFFFF), PlaceType.GENERIC_IMPASSABLE),
-					new Value<>(new Color(0xed1c24), PlaceType.REBEL_BASE_ENTRANCE),
-					new Value<>(new Color(0x22b14c), PlaceType.REBEL_BASE_CORRIDOR),
-					new Value<>(new Color(0xf8941d), PlaceType.REBEL_BASE_SLEEPING_AREA),
-					new Value<>(new Color(0x662d91), PlaceType.REBEL_BASE_COMMON_AREA),
-                    new Value<>(new Color(0x6dd0f7), PlaceType.REBEL_BASE_ARMORY),
-                    new Value<>(new Color(0x3f48cc), PlaceType.REBEL_BASE_CAVED_IN_ROOM))) {
+	public static AbstractWorldType REBEL_BASE = new AbstractWorldType(
+		WorldRegion.SUBMISSION,
+			"Mysterious Cave",
+		PresetColour.BASE_GREY,
+		false,
+		false,
+		TeleportPermissions.NONE,
+		"/com/lilithsthrone/res/map/submission/rebelBase/rebelBase.png",
+		PlaceType.WORLD_MAP_DOMINION,
+		PlaceType.REBEL_BASE_ENTRANCE,
+		Util.newHashMapOfValues(
+				new Value<>(new Color(0xFFFFFF), PlaceType.GENERIC_IMPASSABLE),
+				new Value<>(new Color(0xed1c24), PlaceType.REBEL_BASE_ENTRANCE),
+				new Value<>(new Color(0x22b14c), PlaceType.REBEL_BASE_CORRIDOR),
+				new Value<>(new Color(0xf8941d), PlaceType.REBEL_BASE_SLEEPING_AREA),
+				new Value<>(new Color(0x662d91), PlaceType.REBEL_BASE_COMMON_AREA),
+				new Value<>(new Color(0x6dd0f7), PlaceType.REBEL_BASE_ARMORY),
+				new Value<>(new Color(0x3f48cc), PlaceType.REBEL_BASE_CAVED_IN_ROOM))
+	) {
 		@Override
 		public String getSexBlockedReason(GameCharacter character) {
 			return "A structurally unsound cave is hardly the place for sex!";
@@ -1151,6 +1160,64 @@ public class WorldType {
 		@Override
 		public boolean isFurniturePresent() {
 			return true;
+		}
+	};
+
+	private static HashMap<Color, AbstractPlaceType> mountIsilPlaceMap = new LinkedHashMap<>() {{
+		put(new Color(0xFFFFFF), PlaceType.GENERIC_IMPASSABLE);
+		put(new Color(0x99f5f2), MountIsilPlaces.EXIT);
+		put(new Color(0xc7c7c7), MountIsilPlaces.PATH);
+		put(new Color(0xffa9fd), MountIsilPlaces.ENTRANCE);
+		put(new Color(0xb9ffa9), MountIsilPlaces.SHRINE);
+		put(new Color(0xb9ffa9), MountIsilPlaces.GUARDIAN);
+		put(new Color(0xfff900), MountIsilPlaces.TREASURE);
+	}};
+
+	public static final AbstractWorldType MOUNT_ISIL_PLATEAU = new AbstractWorldType(
+		WorldRegion.MOUNT_ISIL,
+		"Mount Isil Plateau",
+		PresetColour.BASE_GREEN,
+		true,
+		true,
+		TeleportPermissions.BOTH,
+		"/com/lilithsthrone/res/map/dominion/mountIsil/mountIsilPlateau.png",
+		PlaceType.WORLD_MAP_DOMINION,
+		PlaceType.DOMINION_MOUNT_ISIL_ENTRANCE,
+		mountIsilPlaceMap
+	) {
+		@Override
+		public int getMajorAreaIndex() {
+			// TODO (mark)
+			return 1;
+		}
+		@Override
+		public String getOffspringTextFilePath(NPCOffspring o) {
+			// TODO (mark)
+			return "characters/offspring/mountIsil";
+		}
+	};
+
+	public static final AbstractWorldType MOUNT_ISIL_OVERLOOK = new AbstractWorldType(
+		WorldRegion.MOUNT_ISIL,
+		"Mount Isil Overlook",
+		PresetColour.BASE_GREEN,
+		true,
+		true,
+		TeleportPermissions.BOTH,
+		"/com/lilithsthrone/res/map/dominion/mountIsil/mountIsilOverlook.png",
+		PlaceType.WORLD_MAP_DOMINION,
+		MountIsilPlaces.ENTRANCE,
+		mountIsilPlaceMap
+	) {
+		@Override
+		public int getMajorAreaIndex() {
+			// TODO (mark)
+			return 1;
+		}
+		@Override
+		public String getOffspringTextFilePath(NPCOffspring o) {
+			// TODO (mark)
+			return "characters/offspring/mountIsil";
 		}
 	};
 	

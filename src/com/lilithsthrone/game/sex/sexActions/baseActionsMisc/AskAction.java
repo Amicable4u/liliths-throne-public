@@ -277,6 +277,7 @@ public class AskAction {
 		public void applyEffects() {
 			GameCharacter asker = Main.sex.getCharacterPerformingAction();
 			GameCharacter responder = Main.sex.getCharacterTargetedForSexAction(this);
+			// TODO (mark): may need to call removeAdditionalParserTarget after dialogue is done
 			ParserTarget.addAdditionalParserTarget("asker", asker);
 			ParserTarget.addAdditionalParserTarget("responder", responder);
 			SexPace pace = Main.sex.getSexPace(responder);

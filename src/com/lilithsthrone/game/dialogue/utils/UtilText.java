@@ -2615,6 +2615,25 @@ public class UtilText {
 
 		commandsList.add(new ParserCommand(
 				Util.newArrayListOfValues(
+						"matriarch",
+						"patriarch"),
+				true,
+				true,
+				"",
+				"Returns either 'patriarch' or 'matriarch' based on the character's femininity.") {
+			@Override
+			public String parse(List<GameCharacter> specialNPCs, String command, String arguments, String target,
+					GameCharacter character) {
+				if (character.isFeminine()) {
+					return "matriarch";
+				} else {
+					return "patriarch";
+				}
+			}
+		});
+
+		commandsList.add(new ParserCommand(
+				Util.newArrayListOfValues(
 						"miss",
 						"ms",
 						"mister",

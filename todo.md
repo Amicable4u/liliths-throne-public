@@ -7,6 +7,10 @@
   * change fetishes
   * change time
   * get item (spawn in inventory with ItemType.getAllItems())
+* new items
+  * bit gags
+  * cock (chastity) rings
+  * urethral plugs
 * Pet play (allow to ride slaves with saddles, bit gags)
   * https://www.linearity.io/
   * https://inkscape.org/
@@ -20,8 +24,26 @@
   * Buttplug lick clean on unequip:
 
     applyUnequipClothingEffects()
+    getItemUseEffects()
   * hit with crop
   * Tease chastity during sex
+* Mount Isil:
+  * 4 defenders worship the lamia male "Uros", who turns out to be their brother.
+  * One can't be hit with physical (must tease). On second encounter, can't be hit with spells either. Glycor. snake girl with pitch black scales
+  * One always has the best tease (anything player is weak to). Sileniss. snake herm
+  * One can only be hit by characters with their anus plugged, or covered in cum, or with larger dick than her. Vissea. snake shemale
+  * One swaps weapons with the player (trades them an arcane feather duster). On second encounter, strips player. Cyrephses. snake girl 
+  * To ascend, have to collect 4 keys
+  * First key is any key you own (key to own chastity or slave's chastity/collar)
+  * Second key requires player (or their slave) to wear opposite gender clothing
+  * Third key require signing a piece of paper with a kiss (heavy makeup lip, or anal kiss)
+  * Fourth key requires a feat of strength / arcane (deal physical damage, or have enough physique, or cast a leveled-up spells)
+  * Other key: perform one of your fetishes (if player is alone, maybe masturbation fetish or exhibitionism, self bondage, denial, otherwise can use companions / slaves)
+  * The first plateau is a square surrounded by shrines. The player can inspect the shrines, and either face combat, get a reward (steal offerings), fight a defender, solve a trial, or get a random melusine transformation item.
+  * upon defeating all four defenders, and presenting all four keys, the player gets to fight Lissenthe. They start of constricted by her tail. Alternatively, can choose to worship her, get tail fucked, and if they don't die, turn the tables on her.
+  * Lissenthe has a weakness - her cock is so corrupted that she needs to masturbate every third round, but if the player gets too close they are covered in her lust-inducing seed (or perhaps suffer the musk debuff)
+  * Upon victory, 
+
 * Add slave jobs for enslavable named characters
   * Hyorlyss, Fyrsia, Jhortrax
 * "Get Bathed" option (if slave is in party)
@@ -48,7 +70,7 @@
 * Flesh out companions system
 * slave permission for self-clothing
 * Abstraction for referring to the other partner (pet names, dominant, submissive, gentle or rough terms)
-* different copy when doms use "Offer" SexActions
+* different text when doms use "Offer" SexActions
 * work out how to add references to the play / other named NPCs in NPC descriptions
 * SlaveForSale NPCs sometimes end up wearing two collars at once (the player has two keys) due to equipClothing override
 * work out how SlaveJobFlags work, and why only "experience gain" appears to be showing up in the job management menu right now. (Check TooltipInformationEventListener)

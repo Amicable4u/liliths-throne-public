@@ -31,7 +31,7 @@ public abstract class AbstractWorldType {
 	
 	private WorldRegion worldRegion;
 	
-	private String name;
+	public final String name;
 	private String fileLocation;
 	private Colour colour;
 
@@ -102,95 +102,97 @@ public abstract class AbstractWorldType {
 	}
 	
 	public AbstractWorldType(File XMLFile, String author, boolean mod) {
-		if (XMLFile.exists()) {
-			try {
-				Document doc = Main.getDocBuilder().parse(XMLFile);
-				
-				// Cast magic:
-				doc.getDocumentElement().normalize();
-				
-				Element coreElement = Element.getDocumentRootElement(XMLFile); // Loads the document and returns the root element - in AbstractWorldType files it's <worldType>
-				
-				this.fileLocation = XMLFile.getAbsolutePath().replace("worldType.xml", "map.png");
-				
-				this.mod = mod;
-				this.fromExternalFile = true;
-				this.author = author;
-				
-				this.worldRegion = WorldRegion.valueOf(coreElement.getMandatoryFirstOf("worldRegion").getTextContent());
+		if (!XMLFile.exists()) {
+			this.name = "Error: File not found";
+			return;
+		}
+		try {
+			Document doc = Main.getDocBuilder().parse(XMLFile);
+			
+			// Cast magic:
+			doc.getDocumentElement().normalize();
+			
+			Element coreElement = Element.getDocumentRootElement(XMLFile); // Loads the document and returns the root element - in AbstractWorldType files it's <worldType>
+			
+			this.fileLocation = XMLFile.getAbsolutePath().replace("worldType.xml", "map.png");
+			
+			this.mod = mod;
+			this.fromExternalFile = true;
+			this.author = author;
+			
+			this.worldRegion = WorldRegion.valueOf(coreElement.getMandatoryFirstOf("worldRegion").getTextContent());
 
-				this.name = coreElement.getMandatoryFirstOf("name").getTextContent();
-				
-				String colourId = coreElement.getMandatoryFirstOf("colour").getTextContent();
-				if(colourId.startsWith("#")) {
-					this.colour = new Colour(false, Util.newColour(colourId), Util.newColour(colourId), "");
-				} else {
-					this.colour = PresetColour.getColourFromId(colourId);
-				}
-				
-				if(coreElement.getOptionalFirstOf("sexBlockedReason").isPresent()) {
-					sexBlockedReason = coreElement.getMandatoryFirstOf("sexBlockedReason").getTextContent();
-				} else {
-					sexBlockedReason = null;
-				}
-
-				this.usesFile = true;
-				
-				this.furniturePresent = false;
-				this.deskName = "desk";
-				if(coreElement.getOptionalFirstOf("furniturePresent").isPresent()) {
-					this.furniturePresent = Boolean.valueOf(coreElement.getMandatoryFirstOf("furniturePresent").getTextContent().trim());
-					if(!coreElement.getMandatoryFirstOf("furniturePresent").getAttribute("deskName").isEmpty()) {
-						this.deskName = coreElement.getMandatoryFirstOf("furniturePresent").getAttribute("deskName");
-					}
-				}
-
-				this.wallsPresent = false;
-				this.wallName = "wall";
-				if(coreElement.getOptionalFirstOf("wallsPresent").isPresent()) {
-					this.wallsPresent = Boolean.valueOf(coreElement.getMandatoryFirstOf("wallsPresent").getTextContent().trim());
-					if(!coreElement.getMandatoryFirstOf("wallsPresent").getAttribute("wallName").isEmpty()) {
-						this.wallName = coreElement.getMandatoryFirstOf("wallsPresent").getAttribute("wallName");
-					}
-				}
-
-				if(coreElement.getOptionalFirstOf("majorAreaIndex").isPresent()) {
-					majorAreaIndex = Integer.valueOf(coreElement.getMandatoryFirstOf("majorAreaIndex").getTextContent().trim());
-				} else {
-					majorAreaIndex = 0;
-				}
-				
-				this.loiteringEnabled = Boolean.valueOf(coreElement.getMandatoryFirstOf("loiteringEnabled").getTextContent().trim());
-				this.flightEnabled = Boolean.valueOf(coreElement.getMandatoryFirstOf("flightEnabled").getTextContent().trim());
-				this.discoveredOnStart = Boolean.valueOf(coreElement.getMandatoryFirstOf("visibleFromStart").getTextContent().trim());
-				this.revealedOnStart = Boolean.valueOf(coreElement.getMandatoryFirstOf("fullyRevealedFromStart").getTextContent().trim());
-				
-				this.globalMapLocation = PlaceType.getPlaceTypeFromId(coreElement.getMandatoryFirstOf("globalMapLocation").getTextContent().trim());
-				this.standardPlace = PlaceType.getPlaceTypeFromId(coreElement.getMandatoryFirstOf("standardPlace").getTextContent().trim());
-				this.entryFromGlobalMapLocation = PlaceType.getPlaceTypeFromId(coreElement.getMandatoryFirstOf("entryFromGlobalMapLocation").getTextContent().trim());
-
-				this.teleportPermissions = TeleportPermissions.valueOf(coreElement.getMandatoryFirstOf("teleportPermissions").getTextContent());
-				
-				this.placesMap = new HashMap<>();
-				for(Element e : coreElement.getMandatoryFirstOf("places").getAllOf("place")) {
-					try {
-						placesMap.put(Color.decode(e.getAttribute("colour")), PlaceType.getPlaceTypeFromId(e.getTextContent()));
-					} catch(Exception ex) {
-						System.err.println("WorldType loading error in '"+XMLFile.getName()+"': PlaceType '"+e.getTextContent()+"' not recognised! (Not added)");
-					}
-				}
-				
-				this.offspringTextFilePath = "characters/offspring/dominionAlleyway";
-				if(coreElement.getOptionalFirstOf("offspringTextFilePath").isPresent()) {
-					if(!coreElement.getMandatoryFirstOf("offspringTextFilePath").getTextContent().isEmpty()) {
-						this.offspringTextFilePath = coreElement.getMandatoryFirstOf("offspringTextFilePath").getTextContent();
-					}
-				}
-				
-			} catch(Exception ex) {
-				ex.printStackTrace();
-				System.err.println("WorldType was unable to be loaded from file! (" + XMLFile.getName() + ")\n" + ex);
+			this.name = coreElement.getMandatoryFirstOf("name").getTextContent();
+			
+			String colourId = coreElement.getMandatoryFirstOf("colour").getTextContent();
+			if(colourId.startsWith("#")) {
+				this.colour = new Colour(false, Util.newColour(colourId), Util.newColour(colourId), "");
+			} else {
+				this.colour = PresetColour.getColourFromId(colourId);
 			}
+			
+			if(coreElement.getOptionalFirstOf("sexBlockedReason").isPresent()) {
+				sexBlockedReason = coreElement.getMandatoryFirstOf("sexBlockedReason").getTextContent();
+			} else {
+				sexBlockedReason = null;
+			}
+
+			this.usesFile = true;
+			
+			this.furniturePresent = false;
+			this.deskName = "desk";
+			if(coreElement.getOptionalFirstOf("furniturePresent").isPresent()) {
+				this.furniturePresent = Boolean.valueOf(coreElement.getMandatoryFirstOf("furniturePresent").getTextContent().trim());
+				if(!coreElement.getMandatoryFirstOf("furniturePresent").getAttribute("deskName").isEmpty()) {
+					this.deskName = coreElement.getMandatoryFirstOf("furniturePresent").getAttribute("deskName");
+				}
+			}
+
+			this.wallsPresent = false;
+			this.wallName = "wall";
+			if(coreElement.getOptionalFirstOf("wallsPresent").isPresent()) {
+				this.wallsPresent = Boolean.valueOf(coreElement.getMandatoryFirstOf("wallsPresent").getTextContent().trim());
+				if(!coreElement.getMandatoryFirstOf("wallsPresent").getAttribute("wallName").isEmpty()) {
+					this.wallName = coreElement.getMandatoryFirstOf("wallsPresent").getAttribute("wallName");
+				}
+			}
+
+			if(coreElement.getOptionalFirstOf("majorAreaIndex").isPresent()) {
+				majorAreaIndex = Integer.valueOf(coreElement.getMandatoryFirstOf("majorAreaIndex").getTextContent().trim());
+			} else {
+				majorAreaIndex = 0;
+			}
+			
+			this.loiteringEnabled = Boolean.valueOf(coreElement.getMandatoryFirstOf("loiteringEnabled").getTextContent().trim());
+			this.flightEnabled = Boolean.valueOf(coreElement.getMandatoryFirstOf("flightEnabled").getTextContent().trim());
+			this.discoveredOnStart = Boolean.valueOf(coreElement.getMandatoryFirstOf("visibleFromStart").getTextContent().trim());
+			this.revealedOnStart = Boolean.valueOf(coreElement.getMandatoryFirstOf("fullyRevealedFromStart").getTextContent().trim());
+			
+			this.globalMapLocation = PlaceType.getPlaceTypeFromId(coreElement.getMandatoryFirstOf("globalMapLocation").getTextContent().trim());
+			this.standardPlace = PlaceType.getPlaceTypeFromId(coreElement.getMandatoryFirstOf("standardPlace").getTextContent().trim());
+			this.entryFromGlobalMapLocation = PlaceType.getPlaceTypeFromId(coreElement.getMandatoryFirstOf("entryFromGlobalMapLocation").getTextContent().trim());
+
+			this.teleportPermissions = TeleportPermissions.valueOf(coreElement.getMandatoryFirstOf("teleportPermissions").getTextContent());
+			
+			this.placesMap = new HashMap<>();
+			for(Element e : coreElement.getMandatoryFirstOf("places").getAllOf("place")) {
+				try {
+					placesMap.put(Color.decode(e.getAttribute("colour")), PlaceType.getPlaceTypeFromId(e.getTextContent()));
+				} catch(Exception ex) {
+					System.err.println("WorldType loading error in '"+XMLFile.getName()+"': PlaceType '"+e.getTextContent()+"' not recognised! (Not added)");
+				}
+			}
+			
+			this.offspringTextFilePath = "characters/offspring/dominionAlleyway";
+			if(coreElement.getOptionalFirstOf("offspringTextFilePath").isPresent()) {
+				if(!coreElement.getMandatoryFirstOf("offspringTextFilePath").getTextContent().isEmpty()) {
+					this.offspringTextFilePath = coreElement.getMandatoryFirstOf("offspringTextFilePath").getTextContent();
+				}
+			}
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			System.err.println("WorldType was unable to be loaded from file! (" + XMLFile.getName() + ")\n" + ex);
 		}
 	}
 	
