@@ -1,10 +1,10 @@
 package com.lilithsthrone.game.dialogue.places.dominion.mountIsil;
 
-import com.lilithsthrone.game.character.npc.dominion.Silenis;
-import com.lilithsthrone.game.character.npc.dominion.Uros;
+import com.lilithsthrone.game.character.npc.dominion.mountIsil.Silenis;
+import com.lilithsthrone.game.character.npc.dominion.mountIsil.Uros;
 import com.lilithsthrone.game.dialogue.DialogueNode;
-import com.lilithsthrone.game.dialogue.places.dominion.harpyNests.SilenisDialogue;
-import com.lilithsthrone.game.dialogue.places.mountIsil.MountIsilPlaces;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.SilenisDialogue;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.MountIsilPlaces;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.main.Main;

@@ -1,35 +1,20 @@
-package com.lilithsthrone.game.dialogue.places.dominion.harpyNests;
+package com.lilithsthrone.game.dialogue.places.dominion.mountIsil;
 
-import com.lilithsthrone.game.character.body.valueEnums.Femininity;
-import com.lilithsthrone.game.character.fetishes.Fetish;
-import com.lilithsthrone.game.character.npc.dominion.HarpyDominant;
-import com.lilithsthrone.game.character.npc.dominion.HarpyDominantCompanion;
-import com.lilithsthrone.game.character.quests.Quest;
-import com.lilithsthrone.game.character.quests.QuestLine;
-import com.lilithsthrone.game.dialogue.DialogueFlagValue;
-import com.lilithsthrone.game.dialogue.DialogueManager;
 import com.lilithsthrone.game.dialogue.DialogueNode;
-import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.GuardianDialogue;
 import com.lilithsthrone.game.dialogue.responses.Response;
-import com.lilithsthrone.game.dialogue.responses.ResponseCombat;
-import com.lilithsthrone.game.dialogue.responses.ResponseSex;
-import com.lilithsthrone.game.inventory.item.ItemType;
-import com.lilithsthrone.game.sex.managers.universal.SMGeneric;
-import com.lilithsthrone.main.Main;
-import com.lilithsthrone.utils.Util;
 
 /**
  * @since 0.4.9
  * @version 0.4.9
  * @author Mark
  */
-public class UrosDialogue extends GuardianDialogue {
+public class UrosDialogue {
 
 	private UrosDialogue() {
 		// no instantiation
 	}
 
-	private class UrosNode extends DialogueNode {
+	private static class UrosNode extends DialogueNode {
 		public UrosNode() {
 			super("", "", true);
 		}		
@@ -37,6 +22,16 @@ public class UrosDialogue extends GuardianDialogue {
 		@Override
 		public String getLabel() {
 			return "Inner Sanctum";
+		}
+
+		@Override
+		public String getContent() {
+			throw new Error("Expected getContent to be implemented in anonymous class");
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			throw new Error("Expected getResponse to be implemented in anonymous class");
 		}
 	}
 

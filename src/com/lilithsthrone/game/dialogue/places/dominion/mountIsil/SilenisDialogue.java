@@ -1,21 +1,12 @@
-package com.lilithsthrone.game.dialogue.places.dominion.harpyNests;
+package com.lilithsthrone.game.dialogue.places.dominion.mountIsil;
 
-import com.lilithsthrone.game.character.body.valueEnums.Femininity;
 import com.lilithsthrone.game.character.effects.Perk;
-import com.lilithsthrone.game.character.fetishes.Fetish;
-import com.lilithsthrone.game.character.npc.dominion.HarpyDominant;
-import com.lilithsthrone.game.character.npc.dominion.HarpyDominantCompanion;
-import com.lilithsthrone.game.character.npc.dominion.Silenis;
-import com.lilithsthrone.game.character.quests.Quest;
-import com.lilithsthrone.game.character.quests.QuestLine;
-import com.lilithsthrone.game.dialogue.DialogueFlagValue;
-import com.lilithsthrone.game.dialogue.DialogueManager;
+import com.lilithsthrone.game.character.npc.dominion.mountIsil.Silenis;
 import com.lilithsthrone.game.dialogue.DialogueNode;
-import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.GuardianDialogue;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.responses.ResponseCombat;
 import com.lilithsthrone.game.dialogue.responses.ResponseSex;
-import com.lilithsthrone.game.inventory.item.ItemType;
+import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.game.sex.managers.universal.SMGeneric;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
@@ -25,86 +16,13 @@ import com.lilithsthrone.utils.Util;
  * @version 0.4.9
  * @author Mark
  */
-public class SilenisDialogue extends GuardianDialogue {
+public class SilenisDialogue {
 
 	private SilenisDialogue() {
 		// no instantiation
 	}
 
-	private static final Response domSexResponse = new ResponseSex(
-		"Sex",
-		"Have dominant sex with [silenis.name].",
-		true,
-		false,
-		new SMGeneric(
-			Util.newArrayListOfValues(Main.game.getPlayer()),
-			Util.newArrayListOfValues(Main.game.getNpc(Silenis.class)),
-			null,
-			null
-		),
-		AFTER_SEX,
-		"""
-			<p>
-				It looks like you are going to have to remind [silenis.name] that [silenis.her], even though you aren't immune to seductive technique, you aren't just going to let [silenis.name] have [silenis.her] way with you. [silenis.speech(Yes, come closer. You can relieve all your stress right here...)] [silenis.she] says as you [pc.step] forwards, and you catch [silenis.her] tail trying to circle behind you. 
-			</p>
-			<p>
-				Before [silenis.she] can gain the upper hand, you grab [silenis.her] questing tail and thrust it aside, exposing [silenis.namePos] already erect [silenis.penis] and [silenis.vaginaWetness] [silenis.vagina], ready to be breed the devious snake-herm. 
-			</p>
-			<p>
-				[silenis.speech(Fuck... you know exactly how to treat me. Do whatever you want, I'm here to #IF(pc.hasPenis())please your delicious cock#ELSEbe your little lesbian toy#ENDIF.)] [silenis.She] moans as you bend [silenis.herHim] over and get ready to make love.
-			</p>
-		"""
-	);
-
-	private static final Response subSexResponse = new ResponseSex(
-		"Submit",
-		"",
-		false,
-		true,
-		new SMGeneric(
-			Util.newArrayListOfValues(Main.game.getNpc(Silenis.class)),
-			Util.newArrayListOfValues(Main.game.getPlayer()),
-			null,
-			null
-		),
-		AFTER_SEX,
-		"""
-			<p>
-				As [silenis.name] flicks [silenis.her] tail aside, exposing [silenis.namePos] already erect [silenis.penis] and [silenis.vaginaWetness] [silenis.vagina], you realise you have already succumbed to her seductive technique. [silenis.speech(Yes, come closer. You can relieve all your stress right here...)] [silenis.she] says as you [pc.step] forwards, and you barely notice [silenis.her] tail circling behind you. 
-			</p>
-			<p>
-				Before you can lay your [pc.hands] on [silenis.her] perfect body, [silenis.name] crushes you in an almost unbearably strong grip, holding your [pc.bodyShape] body tight as you feel [silenis.her] cool scales slide tantalisingly #IF(pc.hasLegs())between your [pc.legs+]#ELSEdown your back and over your [pc.assSize] butt#ENDIF.
-			</p>
-			<p>
-				[silenis.speech(Shh... I know exactly what you want. Now just hold still and I'll make you my little cocksleeve. Or struggle, I really don't mind.)] [silenis.She] hisses as [silenis.she] slithers around to press [silenis.herHim] cock up against your vulnerable rear and prepares to breed you silly.
-			</p>
-		"""
-	) {
-		@Override
-		public String getTooltipText() {
-			if (Silenis.hasDommedPlayer()) {
-				return UtilText.parse("Let [silenis.name] take hold of your like [silenis.she] did before.");
-			} else {
-				return UtilText.parse("Let the beautiful snake-woman have [silenis.her] way with you.");
-			}
-		}
-	};
-
-	private static final Response leaveResponse = new Response("Leave", "Leave the naga alone, although [silenis.she] will no doubt be disappointed.", SilenisDialogue.EXTERIOR) {
-		@Override
-		public void effects() {
-			Main.game.getTextStartStringBuilder().append("""
-				<p>
-						Deciding that now isn't the best time to be flirting with [silenis.name], you turn your back on the slithering [silenis.woman] before [silenis.she] can change your mind. You hear [silenis.name] hissing as you leave, [silenis.speech(So mean, leaving a woman all flustered like this. I'll be thinking of you...)]
-				</p>
-				<p>
-					"Ignoring her words, you duck through the doors to [silenis.her] chamber, and exit into the vestibule.
-				</p>
-			""");
-		}
-	};
-
-	private class SilenisNode extends DialogueNode {
+	private static class SilenisNode extends DialogueNode {
 		public SilenisNode() {
 			super("", "", true);
 		}		
@@ -112,6 +30,16 @@ public class SilenisDialogue extends GuardianDialogue {
 		@Override
 		public String getLabel() {
 			return "[silenis.NamePos] chambers";
+		}
+
+		@Override
+		public String getContent() {
+			throw new Error("Expected getContent to be implemented in anonymous class");
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			throw new Error("Expected getResponse to be implemented in anonymous class");
 		}
 	}
 
@@ -346,6 +274,98 @@ public class SilenisDialogue extends GuardianDialogue {
 				return leaveResponse;
 			}
 			return null;
+		}
+	};
+
+	public static final DialogueNode AFTER_SEX = new SilenisNode() {
+		@Override
+		public String getContent() {
+			// TODO (mark)
+			return """
+					AFTER_SEX content
+			""";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			// TODO (mark)
+			if (index == 0) {
+				return leaveResponse;
+			}
+			return null;
+		}
+	};
+
+	private static final Response domSexResponse = new ResponseSex(
+		"Sex",
+		"Have dominant sex with [silenis.name].",
+		true,
+		false,
+		new SMGeneric(
+			Util.newArrayListOfValues(Main.game.getPlayer()),
+			Util.newArrayListOfValues(Main.game.getNpc(Silenis.class)),
+			null,
+			null
+		),
+		AFTER_SEX,
+		"""
+			<p>
+				It looks like you are going to have to remind [silenis.name] that [silenis.her], even though you aren't immune to seductive technique, you aren't just going to let [silenis.name] have [silenis.her] way with you. [silenis.speech(Yes, come closer. You can relieve all your stress right here...)] [silenis.she] says as you [pc.step] forwards, and you catch [silenis.her] tail trying to circle behind you. 
+			</p>
+			<p>
+				Before [silenis.she] can gain the upper hand, you grab [silenis.her] questing tail and thrust it aside, exposing [silenis.namePos] already erect [silenis.penis] and [silenis.vaginaWetness] [silenis.vagina], ready to be breed the devious snake-herm. 
+			</p>
+			<p>
+				[silenis.speech(Fuck... you know exactly how to treat me. Do whatever you want, I'm here to #IF(pc.hasPenis())please your delicious cock#ELSEbe your little lesbian toy#ENDIF.)] [silenis.She] moans as you bend [silenis.herHim] over and get ready to make love.
+			</p>
+		"""
+	);
+
+	private static final Response subSexResponse = new ResponseSex(
+		"Submit",
+		"",
+		false,
+		true,
+		new SMGeneric(
+			Util.newArrayListOfValues(Main.game.getNpc(Silenis.class)),
+			Util.newArrayListOfValues(Main.game.getPlayer()),
+			null,
+			null
+		),
+		AFTER_SEX,
+		"""
+			<p>
+				As [silenis.name] flicks [silenis.her] tail aside, exposing [silenis.namePos] already erect [silenis.penis] and [silenis.vaginaWetness] [silenis.vagina], you realise you have already succumbed to her seductive technique. [silenis.speech(Yes, come closer. You can relieve all your stress right here...)] [silenis.she] says as you [pc.step] forwards, and you barely notice [silenis.her] tail circling behind you. 
+			</p>
+			<p>
+				Before you can lay your [pc.hands] on [silenis.her] perfect body, [silenis.name] crushes you in an almost unbearably strong grip, holding your [pc.bodyShape] body tight as you feel [silenis.her] cool scales slide tantalisingly #IF(pc.hasLegs())between your [pc.legs+]#ELSEdown your back and over your [pc.assSize] butt#ENDIF.
+			</p>
+			<p>
+				[silenis.speech(Shh... I know exactly what you want. Now just hold still and I'll make you my little cocksleeve. Or struggle, I really don't mind.)] [silenis.She] hisses as [silenis.she] slithers around to press [silenis.herHim] cock up against your vulnerable rear and prepares to breed you silly.
+			</p>
+		"""
+	) {
+		@Override
+		public String getTooltipText() {
+			if (Silenis.hasDommedPlayer()) {
+				return UtilText.parse("Let [silenis.name] take hold of your like [silenis.she] did before.");
+			} else {
+				return UtilText.parse("Let the beautiful snake-woman have [silenis.her] way with you.");
+			}
+		}
+	};
+
+	private static final Response leaveResponse = new Response("Leave", "Leave the naga alone, although [silenis.she] will no doubt be disappointed.", SilenisDialogue.EXTERIOR) {
+		@Override
+		public void effects() {
+			Main.game.getTextStartStringBuilder().append("""
+				<p>
+						Deciding that now isn't the best time to be flirting with [silenis.name], you turn your back on the slithering [silenis.woman] before [silenis.she] can change your mind. You hear [silenis.name] hissing as you leave, [silenis.speech(So mean, leaving a woman all flustered like this. I'll be thinking of you...)]
+				</p>
+				<p>
+					"Ignoring her words, you duck through the doors to [silenis.her] chamber, and exit into the vestibule.
+				</p>
+			""");
 		}
 	};
 }

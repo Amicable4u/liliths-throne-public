@@ -21,6 +21,7 @@ java -jar target/Lilith\'s\ Throne\ \(linux\)/Lilith\'s\ Throne-0.4.9.jar
 
 * started using java 21 (if you see java.lang.NullPointerException: Cannot invoke "com.sun.tools.javac.code.Symbol.isEnum()" because "expr.sym" is null it is because java 17 does not permit nested switch expressions)
 * Add a cheat menu (#cheatMenuButton). Can refill health & mana, gain money, gain spell upgrade points
+  * lmao I just learned about the existing debug menu. Oh well.
 * Add the "Ask" action during sex, allowing the player to ask their partners what they would like.
 * Add the "Deny cock" action during sex, allowing characters to tease their partner's cocks if they are currently in chastity.
 * Added utilities in ChasteReason.java for reporting whether a character is able to masturbate, and if not, returns the reason why

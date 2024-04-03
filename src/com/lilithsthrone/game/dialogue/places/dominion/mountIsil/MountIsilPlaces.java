@@ -1,4 +1,4 @@
-package com.lilithsthrone.game.dialogue.places.mountIsil;
+package com.lilithsthrone.game.dialogue.places.dominion.mountIsil;
 
 import java.util.List;
 

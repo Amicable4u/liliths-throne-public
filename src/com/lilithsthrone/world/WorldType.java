@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 
 import com.lilithsthrone.game.character.GameCharacter;
 import com.lilithsthrone.game.character.npc.misc.NPCOffspring;
-import com.lilithsthrone.game.dialogue.places.mountIsil.MountIsilPlaces;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.MountIsilPlaces;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.utils.Util.Value;

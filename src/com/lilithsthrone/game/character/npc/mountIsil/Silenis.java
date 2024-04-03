@@ -1,4 +1,4 @@
-package com.lilithsthrone.game.character.npc.dominion;
+package com.lilithsthrone.game.character.npc.dominion.mountIsil;
 
 import java.time.Month;
 import java.util.List;
@@ -23,6 +23,7 @@ import com.lilithsthrone.game.character.body.valueEnums.Capacity;
 import com.lilithsthrone.game.character.body.valueEnums.ClitorisSize;
 import com.lilithsthrone.game.character.body.valueEnums.CupSize;
 import com.lilithsthrone.game.character.body.valueEnums.Femininity;
+import com.lilithsthrone.game.character.body.valueEnums.FootStructure;
 import com.lilithsthrone.game.character.body.valueEnums.HairLength;
 import com.lilithsthrone.game.character.body.valueEnums.HairStyle;
 import com.lilithsthrone.game.character.body.valueEnums.HipSize;
@@ -33,6 +34,8 @@ import com.lilithsthrone.game.character.body.valueEnums.Muscle;
 import com.lilithsthrone.game.character.body.valueEnums.NippleSize;
 import com.lilithsthrone.game.character.body.valueEnums.OrificeElasticity;
 import com.lilithsthrone.game.character.body.valueEnums.OrificePlasticity;
+import com.lilithsthrone.game.character.body.valueEnums.PenetrationGirth;
+import com.lilithsthrone.game.character.body.valueEnums.TesticleSize;
 import com.lilithsthrone.game.character.body.valueEnums.TongueLength;
 import com.lilithsthrone.game.character.body.valueEnums.Wetness;
 import com.lilithsthrone.game.character.effects.Perk;
@@ -53,9 +56,10 @@ import com.lilithsthrone.game.character.race.Subspecies;
 import com.lilithsthrone.game.dialogue.DialogueFlagValue;
 import com.lilithsthrone.game.dialogue.DialogueManager;
 import com.lilithsthrone.game.dialogue.DialogueNode;
-import com.lilithsthrone.game.dialogue.places.dominion.harpyNests.HarpyNestDominant;
-import com.lilithsthrone.game.dialogue.places.mountIsil.MountIsilPlaces;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.MountIsilPlaces;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.SilenisDialogue;
 import com.lilithsthrone.game.dialogue.responses.Response;
+import com.lilithsthrone.game.dialogue.utils.ParserTarget;
 import com.lilithsthrone.game.inventory.CharacterInventory;
 import com.lilithsthrone.game.inventory.InventorySlot;
 import com.lilithsthrone.game.inventory.clothing.AbstractClothing;
@@ -83,7 +87,7 @@ public class Silenis extends MountIsilNpc {
 	
 	public Silenis(boolean isImported) {
 		super(isImported, new NameTriplet("Silix", "Silenix", "Silenis"), "Lithnaga",
-				"One of the [silenis.sister]s of [nyx.name]. Silenis has an uncanny sense for people, and can always discern what they want most, making her as deadly in combat as she is talented in bed.",
+				"One of the [silenis.sister]s of [uros.name]. [Silenis.name] has an uncanny sense for people, and can always discern what they want most, making [silenis.herHim] as deadly in combat as [silenis.she] is talented in bed.",
 				22, Month.JANUARY, 20,
 				20, Gender.F_V_B_FEMALE, Subspecies.getSubspeciesFromId("NoStepOnSnek_snake"), RaceStage.LESSER,
 				new CharacterInventory(30), WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.GUARDIAN, true);
@@ -94,15 +98,15 @@ public class Silenis extends MountIsilNpc {
 	}
 
 	public static boolean hasEncountered() {
-		return MountIsilNpc.hasEncountered(Silenis.class.getName());
+		return MountIsilNpc.hasEncountered(Silenis.class);
 	}
 
 	public static boolean isDefeated() {
-		return MountIsilNpc.isDefeated(Silenis.class.getName());
+		return MountIsilNpc.isDefeated(Silenis.class);
 	}
 
 	public static boolean hasDommedPlayer() {
-		return MountIsilNpc.hasDommedPlayer(Silenis.class.getName());
+		return MountIsilNpc.hasDommedPlayer(Silenis.class);
 	}
 
 	@Override

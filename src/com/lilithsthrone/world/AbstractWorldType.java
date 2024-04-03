@@ -31,7 +31,7 @@ public abstract class AbstractWorldType {
 	
 	private WorldRegion worldRegion;
 	
-	public final String name;
+	private String name;
 	private String fileLocation;
 	private Colour colour;
 

@@ -1,4 +1,4 @@
-package com.lilithsthrone.game.character.npc.dominion;
+package com.lilithsthrone.game.character.npc.dominion.mountIsil;
 
 import java.time.Month;
 import java.util.List;
@@ -23,6 +23,7 @@ import com.lilithsthrone.game.character.body.valueEnums.Capacity;
 import com.lilithsthrone.game.character.body.valueEnums.ClitorisSize;
 import com.lilithsthrone.game.character.body.valueEnums.CupSize;
 import com.lilithsthrone.game.character.body.valueEnums.Femininity;
+import com.lilithsthrone.game.character.body.valueEnums.FootStructure;
 import com.lilithsthrone.game.character.body.valueEnums.HairLength;
 import com.lilithsthrone.game.character.body.valueEnums.HairStyle;
 import com.lilithsthrone.game.character.body.valueEnums.HipSize;
@@ -55,9 +56,10 @@ import com.lilithsthrone.game.character.race.Subspecies;
 import com.lilithsthrone.game.dialogue.DialogueFlagValue;
 import com.lilithsthrone.game.dialogue.DialogueManager;
 import com.lilithsthrone.game.dialogue.DialogueNode;
-import com.lilithsthrone.game.dialogue.places.dominion.harpyNests.HarpyNestDominant;
-import com.lilithsthrone.game.dialogue.places.mountIsil.MountIsilPlaces;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.MountIsilPlaces;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.UrosDialogue;
 import com.lilithsthrone.game.dialogue.responses.Response;
+import com.lilithsthrone.game.dialogue.utils.ParserTarget;
 import com.lilithsthrone.game.inventory.CharacterInventory;
 import com.lilithsthrone.game.inventory.InventorySlot;
 import com.lilithsthrone.game.inventory.clothing.AbstractClothing;
@@ -96,15 +98,15 @@ public class Uros extends MountIsilNpc {
 	}
 
 	public static boolean hasEncountered() {
-		return MountIsilNpc.hasEncountered(Uros.class.getName());
+		return MountIsilNpc.hasEncountered(Uros.class);
 	}
 
 	public static boolean isDefeated() {
-		return MountIsilNpc.isDefeated(Uros.class.getName());
+		return MountIsilNpc.isDefeated(Uros.class);
 	}
 
 	public static boolean hasDommedPlayer() {
-		return MountIsilNpc.hasDommedPlayer(Uros.class.getName());
+		return MountIsilNpc.hasDommedPlayer(Uros.class);
 	}
 
 	@Override

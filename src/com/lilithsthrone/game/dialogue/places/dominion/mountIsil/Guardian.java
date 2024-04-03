@@ -1,8 +1,10 @@
 package com.lilithsthrone.game.dialogue.places.dominion.mountIsil;
 
-import com.lilithsthrone.game.character.npc.dominion.Silenis;
+import com.lilithsthrone.game.character.npc.dominion.mountIsil.Silenis;
 import com.lilithsthrone.game.dialogue.DialogueNode;
-import com.lilithsthrone.game.dialogue.places.dominion.harpyNests.SilenisDialogue;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.SilenisDialogue;
+import com.lilithsthrone.game.character.npc.NPC;
+import com.lilithsthrone.main.Main;
 
 public class Guardian {
   public final DialogueNode exterior;
