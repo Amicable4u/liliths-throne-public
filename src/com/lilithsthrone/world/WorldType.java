@@ -141,7 +141,7 @@ public class WorldType {
 					new Value<>(new Color(0x008080), PlaceType.DOMINION_STREET_HARPY_NESTS),
 					new Value<>(new Color(0x00ff80), PlaceType.DOMINION_HARPY_NESTS_ENTRANCE),
 
-					new Value<>(new Color(0xbc00bf), PlaceType.DOMINION_MOUNT_ISIL_ENTRANCE),
+					new Value<>(new Color(0xac23b9), PlaceType.DOMINION_MOUNT_ISIL_ENTRANCE),
 					
 					new Value<>(new Color(0x004000), PlaceType.DOMINION_PLAZA),
 					new Value<>(new Color(0x00ffff), PlaceType.DOMINION_AUNTS_HOME),
@@ -1169,7 +1169,7 @@ public class WorldType {
 		put(new Color(0xc7c7c7), MountIsilPlaces.PATH);
 		put(new Color(0xffa9fd), MountIsilPlaces.ENTRANCE);
 		put(new Color(0xb9ffa9), MountIsilPlaces.SHRINE);
-		put(new Color(0xb9ffa9), MountIsilPlaces.GUARDIAN);
+		put(new Color(0xffa9c9), MountIsilPlaces.GUARDIAN);
 		put(new Color(0xfff900), MountIsilPlaces.TREASURE);
 	}};
 
@@ -1187,8 +1187,7 @@ public class WorldType {
 	) {
 		@Override
 		public int getMajorAreaIndex() {
-			// TODO (mark)
-			return 1;
+			return 2;
 		}
 		@Override
 		public String getOffspringTextFilePath(NPCOffspring o) {
@@ -1206,14 +1205,9 @@ public class WorldType {
 		TeleportPermissions.BOTH,
 		"/com/lilithsthrone/res/map/dominion/mountIsil/mountIsilOverlook.png",
 		PlaceType.WORLD_MAP_DOMINION,
-		MountIsilPlaces.ENTRANCE,
+		MountIsilPlaces.EXIT,
 		mountIsilPlaceMap
 	) {
-		@Override
-		public int getMajorAreaIndex() {
-			// TODO (mark)
-			return 1;
-		}
 		@Override
 		public String getOffspringTextFilePath(NPCOffspring o) {
 			// TODO (mark)
@@ -1293,11 +1287,9 @@ public class WorldType {
 				AbstractWorldType worldType;
 				try {
 					worldType = ((AbstractWorldType) f.get(null));
-
 					worldToIdMap.put(worldType, f.getName());
 					idToWorldMap.put(f.getName(), worldType);
 					allWorldTypes.add(worldType);
-					
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 				}

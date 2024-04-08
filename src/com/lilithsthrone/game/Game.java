@@ -1213,6 +1213,10 @@ public class Game implements XMLSaving {
 				if(Main.isVersionOlderThan(loadingVersion, "0.4.7.11")) {
 					Main.game.getWorlds().put(WorldType.getWorldTypeFromId("innoxia_fields_elis_tavern_taur"), gen.worldGeneration(WorldType.getWorldTypeFromId("innoxia_fields_elis_tavern_taur")));
 				}
+				if(Main.isVersionOlderThan(loadingVersion, "0.4.9")) {
+					Main.game.getWorlds().put(WorldType.MOUNT_ISIL_PLATEAU, gen.worldGeneration(WorldType.MOUNT_ISIL_PLATEAU));
+					Main.game.getWorlds().put(WorldType.MOUNT_ISIL_OVERLOOK, gen.worldGeneration(WorldType.MOUNT_ISIL_OVERLOOK));
+				}
 				if(Main.isVersionOlderThan(loadingVersion, "0.4.9.1")) {
 					Main.game.getWorlds().put(WorldType.getWorldTypeFromId("innoxia_dominion_sex_shop"), gen.worldGeneration(WorldType.getWorldTypeFromId("innoxia_dominion_sex_shop")));
 				}

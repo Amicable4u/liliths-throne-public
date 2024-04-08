@@ -23,7 +23,7 @@ public class MountIsilPlaces {
 			WorldRegion.MOUNT_ISIL,
 			"Entrance",
 			"mountIsilEntrance text",
-			"mountIsil/stairs",
+			"dominion/mountIsil/stairs",
 			PresetColour.BASE_GREY_LIGHT,
 			MountIsilDialogue.ENTRANCE,
 			Darkness.ALWAYS_LIGHT,
@@ -39,7 +39,7 @@ public class MountIsilPlaces {
 		WorldRegion.MOUNT_ISIL,
 		"Exit",
 		"mountIsilExit text",
-		"mountIsil/stairs",
+		"dominion/mountIsil/stairs",
 		PresetColour.BASE_GREY_LIGHT,
 		MountIsilDialogue.EXIT,
 		Darkness.ALWAYS_LIGHT,
@@ -53,7 +53,7 @@ public class MountIsilPlaces {
 
 	public static final AbstractPlaceType PATH = new AbstractPlaceType(
 			WorldRegion.MOUNT_ISIL,
-			"Mount Isil",
+			"Mount Isil Path",
 			"mountIsilPath text",
 			null,
 			PresetColour.BASE_GREY_LIGHT,
@@ -71,7 +71,7 @@ public class MountIsilPlaces {
 			WorldRegion.MOUNT_ISIL,
 			"Mount Isil shrine",
 			"A small shrine.",
-			"mountIsil/shrine",
+			"dominion/mountIsil/shrine",
 			PresetColour.BASE_GREY_LIGHT,
 			MountIsilDialogue.SHRINE,
 			Darkness.ALWAYS_LIGHT,
@@ -87,7 +87,7 @@ public class MountIsilPlaces {
 			WorldRegion.MOUNT_ISIL,
 			"Treasure",
 			"mountIsilTreasure text",
-			"mountIsil/treasure",
+			"dominion/mountIsil/treasure",
 			PresetColour.BASE_GOLD,
 			MountIsilDialogue.TREASURE,
 			Darkness.ALWAYS_LIGHT,
@@ -103,7 +103,7 @@ public class MountIsilPlaces {
 			WorldRegion.MOUNT_ISIL,
 			"Mount Isil guardian",
 			"Mount Isil guardian text",
-			"mountIsil/guardian",
+			"dominion/mountIsil/guardian",
 			PresetColour.BASE_GREY_LIGHT,
 			MountIsilDialogue.GUARDIAN,
 			Darkness.ALWAYS_LIGHT,
@@ -115,11 +115,11 @@ public class MountIsilPlaces {
 		}
 	}.initWeatherImmune();
 
-	public static final AbstractPlaceType Uros = new AbstractPlaceType(
+	public static final AbstractPlaceType UROS = new AbstractPlaceType(
 			WorldRegion.MOUNT_ISIL,
 			"Inner Sanctum",
 			"Mount Isil uros text",
-			"mountIsil/guardian", // TODO (mark)
+			"dominion/mountIsil/guardian", // TODO (mark)
 			PresetColour.BASE_GREY_LIGHT,
 			UrosDialogue.EXTERIOR,
 			Darkness.ALWAYS_LIGHT,

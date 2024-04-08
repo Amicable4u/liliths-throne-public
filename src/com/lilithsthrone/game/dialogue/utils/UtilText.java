@@ -2780,8 +2780,8 @@ public class UtilText {
 		commandsList.add(new ParserCommand(
 				Util.newArrayListOfValues(
 						"fullRace",
-						"raceFull",
-						"femininityRace"),
+						"raceFull"
+				),
 				true,
 				true,
 				"(coloured)",
@@ -2817,8 +2817,8 @@ public class UtilText {
 		commandsList.add(new ParserCommand(
 				Util.newArrayListOfValues(
 						"fullRaces",
-						"racesFull",
-						"femininityRaces"),
+						"racesFull"
+				),
 				true,
 				true,
 				"(coloured)",
@@ -2934,6 +2934,34 @@ public class UtilText {
 							+ "</span>";
 				}
 				return character.getSubspecies().getFeralName(character.getBody());
+			}
+		});
+
+		commandsList.add(new ParserCommand(
+				Util.newArrayListOfValues(
+						"femininityRace",
+						"raceFemininity"
+				),
+				true,
+				false,
+				"(coloured)",
+				"Returns the masculine/feminine name for this character's species.") {
+			@Override
+			public String parse(List<GameCharacter> specialNPCs, String command, String arguments, String target,
+					GameCharacter character) {
+				String species = getSubspeciesName(character.getSubspecies(), character);
+				if (parseCapitalise) {
+					species = Util.capitaliseSentence(species);
+				}
+				if (arguments != null && Boolean.valueOf(arguments)) {
+					return "<span style='color:" + character.getSubspecies().getColour(character).toWebHexString() + ";'>" + species + "</span>";
+				}
+				return species;
+			}
+
+			@Override
+			protected String applyDeterminer(String descriptor, String input) {
+				return input;
 			}
 		});
 
@@ -8453,6 +8481,30 @@ public class UtilText {
 					return Units.size(character.getPenisRawSizeValue(), Units.ValueType.NUMERIC, Units.UnitType.SHORT);
 				}
 				return Units.size(character.getPenisRawSizeValue(), Units.ValueType.NUMERIC, Units.UnitType.LONG);
+			}
+		});
+
+		commandsList.add(new ParserCommand(
+				Util.newArrayListOfValues(
+						"girlPenis",
+						"girlCock",
+						"girlDick",
+						"futaPenis",
+						"futaCock",
+						"futaDick"
+				),
+				false,
+				false,
+				"",
+				"Returns a feminine penis name for feminine characters with a penis, or else just the normal name for their penis.",
+				BodyPartType.PENIS) {
+			@Override
+			public String parse(List<GameCharacter> specialNPCs, String command, String arguments, String target,
+					GameCharacter character) {
+				if (character.getFemininity().isFeminine()) {
+					return UtilText.returnStringAtRandom("girl-cock", character.hasVagina() ? "futa-dick" : "fem-cock");
+				}
+			return character.getCurrentPenis().getName(character);
 			}
 		});
 

@@ -1,9 +1,11 @@
 package com.lilithsthrone.world;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.w3c.dom.Document;
 
@@ -292,6 +294,19 @@ public abstract class AbstractWorldType {
 
 	public boolean isUsesFile() {
 		return usesFile;
+	}
+
+	public AbstractPlaceType getPlace(BufferedImage mapImg, int x, int y) {
+		Color color = new Color(mapImg.getRGB(x, y));
+		AbstractPlaceType place = this.placesMap.get(color);
+		if (place == null) {
+			System.err.format("Error: Place at (%d,%d) in world %s with colour %s is null!%nPlacesMap:%n", x, y, this.getName(), "#"+Integer.toHexString(color.getRGB()).substring(2));
+
+			for (Entry<Color, AbstractPlaceType> e : placesMap.entrySet()) {
+				System.err.format("  %s -> %s%n", "#"+Integer.toHexString(e.getKey().getRGB()).substring(2), e.getValue().getName());
+			}
+		}
+		return place;
 	}
 
 	public Map<Color, AbstractPlaceType> getPlacesMap() {

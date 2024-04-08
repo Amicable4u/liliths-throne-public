@@ -9,6 +9,7 @@ import com.lilithsthrone.game.character.attributes.AffectionLevelBasic;
 import com.lilithsthrone.game.character.attributes.ObedienceLevelBasic;
 import com.lilithsthrone.game.character.body.types.BodyPartType;
 import com.lilithsthrone.game.character.effects.ChasteReason;
+import com.lilithsthrone.game.character.effects.StatusEffect;
 import com.lilithsthrone.game.character.fetishes.Fetish;
 import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.dialogue.DialogueNode;
@@ -29,6 +30,24 @@ public class SlaveInteract {
   public SlaveInteract(NPC slave) {
     this.slave = slave;
   }
+
+  private boolean enjoysDenial() {
+    return slave.hasFetish(Fetish.FETISH_DENIAL_SELF);
+  }
+
+  private boolean isPentUp() {
+    return slave.hasStatusEffect(StatusEffect.PENT_UP_SLAVE)
+      || slave.isErectionPreventedPhysically()
+      || slave.hasStatusEffect(StatusEffect.CHASTITY_1)
+      || slave.hasStatusEffect(StatusEffect.CHASTITY_2);
+  }
+
+  private boolean isVeryPentUp() {
+    return slave.hasStatusEffect(StatusEffect.CHASTITY_3)
+      || slave.hasStatusEffect(StatusEffect.CHASTITY_4);
+  }
+
+
 
   private boolean enjoysSpanking() {
     return slave.getFetishDesire(Fetish.FETISH_MASOCHIST).isPositive()
@@ -210,6 +229,7 @@ public class SlaveInteract {
         )
         .append("</p>");
       } else if (hatesSpanking()) {
+        // TODO (mark)
         UtilText.nodeContentSB.append("<p>").append(
           switch (affection) {
             case DISLIKE -> "";
@@ -221,6 +241,123 @@ public class SlaveInteract {
       }
 
       return UtilText.nodeContentSB.toString();
+    }
+
+    @Override
+    public Response getResponse(int responseTab, int index) {
+      if (index == 1) {
+        return new Response("Finish", "", previousDialogueNode);
+      }
+      return null;
+    }
+  };
+
+  private DialogueNode DENY_COCK = new DialogueNode("", "", true) {
+    @Override
+    public DialogueNodeType getDialogueNodeType() {
+      return DialogueNodeType.PHONE;
+    }
+
+    @Override
+    public String getLabel() {
+      return "Teasing";
+    }
+
+    @Override
+    public String getContent() {
+
+      AffectionLevelBasic affection = AffectionLevelBasic.getAffectionLevelFromValue(slave.getAffection(Main.game.getPlayer()));
+      ObedienceLevelBasic obedience = ObedienceLevelBasic.getObedienceLevelFromValue(slave.getObedienceValue());
+      // Pair<AffectionLevel, ObedienceLevel> disposition = new Pair<>();
+
+      UtilText.nodeContentSB.setLength(0);
+
+      UtilText.nodeContentSB.append("<p>")
+        .append(
+          switch (affection) {
+            case DISLIKE -> """
+              [npc.name] curls [npc.her] [npc.lip] in distaste as you approach [npc.herHim].
+            """;
+            case NEUTRAL -> """
+              [npc.name] looks neither excited nor dismayed as you approach [npc.herHim].
+            """;
+            case LIKE -> """
+              [npc.name] looks excited to see you as you approach [npc.herHim].
+            """;
+            default -> Arrays.toString(new Throwable().getStackTrace());
+          }
+        ).append(
+          switch (obedience) {
+            case DISOBEDIENT -> " [npc.She] immediately shies away as you reach your [pc.hand] down [npc.her] [npc.bodyShape] body to";
+            case NEUTRAL -> " [npc.She manages to hold still] as you reach your [pc.hand] down [npc.her] [npc.bodyShape] body to";
+            case OBEDIENT -> " [npc.She] obediently allows you to inspect [npc.her] body, reaching down, you";
+            default -> Arrays.toString(new Throwable().getStackTrace());
+          }
+        ).append(" take hold of [npc.her] chaste [npc.penisRace] [npc.penis].");
+
+      String cock = "";
+      String begging = "";
+      if (slave.hasStatusEffect(StatusEffect.CHASTITY_1)) { // a day
+        cock = "caged [npc.girlCock]";
+        begging = "[npc.speech(Please [npc.petName(pc)], I've been horny all day, can you just take it off for a few minutes?')]";
+      } else if (slave.hasStatusEffect(StatusEffect.CHASTITY_2)) { // 2+ days
+        cock = "caged [npc.girlCock]";
+        begging = "[npc.speech(Please [npc.petName(pc)], you haven't let me out for two days now. I'll be a good [npc.girl], just let me masturbate quickly!')]";
+      } else if (slave.hasStatusEffect(StatusEffect.CHASTITY_3)) { // a week
+        cock = "caged and leaking [npc.girlCock]";
+        begging = "[npc.speech([I'm so horny npc.petName(pc)], I can't even think straight. I need to breed someone right now, or I'm going to go crazy!')]";
+      } else if (slave.hasStatusEffect(StatusEffect.CHASTITY_4)) { // 2+ weeks
+        // UtilText.nodeContentSB.append("");
+        cock = "caged and leaking [npc.girlCock]";
+        begging = "[npc.speech([Fuuuck...)] [npc.name] moans. [npc.She] is so distracted by [npc.her] painfully caged erection that [npc.she] can't even summon the words to beg to have [npc.her] cage removed. [npc.speech([npc.petName(pc), it hurts so badly! And it's leaking everywhere... I'll do anything, just please let me cum!])]";
+      } else if (slave.isErectionPreventedPhysically()) {
+        cock = "caged [npc.girlCock]";
+        begging = "[npc.speech(It feels a little sore, [npc.petName(pc)]. Are you going to take it off soon?')]";
+      } else if (slave.hasStatusEffect(StatusEffect.PENT_UP_SLAVE)) {
+        cock = "pent-up [npc.girlCock]";
+        String ending = "you run your [pc.hands] over [npc.her] desperate and throbbing [npc.femininityRace]-[npc.cock].";
+        UtilText.nodeContentSB.append(switch (affection) {
+          case DISLIKE -> " [npc.speech(Get your [pc.hands] off me!)] [npc.name] snarls, but even though [npc.she] obviously loathes you, [npc.she] doesn't pull away, letting " + ending;
+          case NEUTRAL -> " [npc.speech(Th-thank you.)] [npc.name] mumbles, slightly embarrassed to be letting " + ending;
+          case LIKE -> " [npc.speech(Ooh, finally!)] [npc.name] moans, thrusting [npc.her] [npc.hips+] out to let " + ending;
+          default -> Arrays.toString(new Throwable().getStackTrace());
+        });
+        begging = "";
+      } else {
+        cock =  "pent-up [npc.girlCock]";
+        begging = switch (obedience) {
+          case DISOBEDIENT -> "[npc.speech(I don't give a fuck what you told me to do! As if I would ever touch myself in front of you anyway!)] [npc.name] spits.";
+          case NEUTRAL -> "[npc.speech(I still don't see why I'm not allowed to touch myself.)] [npc.name] whines.";
+          case OBEDIENT -> "[npc.speech(I haven't been touching myself, just like you ordered, [npc.petName(pc)].)]";
+          default -> Arrays.toString(new Throwable().getStackTrace());
+        };
+      }
+
+      if (isVeryPentUp()) {
+        UtilText.nodeContentSB.append(
+          " [npc.name] mewls as you take hold of [npc.her] ").append(cock).append(". Even the gentle touch sends [npc.herHim] bucking [npc.her] hips into your [pc.hand], eager for more.</p><p>[pc.speech(It looks like your balls are a little sore, pet.)] You remark, giving [npc.namePos] [npc.balls+] a firm squeeze as [npc.she] groans and #IF(npc.hasLegs())clamps [npc.her] [pc.legs+] together#ELSEclenches [npc.her] muscles under your touch#ENDIF."
+        ).append(begging);
+      } else {
+        UtilText.nodeContentSB.append(
+          " [npc.name] mewls as you take hold of [npc.her] ").append(cock).append(". Even though [npc.she] hasn't been denied an orgasm for that long, it is still obvious from the way [npc.she] gently bucks [npc.her] hips into your [pc.hand] that [npc.she] is eager for more.</p><p>[pc.speech(It looks like your balls are a little sore, pet.)] You remark, giving [npc.namePos] [npc.balls+] a firm squeeze as [npc.she] groans and #IF(npc.hasLegs())clamps [npc.her] [pc.legs+] together#ELSEclenches [npc.her] muscles under your touch#ENDIF."
+        ).append(begging);
+      }
+
+      UtilText.nodeContentSB.append("</p><p>").append(
+        "[pc.speech(Just a little longer, [pc.petName(npc)].)] You say as you grope [npc.herHim], enjoying the feeling of [npc.herHim] squirming in your grip. [pc.speech(I don't want to see you trying to get off, and I definitely don't want you making a mess everywhere. Now be a good little slave and forget about using that cock. If you behave then I might let you touch it some day.)]</p><p>"
+      );
+
+      if (enjoysDenial()) {
+        UtilText.nodeContentSB.append(
+          "[npc.name] looks at you with mixed frustration and lust as [npc.she] breathes ragged breaths. [npc.speech(Alright, [npc.petName(pc)]. You can tease my useless [npc.cock] whenever you please.)]"
+        );
+      } else {
+        UtilText.nodeContentSB.append(
+          "[npc.name] groans in frustration as [npc.she] breathes raggedly while trying to ignore the growing erection #IF(npc.hasLegs())between [npc.her] [npc.legs+]#ELSEstraining for [npc.her] attention#ENDIF. [npc.speech(Are you finished?)]."
+        );
+      }
+
+      return UtilText.nodeContentSB.append("</p><p>You give your [npc.race] slave a friendly slap on the rear, leaving [npc.her] even more horny than before, and send [npc.herHim] on [npc.her] way.</p>").toString();
     }
 
     @Override
@@ -257,7 +394,7 @@ public class SlaveInteract {
 
     if (DenyCock.isPhysicallyPossible(slave)) {
       if (DenyCock.isBaseRequirementsMet(slave)) {
-        actions.add(new Response("Deny cock", UtilText.parse(slave, "[npc.name] has not permitted you to deny [npc.herHim]."), null));
+        actions.add(new Response("Deny cock", UtilText.parse(slave, "[npc.name] has not permitted you to deny [npc.herHim]."), DENY_COCK));
       } else {
         actions.add(DenyCock.getBlockedResponse(slave));
       }

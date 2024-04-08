@@ -43,10 +43,10 @@
   * upon defeating all four defenders, and presenting all four keys, the player gets to fight Lissenthe. They start of constricted by her tail. Alternatively, can choose to worship her, get tail fucked, and if they don't die, turn the tables on her.
   * Lissenthe has a weakness - her cock is so corrupted that she needs to masturbate every third round, but if the player gets too close they are covered in her lust-inducing seed (or perhaps suffer the musk debuff)
   * Upon victory, 
-
 * Add slave jobs for enslavable named characters
   * Hyorlyss, Fyrsia, Jhortrax
-* "Get Bathed" option (if slave is in party)
+* "Get Bathed" option (if slave is in party) (this kind of already exists?)
+* Add dialogue for slaves being apprehensive while being led to the milking room
 * Pain play (impact, electro, sharps, slave job punching-bag)
   * sadistic foot+cock, foot+pussy actions (treading on)
   * sadistic hand+cock, hand+pussy actions (slapping)
@@ -65,6 +65,7 @@
   * NPC who resets character to original
 * "Cum blocking" items (urethral plugs, maybe an enchantment?)
   * Update dialogue for characters who naturally produce 0mL of cum
+* Add more ways to clean companions (use soothing water on them?)
 * Flesh out "Talk about background" (SlaveDialogue.java)
 * Flesh out the bounty system (bar in Slaver's alley)
 * Flesh out companions system

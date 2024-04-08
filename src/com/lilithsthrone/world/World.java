@@ -98,7 +98,7 @@ public class World implements XMLSaving {
 		try {
 			return grid[vec.getX()][vec.getY()];
 		} catch(Exception ex) {
-			System.err.println("Error in WorldType: "+WorldType.getIdFromWorldType(this.getWorldType()));
+			System.err.println("Error in WorldType: " + WorldType.getIdFromWorldType(this.getWorldType()));
 			throw ex;
 		}
 	}
@@ -164,7 +164,11 @@ public class World implements XMLSaving {
 		Cell closestCell = null;
 		for(int i=0; i<grid.length; i++) {
 			for(int j=0; j<grid[0].length; j++) {
-				if(grid[i][j].getPlace().getPlaceType().equals(place)) {
+				AbstractPlaceType placeType = grid[i][j].getPlace().getPlaceType();
+				if (placeType == null) {
+					System.err.format("Error: Place %s at (%d, %d) in World %s has no placeType!%n", grid[i][j].getPlace().getName(), j, i, this.worldType.getName());
+				}
+				if(placeType.equals(place)) {
 					float newDistance = Vector2i.getDistance(location, grid[i][j].getLocation());
 					if(newDistance < distance) {
 						closestCell = grid[i][j];
@@ -173,6 +177,22 @@ public class World implements XMLSaving {
 				}
 			}
 		}
+
+		if (closestCell == null) {
+			System.err.format("Warning: There is no place %s in World %s!%n", place.getName(), this.worldType.getName());
+			System.err.println("Cells are as follows:");
+
+			for(int i=0; i<grid.length; i++) {
+				for(int j=0; j<grid[0].length; j++) {
+					AbstractPlaceType placeType = grid[i][j].getPlace().getPlaceType();
+					System.err.format("%-20s", placeType.getName());
+					if (j == grid[0].length - 1) {
+						System.err.println("");
+					}
+				}
+			}
+		}
+
 		return closestCell;
 	}
 

@@ -41,10 +41,10 @@ public class MountIsilDialogue {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("Ascend steps", "Ascend up to Mount Isil.", MountIsilDialogue.EXIT){
+				return new Response("Ascend steps", "Ascend up to Mount Isil.", MountIsilDialogue.EXIT) {
 					@Override
 					public void effects() {
-						Main.game.getPlayer().setLocation(WorldType.MOUNT_ISIL_PLATEAU, MountIsilPlaces.EXIT, false);
+						Main.game.getPlayer().setLocation(WorldType.MOUNT_ISIL_PLATEAU, MountIsilPlaces.EXIT);
 						Main.game.getTextStartStringBuilder().append(MountIsilPlaces.EXIT.getDialogue(false).getContent());
 					}
 				};
@@ -120,6 +120,15 @@ public class MountIsilDialogue {
 						}
 					};
 				}
+				// else if (getWorldType().equals(WorldType.MOUNT_ISIL_MONASTERY)) {
+				// 	return new Response("Emerge", "Leave the dimly lit monastery, and return to the bright mountaintop.", MountIsilDialogue.EXIT) {
+				// 		@Override
+				// 		public void effects() {
+				// 			Main.game.getTextStartStringBuilder().append(MountIsilDialogue.ENTRANCE.getContent());
+				// 			Main.game.getPlayer().setLocation(WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.ENTRANCE, false);
+				// 		}
+				// 	};
+				// }
 				throw new IllegalStateException("Unknown world type: " + Main.game.getActiveWorld().getWorldType().toString());
 			}
 
@@ -145,8 +154,12 @@ public class MountIsilDialogue {
 
 		@Override
 		public String getContent() {
-			return "Below, the fog clears to reveal a set of stone stairs leading down into Dominion.";
-			// return UtilText.parseFromXMLFile("places/dominion/mountIsil/generic", "OUTSIDE");
+			if (getWorldType().equals(WorldType.MOUNT_ISIL_PLATEAU)) {
+				return "Above, the terrain seems more winding and precarious, but the hand-lain path seems safe enough.";
+			} else if (getWorldType().equals(WorldType.MOUNT_ISIL_OVERLOOK)) {
+				return "An imposing, stone door blocks the way to the monastery.";
+			}
+			return "Mount Isil entrance content";
 		}
 
 		@Override
@@ -162,14 +175,24 @@ public class MountIsilDialogue {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("Dominion", "Descend the steps down to Dominion", MountIsilDialogue.EXTERIOR) {
-					@Override
-					public void effects() {
-						Main.game.getTextStartStringBuilder().append(UtilText.parseFromXMLFile("places/dominion/mountIsil/generic", "EXIT"));
-						Main.game.getPlayer().setLocation(WorldType.DOMINION, PlaceType.DOMINION_MOUNT_ISIL_ENTRANCE, false);
-					}
-				};
-
+				if (getWorldType().equals(WorldType.MOUNT_ISIL_PLATEAU)) {
+					return new Response("Ascend", "Ascend the winding steps to the area overlooking the plateau.", MountIsilDialogue.EXIT) {
+						@Override
+						public void effects() {
+							Main.game.getTextStartStringBuilder().append(MountIsilDialogue.EXIT.getContent());
+							Main.game.getPlayer().setLocation(WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.EXIT);
+						}
+					};
+				} else if (getWorldType().equals(WorldType.MOUNT_ISIL_OVERLOOK)) {
+					return new Response("Enter", "Enter the dimly lit halls of the mountaintop monastery.", MountIsilDialogue.EXIT) {
+						@Override
+						public void effects() {
+							Main.game.getTextStartStringBuilder().append(MountIsilDialogue.EXIT.getContent());
+							// TODO (mark)
+							// Main.game.getPlayer().setLocation(WorldType.MOUNT_ISIL_MONASTERY, MountIsilPlaces.ENTRANCE);
+						}
+					};
+				}
 			}
 			return null;
 		}

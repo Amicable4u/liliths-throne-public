@@ -90,7 +90,7 @@ public class Uros extends MountIsilNpc {
 				"The object of worship for worshippers that visit Mount Isil, Uros is used to being adored for his rare physical appearance and stunning, midnight-black scales. He is also accustomed to dealing with those who refuse to bow down to his majesty.",
 				22, Month.JANUARY, 20,
 				26, Gender.M_P_MALE, Subspecies.getSubspeciesFromId("NoStepOnSnek_snake"), RaceStage.LESSER,
-				new CharacterInventory(30), WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.Uros, true);
+				new CharacterInventory(30), WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.UROS, true);
 	}
 
 	static {
