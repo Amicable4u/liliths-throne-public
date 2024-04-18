@@ -126,6 +126,8 @@ import com.lilithsthrone.game.character.npc.dominion.Wes;
 import com.lilithsthrone.game.character.npc.dominion.Zaranix;
 import com.lilithsthrone.game.character.npc.dominion.ZaranixMaidKatherine;
 import com.lilithsthrone.game.character.npc.dominion.ZaranixMaidKelly;
+import com.lilithsthrone.game.character.npc.mountIsil.Silenis;
+import com.lilithsthrone.game.character.npc.mountIsil.Uros;
 import com.lilithsthrone.game.character.npc.fields.Angelixx;
 import com.lilithsthrone.game.character.npc.fields.Arion;
 import com.lilithsthrone.game.character.npc.fields.Astrapi;
@@ -234,6 +236,7 @@ import com.lilithsthrone.game.dialogue.places.dominion.RedLightDistrict;
 import com.lilithsthrone.game.dialogue.places.dominion.enforcerHQ.EnforcerHQDialogue;
 import com.lilithsthrone.game.dialogue.places.dominion.lilayashome.Lab;
 import com.lilithsthrone.game.dialogue.places.dominion.lilayashome.LilayaHomeGeneric;
+import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.MountIsilPlaces;
 import com.lilithsthrone.game.dialogue.places.dominion.slaverAlley.SlaverAlleyDialogue;
 import com.lilithsthrone.game.dialogue.places.dominion.warehouseDistrict.DominionExpress;
 import com.lilithsthrone.game.dialogue.places.dominion.zaranixHome.ZaranixHomeGroundFloor;
@@ -1134,6 +1137,7 @@ public class Game implements XMLSaving {
 							&& (!worldType.equals("innoxia_dominion_sex_shop_factory") || !Main.isVersionOlderThan(loadingVersion, "0.4.9.13"))
 							&& !worldType.equals("SUPPLIER_DEN") // Removed
 							&& !worldType.equals("JUNGLE") // Removed
+							&& !MountIsilPlaces.shouldRegenerateWorld(worldType, loadingVersion)
 //                          && !worldType.equals("REBEL_BASE")
 							) {
 						World world = World.loadFromXML(e, doc);
@@ -1213,8 +1217,10 @@ public class Game implements XMLSaving {
 				if(Main.isVersionOlderThan(loadingVersion, "0.4.7.11")) {
 					Main.game.getWorlds().put(WorldType.getWorldTypeFromId("innoxia_fields_elis_tavern_taur"), gen.worldGeneration(WorldType.getWorldTypeFromId("innoxia_fields_elis_tavern_taur")));
 				}
-				if(Main.isVersionOlderThan(loadingVersion, "0.4.9")) {
+				if (MountIsilPlaces.shouldRegenerateWorld("MOUNT_ISIL_PLATEAU", loadingVersion)) {
 					Main.game.getWorlds().put(WorldType.MOUNT_ISIL_PLATEAU, gen.worldGeneration(WorldType.MOUNT_ISIL_PLATEAU));
+				}
+				if (MountIsilPlaces.shouldRegenerateWorld("MOUNT_ISIL_OVERLOOK", loadingVersion)) {
 					Main.game.getWorlds().put(WorldType.MOUNT_ISIL_OVERLOOK, gen.worldGeneration(WorldType.MOUNT_ISIL_OVERLOOK));
 				}
 				if(Main.isVersionOlderThan(loadingVersion, "0.4.9.1")) {
@@ -2418,6 +2424,10 @@ public class Game implements XMLSaving {
 			if(addedNpcs.contains(HarpyNymphoCompanion.class)) {
 				Main.game.getNpc(HarpyNymphoCompanion.class).setAffection(Main.game.getNpc(HarpyNympho.class), AffectionLevel.POSITIVE_FIVE_WORSHIP.getMedianValue());
 			}
+
+			// Mount Isil:
+			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Silenis.class))) { addNPC(new Silenis(), false); addedNpcs.add(Silenis.class); }
+			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Uros.class))) { addNPC(new Uros(), false); addedNpcs.add(Uros.class); }
 			
 			// City hall:
 			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Vanessa.class))) { addNPC(new Vanessa(), false); addedNpcs.add(Vanessa.class); }
@@ -2441,16 +2451,16 @@ public class Game implements XMLSaving {
 				getNpc(Rose.class).setAffection(getNpc(Daddy.class), -50);
 			}
 			
-            // Sawlty Towers (Arthur/Felicia's apartment building):
-            if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Felicia.class))) {
-                addNPC(new Felicia(), false);
-                addedNpcs.add(Felicia.class);
-            }
-            if(addedNpcs.contains(Felicia.class)) {
-            	getNpc(Felicia.class).setAffection(getNpc(Arthur.class), AffectionLevel.POSITIVE_THREE_CARING.getMedianValue());
-            }
+			// Sawlty Towers (Arthur/Felicia's apartment building):
+			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Felicia.class))) {
+					addNPC(new Felicia(), false);
+					addedNpcs.add(Felicia.class);
+			}
+			if(addedNpcs.contains(Felicia.class)) {
+				getNpc(Felicia.class).setAffection(getNpc(Arthur.class), AffectionLevel.POSITIVE_THREE_CARING.getMedianValue());
+			}
             
-            // Lovienne's Luxuries:
+			// Lovienne's Luxuries:
 			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Saellatrix.class))) { addNPC(new Saellatrix(), false); addedNpcs.add(Saellatrix.class); }
 			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Fiammetta.class))) { addNPC(new Fiammetta(), false); addedNpcs.add(Fiammetta.class); }
 			if(addedNpcs.contains(Fiammetta.class)) {
@@ -6019,10 +6029,6 @@ public class Game implements XMLSaving {
 
 	public void initQuickTransformationMenu(GameCharacter target, DialogueNode endingNode) {
 		QuickTransformations.initQuickTransformations("misc/quickTransformations", target, endingNode);
-	}
-	
-	public void setParserTarget(String parserTarget, NPC npc) {
-		ParserTarget.addAdditionalParserTarget(parserTarget, npc);
 	}
 	
 	public boolean isFreeRoomAvailableForOccupant() {

@@ -1,16 +1,20 @@
 package com.lilithsthrone.game.dialogue.places.dominion.mountIsil;
 
+import java.util.HashMap;
 import java.util.List;
 
-import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.MountIsilDialogue;
+import com.lilithsthrone.game.character.npc.mountIsil.MountIsilNpc;
+import com.lilithsthrone.game.character.race.AbstractSubspecies;
+import com.lilithsthrone.game.character.race.Subspecies;
+import com.lilithsthrone.game.character.race.SubspeciesSpawnRarity;
 import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.utils.colours.PresetColour;
-import com.lilithsthrone.world.population.Population;
-import com.lilithsthrone.world.population.PopulationDensity;
-import com.lilithsthrone.world.population.PopulationType;
 import com.lilithsthrone.world.WorldRegion;
 import com.lilithsthrone.world.places.AbstractPlaceType;
 import com.lilithsthrone.world.places.Darkness;
+import com.lilithsthrone.world.population.Population;
+import com.lilithsthrone.world.population.PopulationDensity;
+import com.lilithsthrone.world.population.AbstractPopulationType;
 
 /**
  * @since 0.4.9
@@ -18,6 +22,33 @@ import com.lilithsthrone.world.places.Darkness;
  * @author Mark
  */
 public class MountIsilPlaces {
+
+	public static boolean shouldRegenerateWorld(String worldType, String loadingVersion) {
+		// this function is just for future use
+		// it is called during game initialisation when importing a save file
+		// it should return true for mount isil world types if they have been changed in a certain version
+		// and return false for all other world types
+		
+		// TODO (mark): use getId() (if possible?) instead of magic strings
+		// if (worldType == WorldType.MOUNT_ISIL_PLATEAU.getId())
+		if (worldType == "MOUNT_ISIL_PLATEAU") {
+			return false;
+		} else if (worldType == "MOUNT_ISIL_OVERLOOK") {
+			return false;
+		}
+
+		return false;
+	}
+
+	private static AbstractPopulationType cultistPopulationType = new AbstractPopulationType("cultist", "cultists") {};
+	public static Population cultistPopulation = new Population(
+		true,
+		cultistPopulationType,
+		PopulationDensity.NUMEROUS,
+		new HashMap<AbstractSubspecies, SubspeciesSpawnRarity>() {{
+			put(MountIsilNpc.SPECIES, SubspeciesSpawnRarity.TEN);
+		}}
+	);
 
 	public static final AbstractPlaceType ENTRANCE = new AbstractPlaceType(
 			WorldRegion.MOUNT_ISIL,
@@ -95,7 +126,9 @@ public class MountIsilPlaces {
 			"on Mount Isil") {
 		@Override
 		public List<Population> getPopulation() {
-			return Util.newArrayListOfValues();
+			return Util.newArrayListOfValues(
+				cultistPopulation
+			);
 		}
 	}.initWeatherImmune();
 

@@ -104,6 +104,8 @@ import com.lilithsthrone.game.character.npc.misc.GenericMaleNPC;
 import com.lilithsthrone.game.character.npc.misc.GenericTrader;
 import com.lilithsthrone.game.character.npc.misc.PrologueFemale;
 import com.lilithsthrone.game.character.npc.misc.PrologueMale;
+import com.lilithsthrone.game.character.npc.mountIsil.Silenis;
+import com.lilithsthrone.game.character.npc.mountIsil.Uros;
 import com.lilithsthrone.game.character.npc.submission.Axel;
 import com.lilithsthrone.game.character.npc.submission.Claire;
 import com.lilithsthrone.game.character.npc.submission.DarkSiren;
@@ -635,6 +637,28 @@ public class ParserTarget {
 		@Override
 		public GameCharacter getCharacter(String tag, List<GameCharacter> specialNPCList) {
 			return Main.game.getNpc(HarpyNymphoCompanion.class);
+		}
+	};
+
+	public static AbstractParserTarget SILENIS = new AbstractParserTarget(Util.newArrayListOfValues("silenis"), "") {
+		public String getDescription() {
+			return Main.game.getNpc(Silenis.class).getDescription();
+		}
+
+		@Override
+		public GameCharacter getCharacter(String tag, List<GameCharacter> specialNPCList) {
+			return Main.game.getNpc(Silenis.class);
+		}
+	};
+
+	public static AbstractParserTarget UROS = new AbstractParserTarget(Util.newArrayListOfValues("uros"), "") {
+		public String getDescription() {
+			return Main.game.getNpc(Uros.class).getDescription();
+		}
+
+		@Override
+		public GameCharacter getCharacter(String tag, List<GameCharacter> specialNPCList) {
+			return Main.game.getNpc(Uros.class);
 		}
 	};
 	

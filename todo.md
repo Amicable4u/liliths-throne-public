@@ -28,23 +28,24 @@
   * hit with crop
   * Tease chastity during sex
 * Mount Isil:
-  * 4 defenders worship the lamia male "Uros", who turns out to be their brother.
-  * One can't be hit with physical (must tease). On second encounter, can't be hit with spells either. Glycor. snake girl with pitch black scales
-  * One always has the best tease (anything player is weak to). Sileniss. snake herm
-  * One can only be hit by characters with their anus plugged, or covered in cum, or with larger dick than her. Vissea. snake shemale
-  * One swaps weapons with the player (trades them an arcane feather duster). On second encounter, strips player. Cyrephses. snake girl 
-  * To ascend, have to collect 4 keys
-  * First key is any key you own (key to own chastity or slave's chastity/collar)
-  * Second key requires player (or their slave) to wear opposite gender clothing
+  * Begin on the plateau. To ascend, have to collect 4 keys
+  * The first plateau is a square surrounded by shrines. The player can inspect the shrines, and either face combat, get a reward (steal offerings), solve a puzzle, complete a key trial, or get a random snake transformation item.
+  * First key is any key you own (key to own chastity or slave's chastity/collar). You get it back after defeating Uros.
+  * Second key requires player (or their companion) to wear opposite gender clothing
   * Third key require signing a piece of paper with a kiss (heavy makeup lip, or anal kiss)
-  * Fourth key requires a feat of strength / arcane (deal physical damage, or have enough physique, or cast a leveled-up spells)
-  * Other key: perform one of your fetishes (if player is alone, maybe masturbation fetish or exhibitionism, self bondage, denial, otherwise can use companions / slaves)
-  * The first plateau is a square surrounded by shrines. The player can inspect the shrines, and either face combat, get a reward (steal offerings), fight a defender, solve a trial, or get a random melusine transformation item.
-  * upon defeating all four defenders, and presenting all four keys, the player gets to fight Lissenthe. They start of constricted by her tail. Alternatively, can choose to worship her, get tail fucked, and if they don't die, turn the tables on her.
-  * Lissenthe has a weakness - her cock is so corrupted that she needs to masturbate every third round, but if the player gets too close they are covered in her lust-inducing seed (or perhaps suffer the musk debuff)
-  * Upon victory, 
+  * Fourth key requires a feat of strength / arcane (deal enough physical damage, or cast a leveled-up spell)
+  * Other key: perform one of your fetishes If player is alone, maybe masturbation fetish or exhibitionism, self bondage, denial, otherwise can use companions / slaves. Perhaps the shrine contains a dick statue that the player can give blowjob / ride.
+  * 4 defenders worship the lamia male "Uros", who turns out to be their brother.
+  * Glycor - snake girl with pitch black scales: Can't be hit with physical (must tease). On second encounter, can't be hit with spells either.
+  * Silenis - snake herm: Always has the best tease (anything player is weak to).
+  * Vissea - snake shemale: Can only be hit by characters with their anus plugged, or covered in cum, or with larger dick than her.
+  * Cyrephses - snake girl: Swaps weapons with the player (trades them an arcane feather duster). On second encounter, strips player. 
+  * upon defeating all four defenders, and presenting all four keys, the player gets to fight Uros. They start of constricted by his tail. Alternatively, can choose to worship him, get tail fucked, and if they don't die, turn the tables on him.
+  * Uros has a weakness - his cock is so corrupted that he needs to masturbate every third round, but if the player gets too close they are covered in his lust-inducing seed (or perhaps suffer the musk debuff)
+  * Upon victory, Uros offers to let you go around with one of his sisters in exchange for sparing him. His sisters aren't happy about this though, and tell you they will gladly help you take what you want from their brother instead. Options to accept his offer, accept their offer, claim sisters for yourself (Uros isn't allowed to breed any more), claim Uros for yourself (romance Uros, you decide if he is allowed to fuck his sisters)
 * Add slave jobs for enslavable named characters
   * Hyorlyss, Fyrsia, Jhortrax
+  * Must take care to change ImpFortressDialogue.resetFortress
 * "Get Bathed" option (if slave is in party) (this kind of already exists?)
 * Add dialogue for slaves being apprehensive while being led to the milking room
 * Pain play (impact, electro, sharps, slave job punching-bag)

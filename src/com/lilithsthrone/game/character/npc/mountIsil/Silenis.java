@@ -1,4 +1,4 @@
-package com.lilithsthrone.game.character.npc.dominion.mountIsil;
+package com.lilithsthrone.game.character.npc.mountIsil;
 
 import java.time.Month;
 import java.util.List;
@@ -89,12 +89,8 @@ public class Silenis extends MountIsilNpc {
 		super(isImported, new NameTriplet("Silix", "Silenix", "Silenis"), "Lithnaga",
 				"One of the [silenis.sister]s of [uros.name]. [Silenis.name] has an uncanny sense for people, and can always discern what they want most, making [silenis.herHim] as deadly in combat as [silenis.she] is talented in bed.",
 				22, Month.JANUARY, 20,
-				20, Gender.F_V_B_FEMALE, Subspecies.getSubspeciesFromId("NoStepOnSnek_snake"), RaceStage.LESSER,
+				20, Gender.F_V_B_FEMALE, MountIsilNpc.SPECIES, RaceStage.LESSER,
 				new CharacterInventory(30), WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.GUARDIAN, true);
-	}
-
-	static {
-		ParserTarget.addAdditionalParserTarget("silenis", Main.game.getNpc(Silenis.class));
 	}
 
 	public static boolean hasEncountered() {
@@ -166,7 +162,7 @@ public class Silenis extends MountIsilNpc {
 		this.setBodySize(BodySize.ZERO_SKINNY.getMedianValue());
 		
 		// Coverings:
-		this.setEyeCovering(new Covering(BodyCoveringType.getBodyCoveringTypeFromId("EYE_SNAKE"), PresetColour.EYE_GREEN));
+		this.setEyeCovering(new Covering(BodyCoveringType.getBodyCoveringTypeFromId("innoxia_raptor_eye"), PresetColour.EYE_GREEN));
 		this.setSkinCovering(new Covering(BodyCoveringType.SNAKE_SCALES, PresetColour.COVERING_GREEN_DARK), true);
 		this.setSkinCovering(new Covering(BodyCoveringType.HUMAN, PresetColour.SKIN_PALE), true);
 		// TODO (mark)

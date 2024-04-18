@@ -1,7 +1,7 @@
 package com.lilithsthrone.game.dialogue.places.dominion.mountIsil;
 
 import com.lilithsthrone.game.character.effects.Perk;
-import com.lilithsthrone.game.character.npc.dominion.mountIsil.Silenis;
+import com.lilithsthrone.game.character.npc.mountIsil.Silenis;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.responses.ResponseCombat;
@@ -130,8 +130,6 @@ public class SilenisDialogue {
 				if (index == 4) {
 					return subSexResponse;
 				}
-			} else {
-				return leaveResponse;
 			}
 			return null;
 		}

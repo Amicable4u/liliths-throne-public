@@ -1,13 +1,20 @@
 package com.lilithsthrone.game.dialogue.places.dominion.mountIsil;
 
-import com.lilithsthrone.game.character.npc.dominion.mountIsil.Silenis;
-import com.lilithsthrone.game.character.npc.dominion.mountIsil.Uros;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.lilithsthrone.game.character.npc.NPC;
+import com.lilithsthrone.game.character.npc.mountIsil.MountIsilAttacker;
+import com.lilithsthrone.game.character.npc.mountIsil.MountIsilNpc;
+import com.lilithsthrone.game.character.npc.mountIsil.Silenis;
+import com.lilithsthrone.game.character.race.Subspecies;
+import com.lilithsthrone.game.dialogue.AbstractDialogueFlagValue;
+import com.lilithsthrone.game.dialogue.DialogueFlagValue;
 import com.lilithsthrone.game.dialogue.DialogueNode;
-import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.SilenisDialogue;
-import com.lilithsthrone.game.dialogue.places.dominion.mountIsil.MountIsilPlaces;
 import com.lilithsthrone.game.dialogue.responses.Response;
-import com.lilithsthrone.game.dialogue.utils.UtilText;
+import com.lilithsthrone.game.inventory.item.ItemType;
 import com.lilithsthrone.main.Main;
+import com.lilithsthrone.utils.Vector2i;
 import com.lilithsthrone.world.AbstractWorldType;
 import com.lilithsthrone.world.WorldType;
 import com.lilithsthrone.world.places.PlaceType;
@@ -48,10 +55,8 @@ public class MountIsilDialogue {
 						Main.game.getTextStartStringBuilder().append(MountIsilPlaces.EXIT.getDialogue(false).getContent());
 					}
 				};
-
-			} else {
-				return null;
 			}
+			return null;
 		}
 	};
 
@@ -287,12 +292,345 @@ public class MountIsilDialogue {
 		}
 	};
 
-	public static final DialogueNode TREASURE = new DialogueNode("Relics", "", false) {
+	private static Response leaveTreasure = new Response("Leave", "", MountIsilDialogue.PATH) {
+		@Override
+		public void effects() {
+			Main.game.getTextStartStringBuilder().append( hasSearchedTreasure()
+				? "Having already searched this area, you turn back the way you came."
+				: "You decide whatever valuables might be hidden around this area, they aren't worth your trouble."
+			);
+			
+			Main.game.getPlayer().setNearestLocation(WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.PATH, false);
+		}
+	};
+
+	private static AbstractDialogueFlagValue getTreasureFlag() {
+		Vector2i location = Main.game.getPlayer().getLocation();
+		return DialogueFlagValue.getDialogueFlagValueFromId("mark_treasure_overlook_" + location.getX() + "_" + location.getY());
+	}
+
+	private static boolean hasSearchedTreasure() {
+		return Main.game.getDialogueFlags().hasFlag(getTreasureFlag());
+	}
+
+	private static void markTreasureSearched() {
+		Main.game.getDialogueFlags().values.add(getTreasureFlag());
+	}
+
+	private static DialogueNode TREASURE_VANITY = new DialogueNode("Relic", "", false) {
+		@Override
+		public String getContent() {
+			return """
+				<p>
+					You reached into the old drawers, searching for anything that might be useful. With a start, you wrench your [pc.hand] back, and find it covered in a sticky, noxious liquid. You try to wipe it off, but no matter how much you scrub, an intimate smell lingers on your body. 
+				</p>
+			""";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return leaveTreasure;
+			}
+			return null;
+		}
+	};
+
+	private static DialogueNode TREASURE_BOOKSHELF = new DialogueNode("Relic", "", false) {
+		@Override
+		public String getContent() {
+			return """
+				<p>
+					You trace your fingers down the spines of the curled volumes, passing over esoteric treatises on everything from mountain horticulture to font choices for hand scribed reproductions of famous books. Finally, you spot something that might be useful!
+				</p>
+			""";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return leaveTreasure;
+			}
+			return null;
+		}
+	};
+
+	private static DialogueNode TREASURE_FLAMES = new DialogueNode("Relic", "", false) {
+		@Override
+		public String getContent() {
+			return "<p>The glimmer you saw turns out to be a small pile of flames.</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return leaveTreasure;
+			}
+			return null;
+		}
+	};
+
+	private static DialogueNode TREASURE_SILENIS_DIARY = new DialogueNode("Relic", "", true) {
+		@Override
+		public String getContent() {
+			return """
+				<p>
+					You manage to pry the package free, and unwrap the protective cloth to reveal a small, leather-bound journal.
+				</p>
+			""";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Read", "Just a quick look wouldn't hurt...", SILENIS_DIARY_READ) {
+					@Override
+					public void effects() {
+						MountIsilNpc.addFlag(Silenis.class, "journal_opened");
+					}
+				};
+			} else if (index == 2) {
+				return new Response("Leave", "Resist the urge to pry - journals are private!", MountIsilDialogue.PATH) {
+					@Override
+					public void effects() {
+						MountIsilNpc.addFlag(Silenis.class, "journal_unopened");
+						Main.game.getTextStartStringBuilder().append(
+							"You decide to respect the owner's privacy, and carefully replace the journal where you found it. No doubt its owner will appreciate your concern for their privacy."
+						);
+						
+						Main.game.getPlayer().setNearestLocation(WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.PATH, false);
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	private static DialogueNode SILENIS_DIARY_READ = new DialogueNode("Guardian's Diary", "", false) {
+		@Override
+		public String getContent() {
+			return """
+				<p>
+					The journal's contents are written in elegant, flowing script. It reads:
+				</p>
+				<p><i>
+					Uros approached me today. I have known what he and my sisters have been up to for some time now, but I didn't think he would just come up to me and say it. I have to admit, the thought of getting on my belly and worshipping his big, delicious cock makes me wet. I would love to just feel his cock throbbing against my scales, coiling my body around his and milking him for hours with my body...
+				</i></p>
+				<p><i>
+					Even though he would probably never allow it, I've also been starting to fantasize about just sneaking up behind him, wrapping him up in my tail, and fucking that haughty, arrogant ass of his until he forgets all about my sisters. He really has no idea what he is missing out on, the rest of them all know that I am the most skilled in bed. After all, I gave each of them the bet orgasm of their lives, one by one, just to make sure they knew...
+				</i></p>
+				<p><i>
+					If only Uros would slither up behind me right now and pound me against this wall. Imagine he found this diary, I would die of embarrassment, but at least I could have that divine cock at last...
+				</i></p>
+				<p>
+					The next part of the page is stained suspiciously. You decide you've read enough of the obscene diary, and replace it where you found it.
+				</p>
+			""";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Leave", "Leave, armed with your new, depraved knowledge about what the inhabitants of this place engage in.", MountIsilDialogue.PATH) {
+					@Override
+					public void effects() {
+						Main.game.getPlayer().setNearestLocation(WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.PATH, false);
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	// Map coordinates in Mount Isil Overlook to dialogue nodes
+	private static Map<Vector2i, DialogueNode> treasures = new HashMap<>() {{
+		put(new Vector2i(8, 5), new DialogueNode("Relic", "", true) {
+			@Override
+			public String getContent() {
+				return """
+					<p>
+						In a long forgotten dressing room, you find a somewhat dusty vanity. Kiss marks, outlined in bold, red lipstick, have been left all over the mirror, and the drawers are all open. You can tell just by the smell in the air that the many makeup bottles strewn about the desk possess the lingering tinge of the arcane.
+					</p>
+				""";
+			}
+
+			@Override
+			public Response getResponse(int responseTab, int index) {
+				if (index == 1) {
+					return new Response("Search", "See what you can find in the disused drawers and bottles.", TREASURE_VANITY) {
+						@Override
+						public void effects() {
+							Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().setLust(Main.game.getPlayer().getLust() + 10)
+							);
+						}
+					};
+				} else if (index == 2) {
+					return leaveTreasure;
+				}
+				return null;
+			}
+		});
+
+		put(new Vector2i(12, 5), new DialogueNode("Relic", "", true) {
+			@Override
+			public String getContent() {
+				return """
+					<p>
+						The alcove was so cramped that you almost missed it, but following the narrow path leads you to a tiny room containing a small bookshelf. You can smell the years on the pages, and you wonder whether the leathery tomes might contain some useful knowledge about this place.
+					</p>
+				""";
+			}
+
+			@Override
+			public Response getResponse(int responseTab, int index) {
+				if (index == 1) {
+					return new Response("Search", "See what you can find in the dusty bookshelf.", TREASURE_BOOKSHELF) {
+						@Override
+						public void effects() {
+							Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().addItem(
+									Main.game.getItemGen().generateItem(
+										ItemType.getLoreBook(MountIsilNpc.SPECIES)
+									)
+								)
+							);
+						}
+					};
+				} else if (index == 2) {
+					return leaveTreasure;
+				}
+				return null;
+			}
+		});
+
+		put(new Vector2i(8, 3), new DialogueNode("Relic", "", true) {
+			@Override
+			public String getContent() {
+				return """
+					<p>
+						You see something glimmer on the path ahead, but this part of the mountain receives so little light that you can't tell what it is. 
+					</p>
+				""";
+			}
+
+			@Override
+			public Response getResponse(int responseTab, int index) {
+				if (index == 1) {
+					NPC attacker = MountIsilAttacker.initialiseAttacker();
+					return new Response("Search", "Prepare yourself, and peer ahead.", attacker.getEncounterDialogue()) {
+						@Override
+						public void effects() {
+							markTreasureSearched();
+						}
+					};
+				} else if (index == 2) {
+					return leaveTreasure;
+				}
+				return null;
+			}
+		});
+
+		put(new Vector2i(12, 3), new DialogueNode("Relic", "", true) {
+			@Override
+			public String getContent() {
+				return """
+					<p>
+						You see something glimmer on the path ahead, but this part of the mountain receives so little light that you can't tell what it is.
+					</p>
+				""";
+			}
+
+			@Override
+			public Response getResponse(int responseTab, int index) {
+				if (index == 1) {
+					return new Response("Search", "Prepare yourself, and peer ahead.", TREASURE_FLAMES) {
+						@Override
+						public void effects() {
+							markTreasureSearched();
+							Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().incrementMoney(
+									(int) Math.round(100 + 200 * Math.random())
+								)
+							);
+						}
+					};
+				} else if (index == 2) {
+					return leaveTreasure;
+				}
+				return null;
+			}
+		});
+
+		put(new Vector2i(8, 1), new DialogueNode("Relic", "", true) {
+			@Override
+			public String getContent() {
+				return """
+					<p>
+						You see something glimmer on the path ahead, but this part of the mountain receives so little light that you can't tell what it is.
+					</p>
+				""";
+			}
+
+			@Override
+			public Response getResponse(int responseTab, int index) {
+				if (index == 1) {
+					return new Response("Search", "Prepare yourself, and peer ahead.", TREASURE_FLAMES) {
+						@Override
+						public void effects() {
+							markTreasureSearched();
+							Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().incrementMoney(
+									(int) Math.round(150 + 300 * Math.random())
+								)
+							);
+						}
+					};
+				} else if (index == 2) {
+					return leaveTreasure;
+				}
+				return null;
+			}
+		});
+
+		put(new Vector2i(12, 1), new DialogueNode("Relic", "", true) {
+			@Override
+			public String getContent() {
+				return """
+					<p>
+						You take a moment to survey the surrounding area, and you are just about to conclude that there is nothing of interest here. However, at the last moment you spot a small package nestled in the cleft of two stones.
+					</p>
+				""";
+			}
+
+			@Override
+			public Response getResponse(int responseTab, int index) {
+				if (index == 1) {
+					return new Response("Search", "Try to fish out the wedged package.", TREASURE_SILENIS_DIARY) {
+						@Override
+						public void effects() {
+							markTreasureSearched();
+						}
+					};
+				} else if (index == 2) {
+					return leaveTreasure;
+				}
+				return null;
+			}
+		});
+	}};
+
+	private static DialogueNode getTreasure() {
+		return treasures.get(Main.game.getPlayerCell().getLocation());
+	}
+
+	public static final DialogueNode TREASURE = new DialogueNode("", "", false) {
 		@Override
 		public String getLabel() {
-			// TODO (mark):
-			return "Relic: "
-			+ Main.game.getPlayerCell().getLocation().toString();
+			if (getTreasure() == null) {
+				return "Relic " + Main.game.getPlayerCell().getLocation().toString();
+			}
+			return getTreasure().getLabel();
 		}
 
 		@Override
@@ -302,14 +640,26 @@ public class MountIsilDialogue {
 
 		@Override
 		public String getContent() {
-			// TODO (mark):
-			return "<p>Location: " + Main.game.getPlayerCell().getLocation().toString() + "</p>";
+			if (getTreasure() == null) {
+				return "<p>Location: " + Main.game.getPlayerCell().getLocation().toString() + "</p>";
+			}
+			return getTreasure().getContent();
 		}
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
-			// TODO (mark):
-			return null;
+			if (getTreasure() == null) {
+				return null;
+			}
+			if (hasSearchedTreasure()) {
+				if (index == 1) {
+					return new Response("Search", "[style.colourBad(You have already searched this location.)]", null);
+				} else if (index == 2) {
+					return leaveTreasure;
+				}
+				return null;
+			}
+			return getTreasure().getResponse(responseTab, index);
 		}
 	};
 

@@ -81,6 +81,23 @@ public class Perk {
 		}
 	};
 
+	public static AbstractPerk JOB_NPC_MOUNT_ISIL_CULTIST = new AbstractPerk(20,
+			true,
+			"Mount Isil cultist",
+			PerkCategory.JOB,
+			"perks/jobs/npc_mount_isil_guardian", // TODO (mark) make icon
+			PresetColour.BASE_GREEN_DARK, // TODO (mark) make or find a reference to RACE_SNAKE
+			Util.newHashMapOfValues(
+					new Value<>(Attribute.DAMAGE_LUST, 1),
+					new Value<>(Attribute.MAJOR_CORRUPTION, 20),
+					new Value<>(Attribute.MAJOR_PHYSIQUE, 1)),
+			null) {
+		@Override
+		public String getDescription(GameCharacter owner) {
+			return UtilText.parse(owner, "[npc.Name] is a pilgrim visiting Mount Isil for a chance to glimpse their deity. [npc.She] seems to have gleaned some specialized skills, whether from hours of worship, or simply trekking up the low hills.");
+		}
+	};
+
 	public static AbstractPerk JOB_NPC_MOUNT_ISIL_GUARDIAN = new AbstractPerk(20,
 			true,
 			"Mount Isil guardian",

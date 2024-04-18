@@ -1,4 +1,4 @@
-package com.lilithsthrone.game.character.npc.dominion.mountIsil;
+package com.lilithsthrone.game.character.npc.mountIsil;
 
 import java.time.Month;
 import java.util.List;
@@ -86,16 +86,30 @@ public class Uros extends MountIsilNpc {
 	}
 	
 	public Uros(boolean isImported) {
-		super(isImported, new NameTriplet("Uros", "Uroth", "Urileth"), "Lithnaga",
-				"The object of worship for worshippers that visit Mount Isil, Uros is used to being adored for his rare physical appearance and stunning, midnight-black scales. He is also accustomed to dealing with those who refuse to bow down to his majesty.",
-				22, Month.JANUARY, 20,
-				26, Gender.M_P_MALE, Subspecies.getSubspeciesFromId("NoStepOnSnek_snake"), RaceStage.LESSER,
-				new CharacterInventory(30), WorldType.MOUNT_ISIL_OVERLOOK, MountIsilPlaces.UROS, true);
+		super(
+			isImported,
+			new NameTriplet("Uros", "Uroth", "Urileth"),
+			"Lithnaga",
+			"The object of worship for worshippers that visit Mount Isil, Uros is used to being adored for his rare physical appearance and stunning, midnight-black scales. He is also accustomed to dealing with those who refuse to bow down to his majesty.",
+			22, Month.JANUARY,
+			20,
+			26,
+			Gender.M_P_MALE,
+			MountIsilNpc.SPECIES,
+			RaceStage.LESSER,
+			new CharacterInventory(30),
+			// TODO (mark): place Uros somewhere
+			WorldType.EMPTY,
+			PlaceType.GENERIC_HOLDING_CELL,
+			// WorldType.MOUNT_ISIL_OVERLOOK,
+			// MountIsilPlaces.UROS,
+			true
+		);
 	}
 
-	static {
-		ParserTarget.addAdditionalParserTarget("uros", Main.game.getNpc(Uros.class));
-	}
+	// static {
+	// 	ParserTarget.addAdditionalParserTarget("uros", Main.game.getNpc(Uros.class));
+	// }
 
 	public static boolean hasEncountered() {
 		return MountIsilNpc.hasEncountered(Uros.class);
@@ -169,7 +183,7 @@ public class Uros extends MountIsilNpc {
 		this.setBodySize(BodySize.THREE_LARGE.getMedianValue());
 		
 		// Coverings:
-		this.setEyeCovering(new Covering(BodyCoveringType.getBodyCoveringTypeFromId("EYE_SNAKE"), PresetColour.EYE_GREEN));
+		this.setEyeCovering(new Covering(BodyCoveringType.getBodyCoveringTypeFromId("NoStepOnSnek_snake_eye"), PresetColour.EYE_GREEN));
 		this.setSkinCovering(new Covering(BodyCoveringType.SNAKE_SCALES, PresetColour.COVERING_BLACK), true);
 		this.setSkinCovering(new Covering(BodyCoveringType.HUMAN, PresetColour.SKIN_PALE), true);
 		// TODO (mark)

@@ -1,4 +1,4 @@
-package com.lilithsthrone.game.character.npc.dominion.mountIsil;
+package com.lilithsthrone.game.character.npc.mountIsil;
 
 /**
  * @since 0.4.9

@@ -39,6 +39,7 @@ public enum Occupation {
 	NPC_HARPY_MATRIARCH(Perk.JOB_NPC_HARPY_MATRIARCH, "harpy matriarch", "[npc.NameIsFull] a matriarch of a harpy flock.", OccupationTag.HAS_PREREQUISITES),
 	NPC_HARPY_FLOCK_MEMBER(Perk.JOB_NPC_HARPY_FLOCK_MEMBER, "harpy flock member", "[npc.NameIsFull] a member of a harpy flock", OccupationTag.HAS_PREREQUISITES),
 
+	NPC_MOUNT_ISIL_CULTIST(Perk.JOB_NPC_MOUNT_ISIL_CULTIST, "Mount Isil cultist", "[npc.NameIsFull] a member of a cult worshipping their deity on Mount Isil.", OccupationTag.HAS_PREREQUISITES),
 	NPC_MOUNT_ISIL_GUARDIAN(Perk.JOB_NPC_MOUNT_ISIL_GUARDIAN, "guardian of Mount Isil", "[npc.NameIsFull] a guardian of the monastery on Mount Isil.", OccupationTag.HAS_PREREQUISITES),
 
 	NPC_CULTIST(Perk.JOB_NPC_CULTIST, "Cultist", "[npc.NameIs] a full-time member of the 'Cult of Lilith'.", OccupationTag.HAS_PREREQUISITES),

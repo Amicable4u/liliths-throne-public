@@ -1,6 +1,9 @@
-package com.lilithsthrone.game.character.npc.dominion.mountIsil;
+package com.lilithsthrone.game.character.npc.mountIsil;
 
 import java.time.Month;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.io.File;
 
 import com.lilithsthrone.game.character.gender.Gender;
 import com.lilithsthrone.game.character.npc.NPC;
@@ -13,6 +16,7 @@ import com.lilithsthrone.game.dialogue.DialogueFlagValue;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.inventory.CharacterInventory;
 import com.lilithsthrone.main.Main;
+import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.world.AbstractWorldType;
 import com.lilithsthrone.world.WorldType;
 import com.lilithsthrone.world.places.AbstractPlaceType;
@@ -43,6 +47,43 @@ public abstract class MountIsilNpc extends NPC {
 		NPCGenerationFlag... generationFlags
 	) {
 		super(isImported, nameTriplet, surname, description, age, birthMonth, birthDay, level, startingGender, startingSubspecies, stage, inventory, worldLocation, startingPlace, addedToContacts, generationFlags);
+	}
+
+	public static AbstractSubspecies SPECIES;
+
+	// TODO (mark): this is an ugly hack to get around the modded bodies not being available at the time npcs are initialized
+	// This should actually be fixed by ensuring that static block in Subspecies.java executes before the various NPC subclasses are initialized
+	static {
+		Map<String, Map<String, File>> filesMap = Util.getExternalFilesById("res/race", "subspecies", null);
+		outer: for(Entry<String, Map<String, File>> entry : filesMap.entrySet()) {
+			for(Entry<String, File> innerEntry : entry.getValue().entrySet()) {
+				if(Util.getXmlRootElementName(innerEntry.getValue()).equals("subspecies")) {
+					String id = innerEntry.getKey().replaceAll("_race", "");
+					if (id.equals("NoStepOnSnek_snake_subspecies_snake")) {
+						try {
+							AbstractSubspecies subspecies = new AbstractSubspecies(innerEntry.getValue(), entry.getKey(), true) {};
+							SPECIES = subspecies;
+							break outer;
+						} catch(Exception ex) {
+							System.err.println("Loading res/race subspecies failed at 'Subspecies'. File path: "+innerEntry.getValue().getAbsolutePath());
+							System.err.println("Actual exception: ");
+							ex.printStackTrace(System.err);
+						}
+					}
+				}
+			}
+		}
+		if (SPECIES == null) {
+			System.err.println("Mount Isil subspecies 'NoStepOnSnek_snake_subspecies_snake' could not be found.");
+			for(Entry<String, Map<String, File>> entry : filesMap.entrySet()) {
+				for(Entry<String, File> innerEntry : entry.getValue().entrySet()) {
+					if(Util.getXmlRootElementName(innerEntry.getValue()).equals("subspecies")) {
+						String id = innerEntry.getKey().replaceAll("_race", "");
+						System.err.println("  " + id);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -77,6 +118,10 @@ public abstract class MountIsilNpc extends NPC {
 	public int getEscapeChance() {
 		return 25;
 	}
+
+	private static AbstractDialogueFlagValue getDialogueFlagValue(Class npcClass, String flag) {
+		return DialogueFlagValue.getDialogueFlagValueFromId("mark_" + npcClass.getName().toLowerCase() + "_" + flag);
+	}
 	
 	public static boolean hasFlag(Class npcClass, String flag) {
 		return Main.game.getDialogueFlags().hasFlag(getDialogueFlagValue(npcClass, flag));
@@ -84,10 +129,6 @@ public abstract class MountIsilNpc extends NPC {
 
 	public static void addFlag(Class npcClass, String flag) {
 		Main.game.getDialogueFlags().values.add(getDialogueFlagValue(npcClass, flag));
-	}
-
-	private static AbstractDialogueFlagValue getDialogueFlagValue(Class npcClass, String flag) {
-		return DialogueFlagValue.getDialogueFlagValueFromId("mark_" + npcClass.getName().toLowerCase() + "_" + flag);
 	}
 
 	public static boolean hasEncountered(Class npcClass) {
